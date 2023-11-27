@@ -37,6 +37,9 @@
                         </v-col>
                         <v-col cols="12" sm="12">
                             <v-btn round color="primary" dark block type="submit">Register</v-btn>
+                            <v-btn icon dark @click="dialog = false">
+                                <v-icon>mdi-close</v-icon>
+                            </v-btn>
                         </v-col>
                     </v-row>
                 </v-container>
