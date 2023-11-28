@@ -16,10 +16,8 @@ import * as directives from 'vuetify/directives'
 import {fa} from "vuetify/iconsets/fa"
 import {aliases,mdi} from "vuetify/lib/iconsets/mdi"
 import "@mdi/font/css/materialdesignicons.css";
-
 const app = createApp(App)
-
-
+console.log(import.meta.env.VITE_API_URL)
 const vuetify = createVuetify({
     theme: {
         defaultTheme: 'dark',

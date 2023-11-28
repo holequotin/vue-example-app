@@ -1,6 +1,7 @@
 <template>
     <v-dialog v-model="dialog" persistent width="1024">
         <template v-slot:activator="{ props }">
+            {{ app }}
             <v-btn color="success" v-bind="props" block>
                 Create an account
             </v-btn>
@@ -19,11 +20,8 @@
                 <v-form @submit.prevent="submitForm">
                     <v-container>
                     <v-row>
-                        <v-col cols="12" sm="6" md="6">
-                            <v-text-field label="Legal first name*" required v-model="firstName.value.value" :error-messages="firstName.errorMessage.value"></v-text-field>
-                        </v-col>
-                        <v-col cols="12" sm="6" md="6">
-                            <v-text-field label="Legal last name*" v-model="lastName.value.value" :error-messages="lastName.errorMessage.value"
+                        <v-col cols="12" sm="12" md="12">
+                            <v-text-field label="Legal Name*" v-model="name.value.value" :error-messages="name.errorMessage.value"
                                 required></v-text-field>
                         </v-col>
                         <v-col cols="12">
@@ -73,8 +71,7 @@ defineRule('min',(value,params) => {
 
 const {handleSubmit} = useForm({
     validationSchema : {
-        firstName : 'required',
-        lastName : 'required',
+        name : 'required',
         email : 'required|email',
         password : 'required|min:3',
         confirmPassword: (value) => {
@@ -85,8 +82,7 @@ const {handleSubmit} = useForm({
     }
 })
 
-const firstName = useField('firstName');
-const lastName = useField('lastName');
+const name = useField('name');
 const emailField = useField('email')
 const password = useField('password');
 const confirmPassword = useField('confirmPassword');
@@ -94,6 +90,8 @@ const gender = useField('gender')
 
 const submit = handleSubmit(values => {
     alert(JSON.stringify(values, null, 2))
+
 })
 const dialog = ref(false)
+const app = ref('aa')
 </script>
