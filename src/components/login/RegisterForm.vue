@@ -1,7 +1,6 @@
 <template>
     <v-dialog v-model="dialog" persistent width="1024">
         <template v-slot:activator="{ props }">
-            {{ app }}
             <v-btn color="success" v-bind="props" block>
                 Create an account
             </v-btn>
@@ -58,6 +57,7 @@ import { ref } from 'vue'
 import { defineRule } from 'vee-validate';
 import {useField, useForm} from 'vee-validate'
 import { required, email,min} from '@vee-validate/rules';
+import axios from '../../apis/axios'
 
 defineRule('required',value => {
     return required(value)? true : 'This field is required'
@@ -89,9 +89,23 @@ const confirmPassword = useField('confirmPassword');
 const gender = useField('gender')
 
 const submit = handleSubmit(values => {
-    alert(JSON.stringify(values, null, 2))
-
+    // alert(JSON.stringify(values, null, 2))
+    const data = {
+        email: values.email,
+        name: values.name,
+        password: values.password,
+        password_confirmation: values.confirmPassword,
+    }
+    const endpoint = '/auth/register'
+    axios.post(endpoint,data)
+        .then(function (response) {
+            alert(response.data)
+            console.log(response)
+        })
+        .catch(function (error) {
+            alert(JSON.stringify(error.response.data.message))
+        })
+    alert('Send complete')
 })
 const dialog = ref(false)
-const app = ref('aa')
 </script>

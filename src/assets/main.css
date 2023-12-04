@@ -8,7 +8,10 @@
   min-height: 100vh;
   font-weight: normal;
 }
-
+.app {
+  min-height: 100vh;
+  font-weight: normal;
+}
 a,
 .green {
   text-decoration: none;
