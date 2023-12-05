@@ -113,13 +113,13 @@ const submit = handleSubmit(values => {
             dialog.value = false
         })
         .catch(function (error) {
-            const message = error.message || error.response.data.message
+            const message = error.response.data.message || error.message
             errorMessage.value = message
             loading.value = false
             //alert(JSON.stringify(message))
             setTimeout(() => {
                 errorMessage.value = ''
-            },2000)
+            },5000)
         })
 })
 const dialog = ref(false)
