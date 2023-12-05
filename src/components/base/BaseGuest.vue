@@ -2,7 +2,7 @@
     <v-container fluid class="fill-height bounder d-flex flex-column">
         <header class="header">
             <slot name="header"></slot>
-            <AlertBase message="This is first message" type="success"/>
+            <AlertBase :message="message" :type="type" v-show="showAlert"/>
         </header>
         <main class="main">
             <slot name="main"></slot>
@@ -14,6 +14,25 @@
 </template>
 <script setup>
 import AlertBase from '../notify/AlertBase.vue'
+import { watchEffect,ref } from 'vue';
+import {MessageType} from '../../utils/MessageType'
+//TODO: use alert store here
+import {useAlertStore} from '../../stores/alert'
+
+const alertStore = useAlertStore()
+const message = ref('default message')
+const type = ref(MessageType.INFO)
+const showAlert = ref(false)
+watchEffect(() => {
+    message.value = alertStore.messageState
+    type.value = alertStore.typeState
+
+    showAlert.value = true
+    console.log(message.value)
+    setTimeout(() => {
+        showAlert.value = false
+    },2000)
+})
 </script>
 <style scoped>
 .bounder {

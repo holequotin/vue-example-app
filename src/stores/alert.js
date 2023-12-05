@@ -4,7 +4,7 @@ import { MessageType } from '../utils/MessageType'
 
 export const useAlertStore = defineStore('alerts',() => {
     const messageState = ref("No Message")
-    const typeState = ref(MessageType.NONE)
+    const typeState = ref(MessageType.INFO)
 
     function showAlert(message, type) {
         messageState.value = message,

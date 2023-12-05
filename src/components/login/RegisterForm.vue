@@ -12,9 +12,7 @@
                         <v-icon>mdi-close</v-icon>
                     </v-btn></span>
             </v-card-title>
-            <v-card-subtitle>
-                Fast and easy
-            </v-card-subtitle>
+            <ALertBase :message="errorMessage" type="error" v-show="showError" z-index="100"></ALertBase>
             <v-card-text>
                 <v-form @submit.prevent="submitForm">
                     <v-container>
@@ -38,7 +36,7 @@
                             <v-select :items="['Men', 'Women']" label="Gender*" required v-model="gender.value.value" :error-messages="gender.errorMessage.value"></v-select>
                         </v-col>
                         <v-col cols="12" sm="12">
-                            <v-btn round color="primary" dark block type="submit" @click="submit">Register</v-btn>
+                            <v-btn round color="primary" dark block type="submit" @click="submit" :loading="loading">Register</v-btn>
                         </v-col>
                     </v-row>
                 </v-container>
@@ -53,11 +51,13 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref,computed } from 'vue'
 import { defineRule } from 'vee-validate';
 import {useField, useForm} from 'vee-validate'
 import { required, email,min} from '@vee-validate/rules';
 import axios from '../../apis/axios'
+import { useAlertStore } from '../../stores/alert';
+import ALertBase from '../notify/AlertBase.vue'
 
 defineRule('required',value => {
     return required(value)? true : 'This field is required'
@@ -68,7 +68,13 @@ defineRule('email',value => {
 defineRule('min',(value,params) => {
     return min(value,params)?true : `This field need to at least ${params} character`
 })
-
+const alertStore = useAlertStore()
+const errorMessage = ref('')
+const loading = ref(false)
+const showError = computed(() => {
+    if(errorMessage.value) return true
+    return false
+})
 const {handleSubmit} = useForm({
     validationSchema : {
         name : 'required',
@@ -97,15 +103,24 @@ const submit = handleSubmit(values => {
         password_confirmation: values.confirmPassword,
     }
     const endpoint = '/auth/register'
+    loading.value = true
     axios.post(endpoint,data)
         .then(function (response) {
-            alert(response.data)
+            loading.value = false
+            // alert(response.data)
             console.log(response)
+            alertStore.showAlert('Register complete','success')
+            dialog.value = false
         })
         .catch(function (error) {
-            alert(JSON.stringify(error.response.data.message))
+            const message = error.message || error.response.data.message
+            errorMessage.value = message
+            loading.value = false
+            //alert(JSON.stringify(message))
+            setTimeout(() => {
+                errorMessage.value = ''
+            },2000)
         })
-    alert('Send complete')
 })
 const dialog = ref(false)
 </script>
