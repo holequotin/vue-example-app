@@ -3,6 +3,6 @@
 
 <template>
   <main>
-    <TheWelcome />
+    <h1>This is Home View</h1>
   </main>
 </template>
