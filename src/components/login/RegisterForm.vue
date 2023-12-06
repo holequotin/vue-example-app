@@ -55,9 +55,9 @@ import { ref,computed } from 'vue'
 import { defineRule } from 'vee-validate';
 import {useField, useForm} from 'vee-validate'
 import { required, email,min} from '@vee-validate/rules';
-import axios from '../../apis/axios'
 import { useAlertStore } from '../../stores/alert';
 import ALertBase from '../notify/AlertBase.vue'
+import { apiService } from '../../service/apiService';
 
 defineRule('required',value => {
     return required(value)? true : 'This field is required'
@@ -102,9 +102,8 @@ const submit = handleSubmit(values => {
         password: values.password,
         password_confirmation: values.confirmPassword,
     }
-    const endpoint = '/auth/register'
     loading.value = true
-    axios.post(endpoint,data)
+    apiService.register(data)
         .then(function (response) {
             loading.value = false
             // alert(response.data)
