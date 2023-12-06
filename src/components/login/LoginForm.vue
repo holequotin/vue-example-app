@@ -23,6 +23,7 @@
 import RegisterForm from './RegisterForm.vue';
 import { useRouter } from 'vue-router'
 import { useField, useForm } from 'vee-validate'
+import { useUserStore } from '../../stores/user';
 import { useAlertStore } from '../../stores/alert';
 import { MessageType } from '../../utils/MessageType';
 import { getMessage } from '../../utils/errorHandler';
@@ -30,6 +31,7 @@ import { apiService } from '../../service/apiService';
 const router = useRouter()
 
 const alertStore = useAlertStore()
+const userStore = useUserStore()
 const { handleSubmit } = useForm({
     validationSchema: {
         emailField: 'email|required',
@@ -52,6 +54,7 @@ const login = handleSubmit((values) => {
             localStorage.setItem('token', token)
             router.replace({ name: 'home' })
             alertStore.showAlert('Login successfully', MessageType.SUCCESS)
+            userStore.getUser()
             router.push({ name: 'home' })
         })
         .catch((error) => {
