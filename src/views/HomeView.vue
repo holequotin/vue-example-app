@@ -1,12 +1,11 @@
 <template>
-  <BaseGuest>
-    <template #main>
-      <main>
-        <h1>This is Home View</h1>
-      </main>
+  <BaseLayout>
+    <template #appbar>
+      <AppBar></AppBar>
     </template>
-  </BaseGuest>
+  </BaseLayout>
 </template>
 <script setup>
-import BaseGuest from '../components/base/BaseGuest.vue'
+import BaseLayout from './base/BaseLayout.vue';
+import AppBar from '../components/home/appbar/AppBar.vue'
 </script>
