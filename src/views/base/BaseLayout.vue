@@ -6,21 +6,26 @@
 
             </v-app-bar>
         </slot>
-        <v-navigation-drawer location="left">
-            <v-list>
-                <v-list-item title="Drawer left"></v-list-item>
-            </v-list>
-        </v-navigation-drawer>
+        <slot name="left-drawer">
+            <v-navigation-drawer location="left" width="430">
+                <v-list>
+                    <v-list-item title="Drawer left"></v-list-item>
+                </v-list>
+            </v-navigation-drawer>
+        </slot>
 
-        <v-navigation-drawer location="right">
-            <v-list>
-                <v-list-item title="Drawer right"></v-list-item>
-            </v-list>
-        </v-navigation-drawer>
-
-        <v-main class="d-flex align-center justify-center" style="min-height: 300px;">
-            Main Content
-        </v-main>
+        <slot name="right-drawer">
+            <v-navigation-drawer location="right" width="430">
+                <v-list>
+                    <v-list-item title="Drawer right"></v-list-item>
+                </v-list>
+            </v-navigation-drawer>
+        </slot>
+        <slot name="main">
+            <v-main class="d-flex align-center justify-center" style="min-height: 300px;">
+                Main Content
+            </v-main>
+        </slot>
     </v-layout>
 </template>
 
