@@ -2,7 +2,7 @@
     <v-card class="mx-auto mt-5" :title="props.post.user.name" :subtitle="formatedDate" width="70%">
         <template v-slot:prepend>
             <v-avatar color="blue-darken-2" size="large">
-                <span class="text-h5">CJ</span>
+                <span class="text-h5">{{ avatarChar }}</span>
             </v-avatar>
         </template>
         <template v-slot:append>
@@ -37,5 +37,8 @@ import { computed } from 'vue';
 const props = defineProps(['post'])
 const formatedDate = computed(() => {
     return moment(props.post.createdAt).fromNow()
+})
+const avatarChar = computed(() => {
+    return props.post.user.name[0];
 })
 </script>

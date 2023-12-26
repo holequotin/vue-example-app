@@ -1,4 +1,4 @@
-import {ref} from 'vue'
+import {ref, computed} from 'vue'
 import { defineStore } from 'pinia'
 import { userService } from '../service/userService'
 import { useAlertStore } from './alert'
@@ -7,6 +7,12 @@ import { MessageType } from '../utils/MessageType'
 
 export const useUserStore = defineStore('user',() => {
     const user = ref({})
+    const avatarChar = computed(() => {
+        if(user.value.name) {
+            return user.value.name[0]
+        }
+        return 'A'
+    })
     function getUser() {
         userService.getUser()
             .then((response) => {
@@ -20,5 +26,5 @@ export const useUserStore = defineStore('user',() => {
                 alertStore.showAlert('This error from getUser',MessageType.ERROR)
             })
     }
-    return {user,getUser}
+    return {user,getUser,avatarChar}
 })

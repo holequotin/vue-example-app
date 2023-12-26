@@ -25,10 +25,13 @@ import PostCard from '../components/home/feed/PostCard.vue';
 import DrawerLeft from '../components/home/drawerLeft/DrawerLeft.vue';
 import DrawerRight from '../components/home/drawerRight/DrawerRight.vue';
 import { usePostStore } from '../stores/post';
+import { useUserStore } from '../stores/user';
 import { watchEffect } from 'vue';
 
 const postStore = usePostStore();
+const userStore = useUserStore();
 watchEffect(() => {
   postStore.getAllPost()
+  userStore.getUser()
 })
 </script>

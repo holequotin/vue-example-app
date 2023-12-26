@@ -2,7 +2,7 @@
   <v-menu>
     <template v-slot:activator="{ props }">
       <v-avatar color="red" :size="55" class="ma-2" v-bind="props">
-        <span class="text-h5">CJ</span>
+        <span class="text-h5">{{ userStore.avatarChar }}</span>
       </v-avatar>
     </template>
     <v-list>
@@ -14,4 +14,6 @@
 
 <script setup>
 import AvatarMenuItem from './AvatarMenuItem.vue';
+import { useUserStore } from '../../../stores/user';
+const userStore = useUserStore()
 </script>

@@ -25,4 +25,5 @@ import SearchBox from './SearchBox.vue';
 import HomeButton from './HomeButton.vue';
 import NavigationBar from './NavigationBar.vue';
 import AvatarMenu from './AvatarMenu.vue'
+
 </script>
