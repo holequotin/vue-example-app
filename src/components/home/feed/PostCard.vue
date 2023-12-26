@@ -1,5 +1,5 @@
 <template>
-    <v-card class="mx-auto mt-5" title="This is title" subtitle="This is subtitle" width="70%">
+    <v-card class="mx-auto mt-5" :title="props.post.user.name" :subtitle="formatedDate" width="70%">
         <template v-slot:prepend>
             <v-avatar color="blue-darken-2" size="large">
                 <span class="text-h5">CJ</span>
@@ -10,13 +10,13 @@
             <v-btn variant="plain" icon="mdi-close"></v-btn>
         </template>
         <slot name="text">
-            <v-card-text>
-                This is card Text
+            <v-card-text v-if="props.post.content">
+                {{props.post.content}}
             </v-card-text>
         </slot>
         <slot name="image">
-            <v-img width="100%" aspect-ratio="16/9" cover
-                src="https://cdn.vuetifyjs.com/images/parallax/material.jpg"></v-img>
+            <v-img width="100%" aspect-ratio="16/9" cover v-if="props.post.imgPath"
+                :src="props.post.imgPath"></v-img>
         </slot>
         <v-container grid-list-xs fluid class="d-flex flex-row mt-1">
             <slot name="icon">
@@ -32,4 +32,10 @@
 
 <script setup>
 import PostActions from './PostActions.vue'
+import moment from 'moment'
+import { computed } from 'vue';
+const props = defineProps(['post'])
+const formatedDate = computed(() => {
+    return moment(props.post.createdAt).fromNow()
+})
 </script>

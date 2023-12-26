@@ -1,5 +1,5 @@
 import axios from '../apis/axios'
-class APIService {
+class UserService {
     constructor(api) {
         this.api = api
     }
@@ -23,5 +23,5 @@ class APIService {
         return this.api.post(endpoint,data)
     }
 }
-const apiService = new APIService(axios)
-export {apiService}
+const userService = new UserService(axios)
+export {userService}

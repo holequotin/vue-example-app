@@ -27,7 +27,7 @@ import { useUserStore } from '../../stores/user';
 import { useAlertStore } from '../../stores/alert';
 import { MessageType } from '../../utils/MessageType';
 import { getMessage } from '../../utils/errorHandler';
-import { apiService } from '../../service/apiService';
+import { userService } from '../../service/userService';
 const router = useRouter()
 
 const alertStore = useAlertStore()
@@ -46,7 +46,7 @@ const login = handleSubmit((values) => {
         email: values.emailField,
         password: values.password
     }
-    apiService.login(data)
+    userService.login(data)
         .then((response) => {
             const token = response.data.access_token
             //TO DO: Save user to store

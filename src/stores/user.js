@@ -1,6 +1,6 @@
 import {ref} from 'vue'
 import { defineStore } from 'pinia'
-import { apiService } from '../service/apiService'
+import { userService } from '../service/userService'
 import { useAlertStore } from './alert'
 // import { getMessage } from '../utils/errorHandler'
 import { MessageType } from '../utils/MessageType'
@@ -8,7 +8,7 @@ import { MessageType } from '../utils/MessageType'
 export const useUserStore = defineStore('user',() => {
     const user = ref({})
     function getUser() {
-        apiService.getUser()
+        userService.getUser()
             .then((response) => {
                 const userData = response.data
                 user.value = userData

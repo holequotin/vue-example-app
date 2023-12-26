@@ -57,7 +57,7 @@ import {useField, useForm} from 'vee-validate'
 import { required, email,min} from '@vee-validate/rules';
 import { useAlertStore } from '../../stores/alert';
 import ALertBase from '../notify/AlertBase.vue'
-import { apiService } from '../../service/apiService';
+import { userService } from '../../service/userService';
 
 defineRule('required',value => {
     return required(value)? true : 'This field is required'
@@ -103,7 +103,7 @@ const submit = handleSubmit(values => {
         password_confirmation: values.confirmPassword,
     }
     loading.value = true
-    apiService.register(data)
+    userService.register(data)
         .then(function (response) {
             loading.value = false
             // alert(response.data)
