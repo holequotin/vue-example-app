@@ -15,6 +15,9 @@
     <template #left-drawer>
       <DrawerLeft></DrawerLeft>
     </template>
+    <template #right-drawer>
+      <DrawerRight></DrawerRight>
+    </template>
   </BaseLayout>
 </template>
 <script setup>
@@ -23,4 +26,5 @@ import AppBar from '../components/home/appbar/AppBar.vue'
 import NewPostCard from '../components/home/feed/NewPostCard.vue';
 import PostCard from '../components/home/feed/PostCard.vue';
 import DrawerLeft from '../components/home/drawerLeft/DrawerLeft.vue';
+import DrawerRight from '../components/home/drawerRight/DrawerRight.vue';
 </script>
