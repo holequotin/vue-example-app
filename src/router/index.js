@@ -19,7 +19,11 @@ const router = createRouter({
     {
       path: '/login',
       name: 'login',
-      component: () => import('../views/LoginView.vue')
+      component: () => import('../views/LoginView.vue'),
+      beforeEnter : ()  => {
+        if(isAuthenticated()) return {name: 'home'}
+        return true
+      }
     }
   ]
 })
