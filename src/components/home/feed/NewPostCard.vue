@@ -1,5 +1,5 @@
 <template>
-    <v-card width="90%">
+    <v-card width="70%">
         <v-card-item>
             <v-container grid-list-xs fluid class="d-flex flex-row">
                 <AvatarIcon></AvatarIcon>

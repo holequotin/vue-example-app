@@ -12,6 +12,9 @@
         <PostCard></PostCard>
       </v-main>
     </template>
+    <template #left-drawer>
+      <DrawerLeft></DrawerLeft>
+    </template>
   </BaseLayout>
 </template>
 <script setup>
@@ -19,4 +22,5 @@ import BaseLayout from './base/BaseLayout.vue';
 import AppBar from '../components/home/appbar/AppBar.vue'
 import NewPostCard from '../components/home/feed/NewPostCard.vue';
 import PostCard from '../components/home/feed/PostCard.vue';
+import DrawerLeft from '../components/home/drawerLeft/DrawerLeft.vue';
 </script>

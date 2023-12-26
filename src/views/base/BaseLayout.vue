@@ -7,7 +7,7 @@
             </v-app-bar>
         </slot>
         <slot name="left-drawer">
-            <v-navigation-drawer location="left" width="430">
+            <v-navigation-drawer location="left" width="360">
                 <v-list>
                     <v-list-item title="Drawer left"></v-list-item>
                 </v-list>
@@ -15,7 +15,7 @@
         </slot>
 
         <slot name="right-drawer">
-            <v-navigation-drawer location="right" width="430">
+            <v-navigation-drawer location="right" width="360">
                 <v-list>
                     <v-list-item title="Drawer right"></v-list-item>
                 </v-list>

@@ -1,5 +1,5 @@
 <template>
-    <v-card class="mx-auto mt-5" title="This is title" subtitle="This is subtitle" width="90%">
+    <v-card class="mx-auto mt-5" title="This is title" subtitle="This is subtitle" width="70%">
         <template v-slot:prepend>
             <v-avatar color="blue-darken-2" size="large">
                 <span class="text-h5">CJ</span>
