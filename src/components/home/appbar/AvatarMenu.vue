@@ -28,7 +28,7 @@ function logout() {
     .then((response) => {
         router.replace({name : 'login'})
         localStorage.setItem('token','')
-        alertStore.showAlert(response.data.message,MessageType.INFO)
+        alertStore.showAlert(response.data.message,MessageType.SUCCESS)
     })
     .catch((error) => {
       const message = getMessage(error)

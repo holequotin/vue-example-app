@@ -1,6 +1,6 @@
 <template>
     <v-slide-x-transition>
-        <v-alert :text="message" :type="type" variant="tonal" class="alert w-50"></v-alert>
+        <v-alert :text="message" :type="type" class="alert-center w-50"></v-alert>
     </v-slide-x-transition>
 </template>
 
@@ -10,7 +10,7 @@ defineProps(['message', 'type'])
 </script>
 
 <style scoped>
-.alert {
+.alert-center {
     position: fixed;
     top: 20px;
     left: 50%;

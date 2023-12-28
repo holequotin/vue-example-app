@@ -3,7 +3,7 @@ import { defineStore } from 'pinia'
 import { MessageType } from '../utils/MessageType'
 
 export const useAlertStore = defineStore('alerts',() => {
-    const messageState = ref("No Message")
+    const messageState = ref("")
     const typeState = ref(MessageType.INFO)
 
     function showAlert(message, type) {
