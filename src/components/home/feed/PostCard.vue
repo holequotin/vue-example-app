@@ -19,11 +19,11 @@
                 :src="props.post.imgPath"></v-img>
         </slot>
         <!--reaction infomation-->
-        <PostInfo :post-reactions="props.post.reactions"></PostInfo>
+        <PostInfo :post-reactions="reactionRef"></PostInfo>
         <v-divider></v-divider>
         <!--actions in post-->
         <v-container grid-list-xs fluid>
-            <PostActions :post-reactions="post.reactions"></PostActions>
+            <PostActions :post-reactions="reactionRef" :post-id="post.id" @update-reactions="updateReaction"></PostActions>
         </v-container>
     </v-card>
 </template>
@@ -32,12 +32,36 @@
 import PostActions from './PostActions.vue'
 import PostInfo from './PostInfo.vue';
 import moment from 'moment'
-import { computed } from 'vue';
+import { computed,ref } from 'vue';
+import { useUserStore } from '../../../stores/user';
+
+const userStore = useUserStore()
 const props = defineProps(['post'])
+const reactionRef = ref(props.post.reactions)
 const formatedDate = computed(() => {
     return moment(props.post.createdAt).fromNow()
 })
 const avatarChar = computed(() => {
     return props.post.user.name[0];
 })
+function updateReaction(reaction) {
+    if(reaction) {
+        let isExisted = false;
+        reactionRef.value = reactionRef.value.map((item) => {
+            if(item.user.id === userStore.user.id) {
+                isExisted = true;
+                return {...item,type : reaction.id}
+            } else {
+                return item;
+            }
+        })
+        if(!isExisted) {
+            reactionRef.value.push({post_id : props.post.id, user : userStore.user,type : reaction.id})
+        }
+    }else{
+        reactionRef.value = reactionRef.value.filter((item) => {
+            return item.user.id !== userStore.user.id
+        })
+    }
+}
 </script>

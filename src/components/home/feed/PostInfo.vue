@@ -25,9 +25,10 @@
 </template>
 <script setup>
 import { reactions } from '../../../utils/constants';
-import { computed } from 'vue'
+import { computed} from 'vue'
 
 const props = defineProps(['postReactions'])
+
 const reacted = computed(() => {
     const result = new Map()
     for(let i=0;i<props.postReactions.length;i++) {

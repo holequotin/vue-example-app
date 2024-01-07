@@ -31,19 +31,14 @@
 </template>
 <script setup>
 import ReactionIcon from './ReactionIcon.vue';
-import { computed, ref } from 'vue'
+import { computed } from 'vue'
 import { reactions } from '../../../utils/constants';
-import { useUserStore } from '../../../stores/user'
+import { useUserStore } from '../../../stores/user';
+import { reactionService } from '../../../service/reactionService'
 
 const userStore = useUserStore()
-const props = defineProps(['postReactions'])
-const hasReaction = ref(false)
-
-// const currReaction = ref({
-//     tooltip: 'Like',
-//     icon: 'mdi-thumb-up-outline',
-//     color: 'none'
-// })
+const props = defineProps(['postReactions', 'postId'])
+const emit = defineEmits(['update-reactions'])
 
 const currReaction = computed(() => {
     const result = props.postReactions.filter((item) => {
@@ -53,30 +48,54 @@ const currReaction = computed(() => {
         const final_result = reactions.find((item) => {
             return item.id === result[0].type
         })
-        return final_result
+        return { ...final_result, isReacted: true }
     }
     return {
         tooltip: 'Like',
         icon: 'mdi-thumb-up-outline',
-        color: 'none'
+        color: 'none',
+        isReacted: false
     }
 })
 
 function react(reaction) {
-    if (reaction.tooltip === currReaction.value.tooltip && hasReaction.value == true) {
+    if (reaction.tooltip === currReaction.value.tooltip && currReaction.value.isReacted == true) {
         currReaction.value.color = 'none'
         currReaction.value.icon = 'mdi-thumb-up-outline'
         currReaction.value.tooltip = 'Like'
-        hasReaction.value = false
+        currReaction.value.isReacted == false
 
-        //send request here
+        //send request to remove reaction here
+        reactionService.removeReaction(props.postId).then((response) => {
+            console.log(response)
+        }).then((error) => {
+            //handle error with alert
+            console.log(error)
+        })
+        emit('update-reactions')
     } else {
+        //send request to update or store reaction
+        if (currReaction.value.isReacted) {
+            // update request
+            reactionService.updateReaction(props.postId, reaction.id).then((response) => {
+                console.log(response)
+            }).catch((error) => {
+                console.log(error)
+            })
+        } else {
+            // store request
+            reactionService.storeReaction(props.postId, reaction.id).then((response) => {
+                console.log(response)
+            }).catch((error) => {
+                console.log(error)
+            })
+        }
         currReaction.value.color = reaction.color
         currReaction.value.icon = reaction.icon
         currReaction.value.tooltip = reaction.tooltip
-        hasReaction.value = true
+        currReaction.value.isReacted == true
+        emit('update-reactions', reaction)
     }
-
     // send request here
 }
 </script> 
