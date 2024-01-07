@@ -31,20 +31,37 @@
 </template>
 <script setup>
 import ReactionIcon from './ReactionIcon.vue';
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
+import { reactions } from '../../../utils/constants';
+import { useUserStore } from '../../../stores/user'
+
+const userStore = useUserStore()
+const props = defineProps(['postReactions'])
 const hasReaction = ref(false)
-const reactions = [
-    { color: 'primary', tooltip: 'Like', icon: 'mdi-thumb-up' },
-    { color: 'pink', tooltip: 'Love', icon: 'mdi-heart' },
-    { color: 'yellow lighten-2', tooltip: 'Sad', icon: 'mdi-emoticon-sad' },
-    { color: 'yellow lighten-2', tooltip: 'Haha', icon: 'mdi-emoticon-lol' },
-    { color: 'yellow lighten-2', tooltip: 'Angry', icon: 'mdi-emoticon-angry' },
-]
-const currReaction = ref({
-    tooltip: 'Like',
-    icon: 'mdi-thumb-up-outline',
-    color: 'none'
+
+// const currReaction = ref({
+//     tooltip: 'Like',
+//     icon: 'mdi-thumb-up-outline',
+//     color: 'none'
+// })
+
+const currReaction = computed(() => {
+    const result = props.postReactions.filter((item) => {
+        return item.user.id === userStore.user.id
+    })
+    if (result.length > 0) {
+        const final_result = reactions.find((item) => {
+            return item.id === result[0].type
+        })
+        return final_result
+    }
+    return {
+        tooltip: 'Like',
+        icon: 'mdi-thumb-up-outline',
+        color: 'none'
+    }
 })
+
 function react(reaction) {
     if (reaction.tooltip === currReaction.value.tooltip && hasReaction.value == true) {
         currReaction.value.color = 'none'

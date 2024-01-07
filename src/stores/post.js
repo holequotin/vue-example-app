@@ -4,7 +4,7 @@ import { postService } from '../service/postService'
 
 export const usePostStore = defineStore('posts', () => {
   const posts = ref([])
-  function getAllPost() {
+  async function getAllPost() {
     postService
       .getAllPost()
       .then((response) => {

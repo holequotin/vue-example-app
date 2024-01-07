@@ -1,5 +1,5 @@
-const avatarChar = (name) => {
+const getAvatarChar = (name) => {
     return name[0]
 }
 
-export {avatarChar}
+export {getAvatarChar}

@@ -1,7 +1,7 @@
 <template>
     <AppBar></AppBar>
     <v-layout class="rounded rounded-md">
-        <AlertBase :message="message" :type="type" v-show="showAlert" />
+        <AlertBase :message="alertStore.messageState" :type="alertStore.typeState" v-show="showAlert" />
         <slot name="appbar">
             <v-app-bar title="This is slot app bar">
 
@@ -34,16 +34,14 @@
 import AlertBase from '../../components/notify/AlertBase.vue';
 import { useAlertStore } from '../../stores/alert';
 import { ref, watchEffect } from 'vue'
-import { MessageType } from '../../utils/MessageType';
+// import { MessageType } from '../../utils/MessageType';
 const alertStore = useAlertStore()
-const message = ref('default message')
-const type = ref(MessageType.INFO)
 const showAlert = ref(false)
 watchEffect(() => {
-    message.value = alertStore.messageState
-    type.value = alertStore.typeState
-    if (message.value != '') {
+    if (alertStore.messageState != '') {
+        console.log('Show Alert', alertStore.messageState)
         showAlert.value = true
+        //alertStore.typeState = MessageType.INFO
         setTimeout(() => {
             showAlert.value = false
         }, 2000)

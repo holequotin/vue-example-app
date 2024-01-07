@@ -33,7 +33,7 @@ class UserService {
             }
         }
         return this.api.post(endpoint,data,config)
-    } 
+    }
 }
 const userService = new UserService(axios)
 export {userService}

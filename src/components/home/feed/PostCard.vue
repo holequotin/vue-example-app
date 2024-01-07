@@ -18,20 +18,19 @@
             <v-img width="100%" aspect-ratio="16/9" cover v-if="props.post.imgPath"
                 :src="props.post.imgPath"></v-img>
         </slot>
-        <v-container grid-list-xs fluid class="d-flex flex-row mt-1">
-            <slot name="icon">
-                <v-icon icon="$vuetify" size="x-small"></v-icon>
-            </slot>
-        </v-container>
+        <!--reaction infomation-->
+        <PostInfo :post-reactions="props.post.reactions"></PostInfo>
         <v-divider></v-divider>
+        <!--actions in post-->
         <v-container grid-list-xs fluid>
-            <PostActions></PostActions>
+            <PostActions :post-reactions="post.reactions"></PostActions>
         </v-container>
     </v-card>
 </template>
 
 <script setup>
 import PostActions from './PostActions.vue'
+import PostInfo from './PostInfo.vue';
 import moment from 'moment'
 import { computed } from 'vue';
 const props = defineProps(['post'])

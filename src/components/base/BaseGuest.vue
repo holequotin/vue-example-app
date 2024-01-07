@@ -2,7 +2,7 @@
     <v-container fluid class="fill-height bounder d-flex flex-column">
         <header class="header">
             <slot name="header"></slot>
-            <AlertBase :message="message" :type="type" v-show="showAlert"/>
+            <AlertBase :message="alertStore.messageState" :type="type" v-show="showAlert"/>
         </header>
         <main class="main">
             <slot name="main"></slot>
@@ -26,12 +26,12 @@ const showAlert = ref(false)
 watchEffect(() => {
     message.value = alertStore.messageState
     type.value = alertStore.typeState
-
-    showAlert.value = true
-    console.log(message.value)
-    setTimeout(() => {
-        showAlert.value = false
-    },2000)
+    if (message.value != '') {
+        showAlert.value = true
+        setTimeout(() => {
+            showAlert.value = false
+        }, 2000)
+    }
 })
 </script>
 <style scoped>

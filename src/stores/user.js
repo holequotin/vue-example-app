@@ -1,9 +1,9 @@
 import {ref, computed} from 'vue'
 import { defineStore } from 'pinia'
 import { userService } from '../service/userService'
-import { useAlertStore } from './alert'
-// import { getMessage } from '../utils/errorHandler'
-import { MessageType } from '../utils/MessageType'
+import { errorHandler } from '../utils/errorHandler'
+
+
 
 export const useUserStore = defineStore('user',() => {
     const user = ref({})
@@ -20,10 +20,12 @@ export const useUserStore = defineStore('user',() => {
                 user.value = userData
             })
             .catch((error) => {
-                //const message = getMessage(error)
-                console.log(error)
-                const alertStore = useAlertStore()
-                alertStore.showAlert('This error from getUser',MessageType.ERROR)
+                // console.log(error.response.status)
+                // router.replace({name: 'login'})
+                // const message = getMessage(error)
+                // const alertStore = useAlertStore()
+                // alertStore.showAlert(message,MessageType.ERROR)
+                errorHandler(error)
             })
     }
     return {user,getUser,avatarChar}

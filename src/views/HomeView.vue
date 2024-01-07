@@ -33,5 +33,12 @@ const userStore = useUserStore();
 watchEffect(() => {
   postStore.getAllPost()
   userStore.getUser()
+  // Promise.all([postStore.getAllPost(),userStore.getUser()])
+  //   .then((results) => {
+  //       console.log(results)
+  //   })
+  //   .catch((error) => {
+  //     console.log(error)
+  //   })
 })
 </script>
