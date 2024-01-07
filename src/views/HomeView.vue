@@ -26,19 +26,27 @@ import DrawerLeft from '../components/home/drawerLeft/DrawerLeft.vue';
 import DrawerRight from '../components/home/drawerRight/DrawerRight.vue';
 import { usePostStore } from '../stores/post';
 import { useUserStore } from '../stores/user';
-import { watchEffect } from 'vue';
+import { onMounted,ref } from 'vue';
 
-const postStore = usePostStore();
-const userStore = useUserStore();
-watchEffect(() => {
+
+const postStore = usePostStore()
+const userStore = useUserStore()
+const posts = ref(postStore.posts);
+const user = ref(userStore.user);
+
+
+
+// console.log('Load new data outside')
+// watchEffect(() => {
+//   postStore.getAllPost()
+//   userStore.getUser()
+//   console.log('Load new data')
+// })
+onMounted(() => {
   postStore.getAllPost()
   userStore.getUser()
-  // Promise.all([postStore.getAllPost(),userStore.getUser()])
-  //   .then((results) => {
-  //       console.log(results)
-  //   })
-  //   .catch((error) => {
-  //     console.log(error)
-  //   })
+
+  posts.value = postStore.posts
+  user.value = userStore.user
 })
 </script>

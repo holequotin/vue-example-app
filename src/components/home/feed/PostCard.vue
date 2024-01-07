@@ -32,7 +32,7 @@
 import PostActions from './PostActions.vue'
 import PostInfo from './PostInfo.vue';
 import moment from 'moment'
-import { computed,ref } from 'vue';
+import { computed,ref, watchEffect } from 'vue';
 import { useUserStore } from '../../../stores/user';
 
 const userStore = useUserStore()
@@ -64,4 +64,7 @@ function updateReaction(reaction) {
         })
     }
 }
+watchEffect(() => {
+    reactionRef.value = props.post.reactions
+})
 </script>

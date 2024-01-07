@@ -68,7 +68,7 @@ function react(reaction) {
         //send request to remove reaction here
         reactionService.removeReaction(props.postId).then((response) => {
             console.log(response)
-        }).then((error) => {
+        }).catch((error) => {
             //handle error with alert
             console.log(error)
         })
