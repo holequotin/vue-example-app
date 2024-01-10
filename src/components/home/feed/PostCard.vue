@@ -25,6 +25,14 @@
         <v-container grid-list-xs fluid>
             <PostActions :post-reactions="reactionRef" :post-id="post.id" @update-reactions="updateReaction"></PostActions>
         </v-container>
+        <v-divider></v-divider>
+        <slot name="comment-list">
+            <CommentList></CommentList>
+        </slot>
+        <v-divider></v-divider>
+        <slot name="new-comment">
+            <NewComment></NewComment>
+        </slot>
     </v-card>
 </template>
 
@@ -34,6 +42,8 @@ import PostInfo from './PostInfo.vue';
 import moment from 'moment'
 import { computed,ref, watchEffect } from 'vue';
 import { useUserStore } from '../../../stores/user';
+import CommentList from './CommentList.vue';
+import NewComment from './NewComment.vue';
 
 const userStore = useUserStore()
 const props = defineProps(['post'])

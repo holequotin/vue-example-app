@@ -18,9 +18,13 @@
             </v-menu>
         </v-col>
         <v-col>
-            <v-btn variant="plain" block prepend-icon="mdi-comment-outline">
+            <v-btn variant="plain" block prepend-icon="mdi-comment-outline" @click="dialog = !dialog">
                 Comment
             </v-btn>
+            <!-- <v-btn color="primary" @click="dialog = !dialog">
+                Open Dialog
+            </v-btn> -->
+            <PostDialog :dialog="dialog" @toggle="dialog =!dialog"></PostDialog>
         </v-col>
         <v-col>
             <v-btn variant="plain" block prepend-icon="mdi-share-outline">
@@ -35,10 +39,13 @@ import { computed } from 'vue'
 import { reactions } from '../../../utils/constants';
 import { useUserStore } from '../../../stores/user';
 import { reactionService } from '../../../service/reactionService'
+import PostDialog from './PostDialog.vue';
+import { ref } from 'vue'
 
 const userStore = useUserStore()
 const props = defineProps(['postReactions', 'postId'])
 const emit = defineEmits(['update-reactions'])
+const dialog = ref(false)
 
 const currReaction = computed(() => {
     const result = props.postReactions.filter((item) => {
