@@ -83,11 +83,12 @@ function react(reaction) {
         })
     } else {
         //send request to update or store reaction
-        postStore.storeReaction(props.post.id,reaction)
+        
         if (currReaction.value.isReacted) {
             // update request
             reactionService.updateReaction(props.post.id, reaction.id).then((response) => {
                 console.log(response)
+                postStore.updateReaction(props.post.id,response.data)
             }).catch((error) => {
                 console.log(error)
             })
@@ -95,6 +96,7 @@ function react(reaction) {
             // store request
             reactionService.storeReaction(props.post.id, reaction.id).then((response) => {
                 console.log(response)
+                postStore.storeReaction(props.post.id,response.data)
             }).catch((error) => {
                 console.log(error)
             })
