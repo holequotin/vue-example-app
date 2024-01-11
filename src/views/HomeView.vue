@@ -6,7 +6,7 @@
     <template #main>
       <v-main class="d-flex align-center justify-center flex-column" style="min-height: 300px;">
         <NewPostCard></NewPostCard>
-        <PostCard v-for="post in postStore.posts" :key="post.id" :post="post"></PostCard>
+        <PostCard v-for="post in postStore.posts" :key="post.id" :post="post" type="feed"></PostCard>
       </v-main>
     </template>
     <template #left-drawer>

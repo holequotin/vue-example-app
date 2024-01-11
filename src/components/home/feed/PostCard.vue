@@ -7,7 +7,7 @@
         </template>
         <template v-slot:append>
             <v-btn variant="plain" icon="mdi-dots-horizontal"></v-btn>
-            <v-btn variant="plain" icon="mdi-close"></v-btn>
+            <v-btn variant="plain" icon="mdi-close" v-if="$props.type === 'feed'"></v-btn>
         </template>
         <slot name="text">
             <v-card-text v-if="props.post.content">
@@ -19,20 +19,17 @@
                 :src="props.post.imgPath"></v-img>
         </slot>
         <!--reaction infomation-->
-        <PostInfo :post-reactions="reactionRef"></PostInfo>
+        <PostInfo :post-reactions="post.reactions"></PostInfo>
         <v-divider></v-divider>
         <!--actions in post-->
         <v-container grid-list-xs fluid>
-            <PostActions :post-reactions="reactionRef" :post-id="post.id" @update-reactions="updateReaction"></PostActions>
+            <PostActions :post-reactions="post.reactions" :post="post" :type="props.type"></PostActions>
         </v-container>
         <v-divider></v-divider>
         <slot name="comment-list">
-            <CommentList></CommentList>
+            <CommentList :comments="post.comments" :type="props.type"></CommentList>
         </slot>
         <v-divider></v-divider>
-        <slot name="new-comment">
-            <NewComment></NewComment>
-        </slot>
     </v-card>
 </template>
 
@@ -40,41 +37,16 @@
 import PostActions from './PostActions.vue'
 import PostInfo from './PostInfo.vue';
 import moment from 'moment'
-import { computed,ref, watchEffect } from 'vue';
-import { useUserStore } from '../../../stores/user';
+import { computed } from 'vue';
+//import { useUserStore } from '../../../stores/user';
 import CommentList from './CommentList.vue';
-import NewComment from './NewComment.vue';
 
-const userStore = useUserStore()
-const props = defineProps(['post'])
-const reactionRef = ref(props.post.reactions)
+//const userStore = useUserStore()
+const props = defineProps(['post','type'])
 const formatedDate = computed(() => {
     return moment(props.post.createdAt).fromNow()
 })
 const avatarChar = computed(() => {
     return props.post.user.name[0];
-})
-function updateReaction(reaction) {
-    if(reaction) {
-        let isExisted = false;
-        reactionRef.value = reactionRef.value.map((item) => {
-            if(item.user.id === userStore.user.id) {
-                isExisted = true;
-                return {...item,type : reaction.id}
-            } else {
-                return item;
-            }
-        })
-        if(!isExisted) {
-            reactionRef.value.push({post_id : props.post.id, user : userStore.user,type : reaction.id})
-        }
-    }else{
-        reactionRef.value = reactionRef.value.filter((item) => {
-            return item.user.id !== userStore.user.id
-        })
-    }
-}
-watchEffect(() => {
-    reactionRef.value = props.post.reactions
 })
 </script>

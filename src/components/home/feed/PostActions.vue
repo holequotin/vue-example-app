@@ -18,13 +18,13 @@
             </v-menu>
         </v-col>
         <v-col>
-            <v-btn variant="plain" block prepend-icon="mdi-comment-outline" @click="dialog = !dialog">
+            <v-btn variant="plain" block prepend-icon="mdi-comment-outline" @click="dialog = !dialog" v-if="props.type === 'feed'">
                 Comment
             </v-btn>
-            <!-- <v-btn color="primary" @click="dialog = !dialog">
-                Open Dialog
-            </v-btn> -->
-            <PostDialog :dialog="dialog" @toggle="dialog =!dialog"></PostDialog>
+            <v-btn variant="plain" block prepend-icon="mdi-comment-outline" v-if="props.type === 'dialog'">
+                Comment
+            </v-btn>
+            <PostDialog :dialog="dialog" @toggle="dialog =!dialog" :post="post"></PostDialog>
         </v-col>
         <v-col>
             <v-btn variant="plain" block prepend-icon="mdi-share-outline">
@@ -38,13 +38,14 @@ import ReactionIcon from './ReactionIcon.vue';
 import { computed } from 'vue'
 import { reactions } from '../../../utils/constants';
 import { useUserStore } from '../../../stores/user';
+import { usePostStore } from '../../../stores/post';
 import { reactionService } from '../../../service/reactionService'
 import PostDialog from './PostDialog.vue';
 import { ref } from 'vue'
 
 const userStore = useUserStore()
-const props = defineProps(['postReactions', 'postId'])
-const emit = defineEmits(['update-reactions'])
+const postStore = usePostStore()
+const props = defineProps(['postReactions','type','post'])
 const dialog = ref(false)
 
 const currReaction = computed(() => {
@@ -73,25 +74,26 @@ function react(reaction) {
         currReaction.value.isReacted == false
 
         //send request to remove reaction here
-        reactionService.removeReaction(props.postId).then((response) => {
+        postStore.deleteReaction(props.post.id)
+        reactionService.removeReaction(props.post.id).then((response) => {
             console.log(response)
         }).catch((error) => {
             //handle error with alert
             console.log(error)
         })
-        emit('update-reactions')
     } else {
         //send request to update or store reaction
+        postStore.storeReaction(props.post.id,reaction)
         if (currReaction.value.isReacted) {
             // update request
-            reactionService.updateReaction(props.postId, reaction.id).then((response) => {
+            reactionService.updateReaction(props.post.id, reaction.id).then((response) => {
                 console.log(response)
             }).catch((error) => {
                 console.log(error)
             })
         } else {
             // store request
-            reactionService.storeReaction(props.postId, reaction.id).then((response) => {
+            reactionService.storeReaction(props.post.id, reaction.id).then((response) => {
                 console.log(response)
             }).catch((error) => {
                 console.log(error)
@@ -101,7 +103,6 @@ function react(reaction) {
         currReaction.value.icon = reaction.icon
         currReaction.value.tooltip = reaction.tooltip
         currReaction.value.isReacted == true
-        emit('update-reactions', reaction)
     }
     // send request here
 }
