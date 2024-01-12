@@ -22,8 +22,8 @@
                 </v-btn>
             </template>
             <v-list>
-                <v-list-item prepend-icon="mdi-dots-horizontal" @click="console.log('Update Comment')">
-                    <v-list-item-title>Update</v-list-item-title>
+                <v-list-item prepend-icon="mdi-pencil" @click="console.log('Update Comment')">
+                    <v-list-item-title>Edit</v-list-item-title>
                 </v-list-item>
                 <v-list-item prepend-icon="mdi-delete" @click="deleteComment">
                     <v-list-item-title>Delete</v-list-item-title>
