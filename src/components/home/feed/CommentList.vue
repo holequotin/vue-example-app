@@ -1,6 +1,6 @@
 <template>
     <v-container grid-list-xs fluid>
-        <div v-if="props.type === 'feed' && comments.length > 0">
+        <div v-if="props.type === 'feed' && comments.length > 3">
             <v-btn variant="plain" @click="$emit('load-comment')">
                 Load more comments
             </v-btn>

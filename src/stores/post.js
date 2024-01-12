@@ -72,5 +72,20 @@ export const usePostStore = defineStore('posts', () => {
       return item
     })
   }
-  return { posts, getAllPost, storeReaction, deleteReaction, updateReaction, storeComment }
+  function deleteComment(postId,comment) {
+    console.log('delete comment')
+    let post = posts.value.find((item) => {
+      return item.id == postId
+    })
+    post.comments = post.comments.filter((item) => {
+      return item.id !== comment.id
+    })
+    posts.value = posts.value.map((item) => {
+      if (item.id === postId) {
+        return post
+      }
+      return item
+    })
+  }
+  return { posts, getAllPost, storeReaction, deleteReaction, updateReaction, storeComment,deleteComment }
 })

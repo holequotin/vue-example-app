@@ -25,6 +25,15 @@ class CommentService {
       }
     })
   }
+  async deleteComment(commentId) {
+    const token = localStorage.getItem('token')
+    return this.api.delete(`/comments/${commentId}`,{
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      }
+    })
+  }
 }
 const commentService = new CommentService(axios)
 export { commentService }

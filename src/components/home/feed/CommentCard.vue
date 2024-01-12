@@ -15,12 +15,40 @@
                 </slot>
             </v-card-item>
         </v-card>
+        <v-menu location="end" v-if="userStore.user.id === props.comment.user.id">
+            <template v-slot:activator="{ props }">
+                <v-btn v-bind="props" variant="plain" icon="mdi-dots-horizontal" size="small">
+                    
+                </v-btn>
+            </template>
+            <v-list>
+                <v-list-item prepend-icon="mdi-dots-horizontal" @click="console.log('Update Comment')">
+                    <v-list-item-title>Update</v-list-item-title>
+                </v-list-item>
+                <v-list-item prepend-icon="mdi-delete" @click="deleteComment">
+                    <v-list-item-title>Delete</v-list-item-title>
+                </v-list-item>
+            </v-list>
+        </v-menu>
     </div>
 </template>
 <script setup>
 import AvatarIcon from './AvatarIcon.vue';
+import { useUserStore } from '../../../stores/user';
+import {commentService} from '../../../service/commentService'
+import {usePostStore} from '../../../stores/post'
 const props = defineProps(['user', 'comment']);
-
+const userStore = useUserStore()
+const postStore = usePostStore()
+function deleteComment() {
+    commentService.deleteComment(props.comment.id).then((response) => {
+        //show alert?
+        console.log(response.data)
+        postStore.deleteComment(props.comment.post_id,props.comment)
+    }).catch((error) => {
+        console.log(error)
+    } )
+}
 </script>
 
 <style scoped>
