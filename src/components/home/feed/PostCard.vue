@@ -23,30 +23,37 @@
         <v-divider></v-divider>
         <!--actions in post-->
         <v-container grid-list-xs fluid>
-            <PostActions :post-reactions="post.reactions" :post="post" :type="props.type"></PostActions>
+            <PostActions :post-reactions="post.reactions" :post="post" :type="props.type" @comment-click="toggleDialog"></PostActions>
         </v-container>
         <v-divider></v-divider>
         <slot name="comment-list">
-            <CommentList :comments="post.comments" :type="props.type"></CommentList>
+            <CommentList :comments="post.comments" :type="props.type" @load-comment="toggleDialog"></CommentList>
         </slot>
         <v-divider></v-divider>
+        <PostDialog :dialog="dialog" @toggle="dialog =!dialog" :post="post"></PostDialog>
     </v-card>
 </template>
 
 <script setup>
 import PostActions from './PostActions.vue'
 import PostInfo from './PostInfo.vue';
+import PostDialog from './PostDialog.vue';
 import moment from 'moment'
-import { computed } from 'vue';
+import { computed,ref } from 'vue';
 //import { useUserStore } from '../../../stores/user';
 import CommentList from './CommentList.vue';
 
 //const userStore = useUserStore()
 const props = defineProps(['post','type'])
+const dialog = ref(false)
 const formatedDate = computed(() => {
     return moment(props.post.createdAt).fromNow()
 })
 const avatarChar = computed(() => {
     return props.post.user.name[0];
 })
+function toggleDialog() {
+    console.log('change')
+    dialog.value = !dialog.value
+}
 </script>

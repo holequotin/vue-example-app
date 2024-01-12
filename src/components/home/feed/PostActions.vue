@@ -18,13 +18,12 @@
             </v-menu>
         </v-col>
         <v-col>
-            <v-btn variant="plain" block prepend-icon="mdi-comment-outline" @click="dialog = !dialog" v-if="props.type === 'feed'">
+            <v-btn variant="plain" block prepend-icon="mdi-comment-outline" @click="$emit('comment-click')" v-if="props.type === 'feed'">
                 Comment
             </v-btn>
             <v-btn variant="plain" block prepend-icon="mdi-comment-outline" v-if="props.type === 'dialog'">
                 Comment
             </v-btn>
-            <PostDialog :dialog="dialog" @toggle="dialog =!dialog" :post="post"></PostDialog>
         </v-col>
         <v-col>
             <v-btn variant="plain" block prepend-icon="mdi-share-outline">
@@ -40,13 +39,11 @@ import { reactions } from '../../../utils/constants';
 import { useUserStore } from '../../../stores/user';
 import { usePostStore } from '../../../stores/post';
 import { reactionService } from '../../../service/reactionService'
-import PostDialog from './PostDialog.vue';
-import { ref } from 'vue'
 
 const userStore = useUserStore()
 const postStore = usePostStore()
 const props = defineProps(['postReactions','type','post'])
-const dialog = ref(false)
+defineEmits(['comment-click'])
 
 const currReaction = computed(() => {
     const result = props.postReactions.filter((item) => {
@@ -73,19 +70,15 @@ function react(reaction) {
         currReaction.value.tooltip = 'Like'
         currReaction.value.isReacted == false
 
-        //send request to remove reaction here
         postStore.deleteReaction(props.post.id)
         reactionService.removeReaction(props.post.id).then((response) => {
             console.log(response)
         }).catch((error) => {
-            //handle error with alert
             console.log(error)
         })
     } else {
-        //send request to update or store reaction
         
         if (currReaction.value.isReacted) {
-            // update request
             reactionService.updateReaction(props.post.id, reaction.id).then((response) => {
                 console.log(response)
                 postStore.updateReaction(props.post.id,response.data)
@@ -93,7 +86,6 @@ function react(reaction) {
                 console.log(error)
             })
         } else {
-            // store request
             reactionService.storeReaction(props.post.id, reaction.id).then((response) => {
                 console.log(response)
                 postStore.storeReaction(props.post.id,response.data)

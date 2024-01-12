@@ -12,7 +12,7 @@
                 <PostCard :post="post" width="100%" type="dialog" class="overflow-auto">
                 </PostCard>
                 <slot name="new-comment">
-                    <NewComment></NewComment>
+                    <NewComment :user="userStore.user" :post="post"></NewComment>
                 </slot>
             </v-card>
         </v-dialog>
@@ -22,7 +22,9 @@
 import { defineProps} from 'vue';
 import PostCard from './PostCard.vue';
 import NewComment from './NewComment.vue';
+import { useUserStore } from '../../../stores/user';
 
+const userStore = useUserStore()
 const props = defineProps(['dialog','post'])
 defineEmits(['toggle'])
 </script>

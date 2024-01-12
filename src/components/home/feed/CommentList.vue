@@ -1,6 +1,10 @@
 <template>
     <v-container grid-list-xs fluid>
-        <h2 v-if="props.type === 'feed' && comments.length > 0">Load more comments</h2>
+        <div v-if="props.type === 'feed' && comments.length > 0">
+            <v-btn variant="plain" @click="$emit('load-comment')">
+                Load more comments
+            </v-btn>
+        </div>
         <v-list lines="two">
             <div v-if="props.type === 'feed'">
                 <v-list-item v-for="n in list_size" :key="n">
@@ -19,8 +23,9 @@
 import { computed } from 'vue';
 import CommentCard from './CommentCard.vue';
 const props = defineProps(['type', 'comments'])
+defineEmits(['load-comment'])
 const list_size = computed(() => {
-    if(props.comments.length >= 3) return 3;
+    if (props.comments.length >= 3) return 3;
     return props.comments.length
 })
 
