@@ -60,7 +60,7 @@ export const usePostStore = defineStore('posts', () => {
       return item
     })
   }
-  function storeComment(postId,comment) {
+  function storeComment(postId, comment) {
     let post = posts.value.find((item) => {
       return item.id === postId
     })
@@ -72,7 +72,24 @@ export const usePostStore = defineStore('posts', () => {
       return item
     })
   }
-  function deleteComment(postId,comment) {
+  function updateComment(postId, comment) {
+    let post = posts.value.find((item) => {
+      return item.id === postId
+    })
+    post.comments = post.comments.map((item) => {
+      if (item.id == comment.id) {
+        return comment
+      }
+      return item
+    })
+    posts.value = posts.value.map((item) => {
+      if (item.id === postId) {
+        return post
+      }
+      return item
+    })
+  }
+  function deleteComment(postId, comment) {
     console.log('delete comment')
     let post = posts.value.find((item) => {
       return item.id == postId
@@ -87,5 +104,14 @@ export const usePostStore = defineStore('posts', () => {
       return item
     })
   }
-  return { posts, getAllPost, storeReaction, deleteReaction, updateReaction, storeComment,deleteComment }
+  return {
+    posts,
+    getAllPost,
+    storeReaction,
+    deleteReaction,
+    updateReaction,
+    storeComment,
+    deleteComment,
+    updateComment
+  }
 })

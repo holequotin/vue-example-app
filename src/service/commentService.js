@@ -27,10 +27,22 @@ class CommentService {
   }
   async deleteComment(commentId) {
     const token = localStorage.getItem('token')
-    return this.api.delete(`/comments/${commentId}`,{
+    return this.api.delete(`/comments/${commentId}`, {
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`
+      }
+    })
+  }
+  async updateComment(commentId, data) {
+    const token = localStorage.getItem('token')
+    data._method = 'PATCH'
+    console.log('data in service',data)
+    return this.api.post(`/comments/${commentId}`, data, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        Authorization: `Bearer ${token}`,
+        Accept: 'application/json'
       }
     })
   }
