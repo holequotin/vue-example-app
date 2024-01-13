@@ -104,9 +104,13 @@ export const usePostStore = defineStore('posts', () => {
       return item
     })
   }
+  function storePost(data) {
+    posts.value.unshift(data)
+  }
   return {
     posts,
     getAllPost,
+    storePost,
     storeReaction,
     deleteReaction,
     updateReaction,

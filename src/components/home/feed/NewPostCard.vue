@@ -3,19 +3,24 @@
         <v-card-item>
             <v-container grid-list-xs fluid class="d-flex flex-row">
                 <AvatarIcon :user="userStore.user"></AvatarIcon>
-            <v-text-field
-                name="name"
-                id="id"
-                class="ma-2"
-                placeholder="What is on your mind?"
-            ></v-text-field>
+            <v-btn rounded="xl" size="x-large" width="90%" variant="tonal" class="custom-text" @click="dialog = !dialog">What's your mind?</v-btn>
             </v-container>
         </v-card-item>
     </v-card>
+    <CreatePostDialog :dialog="dialog" @toggle="dialog = !dialog"></CreatePostDialog>
 </template>
 
 <script setup>
 import AvatarIcon from './AvatarIcon.vue';
 import { useUserStore } from '../../../stores/user';
+import CreatePostDialog from './CreatePostDialog.vue';
+import {ref} from 'vue'
 const userStore = useUserStore()
+const dialog = ref(false)
 </script>
+<style scoped>
+.custom-text{
+    text-transform: none;
+    justify-content: start;
+}
+</style>

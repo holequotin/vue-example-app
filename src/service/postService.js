@@ -6,6 +6,16 @@ class PostService {
     async getAllPost() {
         return this.api.get('/posts')
     }
+    async storePost(data) {
+        const token = localStorage.getItem('token')
+        return this.api.post('/posts',data,{
+            headers : {
+                'Content-Type': 'multipart/form-data',
+                Authorization: `Bearer ${token}`,
+                Accept: 'application/json'
+            }
+        })
+    }
 }
 const postService = new PostService(axios)
 export {postService}
