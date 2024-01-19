@@ -6,6 +6,13 @@ class PostService {
     async getAllPost() {
         return this.api.get('/posts')
     }
+    async getPostByUser(userId) {
+        return this.api.get('/posts', {
+            params : {
+                user_id : userId
+            }
+        })
+    }
     async storePost(data) {
         const token = localStorage.getItem('token')
         return this.api.post('/posts',data,{

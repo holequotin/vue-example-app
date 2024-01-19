@@ -1,5 +1,5 @@
 <template>
-    <v-card width="70%">
+    <v-card width="100%">
         <v-card-item>
             <v-container grid-list-xs fluid class="d-flex flex-row">
                 <AvatarIcon :user="userStore.user"></AvatarIcon>

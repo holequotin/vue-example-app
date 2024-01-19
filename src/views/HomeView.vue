@@ -5,8 +5,12 @@
     </template>
     <template #main>
       <v-main class="d-flex align-center justify-center flex-column" style="min-height: 300px;">
-        <NewPostCard></NewPostCard>
-        <PostCard v-for="post in postStore.posts" :key="post.id" :post="post" type="feed"></PostCard>
+        <div style="width: 70%;">
+          <NewPostCard></NewPostCard>
+        </div>
+        <div style="width: 70%;">
+          <PostCard v-for="post in postStore.posts" :key="post.id" :post="post" type="feed"></PostCard>
+        </div>
       </v-main>
     </template>
     <template #left-drawer>

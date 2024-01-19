@@ -1,5 +1,5 @@
 <template>
-    <v-card class="mx-auto mt-5" :title="props.post.user.name" :subtitle="props.post.createdAt ? formatedDate : null" width="70%">
+    <v-card class="mx-auto mt-5" :title="props.post.user.name" :subtitle="props.post.createdAt ? formatedDate : null" width="100%">
         <template v-slot:prepend>
             <v-avatar color="blue-darken-2" size="large">
                 <span class="text-h5">{{ avatarChar }}</span>

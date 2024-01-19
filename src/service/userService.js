@@ -14,6 +14,13 @@ class UserService {
         }
         return this.api.post('/auth/me',data,config)
     }
+    async getUserById(userId) {
+        return this.api.get('/users', {
+            params : {
+                user_id : userId
+            }
+        })
+    }
     async login(data) {
         const endpoint = '/auth/login'
         return this.api.post(endpoint,data)

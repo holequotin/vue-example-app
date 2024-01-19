@@ -24,7 +24,23 @@ const router = createRouter({
         if(isAuthenticated()) return {name: 'home'}
         return true
       }
-    }
+    },
+    {
+      path: '/profile/:id',
+      // TODO: Add guard here
+      children : [
+        {
+          path : 'friends',
+          component : () => import('../views/profile/FriendsProfile.vue'),
+          name: 'profile-friend'
+        },
+        {
+          path: '',
+          component: () => import('../views/profile/BaseProfile.vue'),
+          name: 'profile-parent'
+        }
+      ]
+    },
   ]
 })
 router.beforeEach((to) => {
