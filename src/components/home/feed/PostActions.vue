@@ -39,6 +39,7 @@ import { reactions } from '../../../utils/constants';
 import { useUserStore } from '../../../stores/user';
 import { usePostStore } from '../../../stores/post';
 import { reactionService } from '../../../service/reactionService'
+import { errorHandler } from '../../../utils/errorHandler';
 
 const userStore = useUserStore()
 const postStore = usePostStore()
@@ -74,7 +75,7 @@ function react(reaction) {
         reactionService.removeReaction(props.post.id).then((response) => {
             console.log(response)
         }).catch((error) => {
-            console.log(error)
+            errorHandler(error)
         })
     } else {
         
@@ -83,14 +84,14 @@ function react(reaction) {
                 console.log(response)
                 postStore.updateReaction(props.post.id,response.data)
             }).catch((error) => {
-                console.log(error)
+                errorHandler(error)
             })
         } else {
             reactionService.storeReaction(props.post.id, reaction.id).then((response) => {
                 console.log(response)
                 postStore.storeReaction(props.post.id,response.data)
             }).catch((error) => {
-                console.log(error)
+                errorHandler(error)
             })
         }
         currReaction.value.color = reaction.color

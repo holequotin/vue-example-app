@@ -79,6 +79,7 @@ import {userService} from '../../service/userService'
 import {friendService} from '../../service/friendService'
 import {usePostStore} from '../../stores/post'
 import { useUserStore } from '../../stores/user';
+import { errorHandler } from '../../utils/errorHandler';
 const route = useRoute();
 const user = ref({});
 const test = ref('Hello');
@@ -97,14 +98,14 @@ watchEffect(() => {
             user.value = response.data
         })
         .catch((error) => {
-            console.error(error);
+            errorHandler(error);
         })  
     friendService.getFriendsByUserId(userId)
         .then((response) => {
             friends.value = response.data
         })
         .catch((error) => {
-            console.error(error);
+            errorHandler(error);
         })
 })
 </script>

@@ -31,6 +31,7 @@ import { computed, ref, watchEffect } from 'vue'
 import { useUserStore } from '../../../stores/user';
 import {postService} from '../../../service/postService'
 import {usePostStore} from '../../../stores/post'
+import { errorHandler } from '../../../utils/errorHandler';
 const props = defineProps(['dialog'])
 const userStore = useUserStore()
 const postStore = usePostStore()
@@ -60,7 +61,7 @@ function storePost() {
         emit('toggle')
         postStore.storePost(response.data);
     }).catch((error) => {
-        console.log(error)
+        errorHandler(error)
     })
 }
 watchEffect(() => {

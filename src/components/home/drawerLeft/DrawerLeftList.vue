@@ -10,7 +10,6 @@
         </v-list-item>
     </v-list>
 </template>
-
 <script setup>
 // import DrawerLeftListItem from './DrawerLeftListItem.vue';
 import { ref } from 'vue'

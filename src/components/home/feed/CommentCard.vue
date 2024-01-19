@@ -48,6 +48,7 @@ import { commentService } from '../../../service/commentService'
 import { usePostStore } from '../../../stores/post';
 import { RouterLink } from 'vue-router';
 import { ref } from 'vue'
+import { errorHandler } from '../../../utils/errorHandler';
 const props = defineProps(['user', 'comment']);
 const commentContent = ref(props.comment.content)
 const onEditing = ref(false)
@@ -57,10 +58,10 @@ const postStore = usePostStore()
 function deleteComment() {
     commentService.deleteComment(props.comment.id).then((response) => {
         //show alert?
-        console.log(response.data)
+        console.log(response)
         postStore.deleteComment(props.comment.post_id, props.comment)
     }).catch((error) => {
-        console.log(error)
+        errorHandler(error)
     })
 }
 function updateComment() {
@@ -72,7 +73,7 @@ function updateComment() {
         onEditing.value = false
         postStore.updateComment(props.comment.post_id, response.data)
     }).catch((error) => {
-        console.log(error)
+        errorHandler(error)
     })
 }
 </script>

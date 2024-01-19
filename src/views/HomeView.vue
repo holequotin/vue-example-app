@@ -38,14 +38,6 @@ const userStore = useUserStore()
 const posts = ref(postStore.posts);
 const user = ref(userStore.user);
 
-
-
-// console.log('Load new data outside')
-// watchEffect(() => {
-//   postStore.getAllPost()
-//   userStore.getUser()
-//   console.log('Load new data')
-// })
 onMounted(() => {
   postStore.getAllPost()
   userStore.getUser()

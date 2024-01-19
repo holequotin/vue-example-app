@@ -62,7 +62,6 @@ const avatarChar = computed(() => {
     return props.post.user.name[0];
 })
 function toggleDialog() {
-    console.log('change')
     dialog.value = !dialog.value
 }
 </script>

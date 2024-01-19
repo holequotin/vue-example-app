@@ -13,6 +13,7 @@ import { computed, ref } from 'vue';
 import AvatarIcon from './AvatarIcon.vue';
 import { commentService } from '../../../service/commentService'
 import { usePostStore } from '../../../stores/post';
+import { errorHandler } from '../../../utils/errorHandler';
 const props = defineProps(['user', 'post'])
 const postStore = usePostStore()
 const content = ref(null);
@@ -27,14 +28,13 @@ function storeComment() {
         image: image.value ? image.value[0] : null,
         post_id: props.post.id
     }
-    console.log(data)
     commentService.storeComment(data).then((response) => {
         // add to store here
         postStore.storeComment(props.post.id, response.data)
         content.value = null
         image.value = null
     }).catch((error) => {
-        console.log(error)
+        errorHandler(error)
     })
 }
 </script>
