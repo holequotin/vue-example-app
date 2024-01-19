@@ -29,7 +29,6 @@
                     </v-container>
                 </v-card>
                 <slot name="content" :friends = "friends">
-                    {{ friends.length }}
                     <v-container grid-list-xs style="width: 70%;" class="d-flex flex-row">
                         <v-row>
                             <v-col cols="5">

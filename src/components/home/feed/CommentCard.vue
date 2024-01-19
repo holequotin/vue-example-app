@@ -3,21 +3,24 @@
         <AvatarIcon :user="props.user" :size="40" class="mb-2"></AvatarIcon>
         <v-card variant="tonal" class="rounded-xl">
             <v-card-item>
-                <v-card-title class="title">
-                    {{ user.name }}
-                </v-card-title>
+                <RouterLink :to="{ name: 'profile-parent', params: { id: props.user.id } }">
+                    <v-card-title class="title" style="color: white;">
+                        {{ user.name }}
+                    </v-card-title>
+                </RouterLink>
                 <v-card-content class="content" v-if="props.comment.content">
                     <v-textarea variant="solo" v-model="commentContent" v-if="onEditing"></v-textarea>
                     <p v-else> {{ props.comment.content }}</p>
                 </v-card-content>
                 <slot name="image">
-                    <v-file-input label="File input" hide-input class="custom-file-input" v-model="updateImage" v-if="onEditing"></v-file-input>
+                    <v-file-input label="File input" hide-input class="custom-file-input" v-model="updateImage"
+                        v-if="onEditing"></v-file-input>
                     <v-img width="100%" aspect-ratio="16/9" cover v-if="props.comment.imgPath"
                         :src="props.comment.imgPath"></v-img>
                 </slot>
             </v-card-item>
             <v-card-actions v-if="onEditing" class="d-flex justify-space-around" width="auto">
-                <v-btn color="error" @click="onEditing=false">Cancel</v-btn>
+                <v-btn color="error" @click="onEditing = false">Cancel</v-btn>
                 <v-btn color="success" @click="updateComment">Update</v-btn>
             </v-card-actions>
         </v-card>
@@ -42,8 +45,9 @@
 import AvatarIcon from './AvatarIcon.vue';
 import { useUserStore } from '../../../stores/user';
 import { commentService } from '../../../service/commentService'
-import { usePostStore } from '../../../stores/post'
-import {ref} from 'vue'
+import { usePostStore } from '../../../stores/post';
+import { RouterLink } from 'vue-router';
+import { ref } from 'vue'
 const props = defineProps(['user', 'comment']);
 const commentContent = ref(props.comment.content)
 const onEditing = ref(false)
@@ -61,12 +65,12 @@ function deleteComment() {
 }
 function updateComment() {
     const data = {
-        content : commentContent.value,
-        image : updateImage.value ? updateImage.value[0] : null
+        content: commentContent.value,
+        image: updateImage.value ? updateImage.value[0] : null
     }
-    commentService.updateComment(props.comment.id,data).then((response) => {
+    commentService.updateComment(props.comment.id, data).then((response) => {
         onEditing.value = false
-        postStore.updateComment(props.comment.post_id,response.data)
+        postStore.updateComment(props.comment.post_id, response.data)
     }).catch((error) => {
         console.log(error)
     })

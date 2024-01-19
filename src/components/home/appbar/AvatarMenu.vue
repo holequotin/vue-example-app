@@ -6,7 +6,7 @@
       </v-avatar>
     </template>
     <v-list>
-      <AvatarMenuItem title="Profile" icon="mdi-account"></AvatarMenuItem>
+      <RouterLink :to="{name: 'profile-parent', params: {id : userStore.user.id}}"><AvatarMenuItem title="Profile" icon="mdi-account" style="color: white;"></AvatarMenuItem></RouterLink>
       <AvatarMenuItem title="Logout" icon="mdi-logout-variant" @item-click.once="logout"></AvatarMenuItem>
     </v-list>
   </v-menu>
@@ -20,6 +20,7 @@ import { useAlertStore } from '../../../stores/alert';
 import { useRouter } from 'vue-router';
 import { MessageType } from '../../../utils/MessageType';
 import { getMessage } from '../../../utils/errorHandler';
+import { RouterLink } from 'vue-router';
 const userStore = useUserStore()
 const alertStore = useAlertStore()
 const router = useRouter()
