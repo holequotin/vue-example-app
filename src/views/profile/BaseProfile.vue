@@ -49,8 +49,8 @@
                                 </v-card>
                             </v-col>
                             <v-col cols="7">
-                                <NewPostCard width="100%"></NewPostCard>
-                                <PostCard v-for="post in posts" type="feed" :post="post" :key="post.id"></PostCard>
+                                <NewPostCard width="100%" v-if="userStore.user?.id == user?.id"></NewPostCard>
+                                <PostCard v-for="post in postStore.profilePosts" type="feed" :post="post" :key="post.id"></PostCard>
                             </v-col>
                         </v-row>
                     </v-container>
@@ -75,33 +75,30 @@ import NewPostCard from '../../components/home/feed/NewPostCard.vue';
 import PostCard from '../../components/home/feed/PostCard.vue';
 import { provide, ref, watchEffect } from 'vue'
 import { RouterLink,useRoute } from 'vue-router';
-import {postService} from '../../service/postService'
 import {userService} from '../../service/userService'
 import {friendService} from '../../service/friendService'
+import {usePostStore} from '../../stores/post'
+import { useUserStore } from '../../stores/user';
 const route = useRoute();
-const posts = ref([]);
 const user = ref({});
 const test = ref('Hello');
 const friends = ref([]);
+const postStore = usePostStore();
+const userStore = useUserStore();
 provide('friends', friends)
 provide('test', test)
 watchEffect(() => {
     const userId = route.params.id;
     //TODO: Use promie all
+    postStore.getAllPost()
+    userStore.getUser()
     userService.getUserById(userId)
         .then((response) => {
             user.value = response.data
         })
         .catch((error) => {
             console.error(error);
-        })
-    postService.getPostByUser(userId)
-        .then((response) => {
-            posts.value = response.data;
-        })
-        .catch((error) => {
-            console.error(error);
-        })    
+        })  
     friendService.getFriendsByUserId(userId)
         .then((response) => {
             friends.value = response.data

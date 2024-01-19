@@ -1,5 +1,5 @@
 <template>
-    <v-card class="mx-auto mt-5" width="100%">
+    <v-card class="mx-auto mb-5" width="100%">
         <template v-slot:prepend>
             <div class="d-flex justify-start">
                 <v-avatar color="blue-darken-2" size="large">
@@ -50,7 +50,6 @@ import PostInfo from './PostInfo.vue';
 import PostDialog from './PostDialog.vue';
 import moment from 'moment'
 import { computed, ref } from 'vue';
-//import { useUserStore } from '../../../stores/user';
 import CommentList from './CommentList.vue';
 
 //const userStore = useUserStore()

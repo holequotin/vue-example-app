@@ -2,10 +2,20 @@ import { ref } from 'vue'
 import { defineStore } from 'pinia'
 import { postService } from '../service/postService'
 import { useUserStore } from './user'
+import {useRoute} from 'vue-router'
+import { computed } from 'vue'
 
 export const usePostStore = defineStore('posts', () => {
+  const route = useRoute()
   const posts = ref([])
   const userStore = useUserStore()
+
+  const profilePosts = computed(() => {
+    return posts.value.filter((item) => {
+      return item.user.id == route.params.id
+    })
+  })
+
   async function getAllPost() {
     postService
       .getAllPost()
@@ -109,6 +119,7 @@ export const usePostStore = defineStore('posts', () => {
   }
   return {
     posts,
+    profilePosts,
     getAllPost,
     storePost,
     storeReaction,
@@ -116,6 +127,6 @@ export const usePostStore = defineStore('posts', () => {
     updateReaction,
     storeComment,
     deleteComment,
-    updateComment
+    updateComment,
   }
 })
