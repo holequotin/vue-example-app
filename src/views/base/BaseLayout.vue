@@ -44,6 +44,7 @@ watchEffect(() => {
         //alertStore.typeState = MessageType.INFO
         setTimeout(() => {
             showAlert.value = false
+            alertStore.messageState = ''
         }, 2000)
     }
 })

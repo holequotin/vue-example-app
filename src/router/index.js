@@ -41,9 +41,18 @@ const router = createRouter({
         }
       ]
     },
+    {
+      path: '/forget_password',
+      component: () => import('../views/authentication/ForgetPassword.vue'),
+      name: 'forget-password'
+    },
+    {
+      path: '/reset_password',
+      component: () => import('../views/authentication/ResetPassword.vue')
+    }
   ]
 })
-router.beforeEach((to) => {
-  if(to.name != 'login' && !isAuthenticated()) return {name : 'login'}
-})
+// router.beforeEach((to) => {
+//   if(to.name != 'login' && !isAuthenticated()) return {name : 'login'}
+// })
 export default router

@@ -30,6 +30,7 @@ watchEffect(() => {
         showAlert.value = true
         setTimeout(() => {
             showAlert.value = false
+            alertStore.messageState = ''
         }, 2000)
     }
 })

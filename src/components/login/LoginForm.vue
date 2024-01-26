@@ -10,7 +10,7 @@
             </v-form>
 
             <v-container class="fill-height align-center justify-center">
-                <a href="">Forgot Password?</a>
+                <RouterLink :to="{name: 'forget-password'}">Forgot Password?</RouterLink>
             </v-container>
             <v-divider></v-divider>
             <RegisterForm></RegisterForm>
@@ -28,6 +28,7 @@ import { useAlertStore } from '../../stores/alert';
 import { MessageType } from '../../utils/MessageType';
 import { getMessage } from '../../utils/errorHandler';
 import { userService } from '../../service/userService';
+import { RouterLink } from 'vue-router';
 const router = useRouter()
 
 const alertStore = useAlertStore()

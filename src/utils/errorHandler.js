@@ -18,6 +18,9 @@ const errorHandler = function (error) {
     case 500:
       alertStore.showAlert('Internal Server Error', MessageType.ERROR)
       break
+    case 404:
+      alertStore.showAlert('Not Found', MessageType.ERROR)
+      break;
     default:
       router.replace({ name: 'login' })
       break
