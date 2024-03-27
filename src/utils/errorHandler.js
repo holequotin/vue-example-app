@@ -9,6 +9,7 @@ const getMessage = function (error) {
   return error.message
 }
 const errorHandler = function (error) {
+  console.log(error);
   switch (error.response.status) {
     case 401:
       router.replace({ name: 'login' })
@@ -22,7 +23,7 @@ const errorHandler = function (error) {
       alertStore.showAlert('Not Found', MessageType.ERROR)
       break;
     default:
-      router.replace({ name: 'login' })
+      alertStore.showAlert(error.response.data.message, MessageType.ERROR)
       break
   }
 }

@@ -1,6 +1,7 @@
 <template>
     <v-avatar color="red" :size="props.size" class="ma-2" v-bind="props">
-        <span class="text-h5">{{ char }}</span>
+        <v-img v-if="user.avatar" alt="John" :src="user.avatar"></v-img>
+        <span v-else class="text-h5">{{ char }}</span>
     </v-avatar>
 </template>
 

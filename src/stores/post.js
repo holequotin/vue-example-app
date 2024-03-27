@@ -4,10 +4,12 @@ import { postService } from '../service/postService'
 import { useUserStore } from './user'
 import {useRoute} from 'vue-router'
 import { computed } from 'vue'
+import { errorHandler } from '../utils/errorHandler'
 
 export const usePostStore = defineStore('posts', () => {
   const route = useRoute()
   const posts = ref([])
+  const currentPage = ref(1)
   const userStore = useUserStore()
 
   const profilePosts = computed(() => {
@@ -16,17 +18,43 @@ export const usePostStore = defineStore('posts', () => {
     })
   })
 
+  function nextPage(...params) {
+    currentPage.value++;
+    params[0](params[1])
+  }
+
+  function previousPage(...params) {
+    if(currentPage.value > 1) {
+          currentPage.value--;
+          params[0](params[1])
+    }
+  }
+
   async function getAllPost() {
+    //FIXME: Magic number
     postService
-      .getAllPost()
+      .getAllPost(currentPage.value, 5)
       .then((response) => {
         console.log(response.data)
         posts.value = response.data
       })
       .catch((err) => {
-        console.log(err.data.message)
+        console.log(err)
       })
   }
+
+  async function getPostsByUser(userId){
+    console.log('userId', userId);
+    postService.getPostsByUser(userId, currentPage.value, 5)
+    .then((response) => {
+        posts.value = response.data
+        console.log(posts.value)
+    })
+    .catch((error) => {
+        errorHandler(error)
+    })
+  }
+
   function storeReaction(postId, reaction) {
     let post = posts.value.find((item) => {
       return item.id === postId
@@ -119,6 +147,7 @@ export const usePostStore = defineStore('posts', () => {
   }
   return {
     posts,
+    currentPage,
     profilePosts,
     getAllPost,
     storePost,
@@ -128,5 +157,8 @@ export const usePostStore = defineStore('posts', () => {
     storeComment,
     deleteComment,
     updateComment,
+    nextPage,
+    previousPage,
+    getPostsByUser
   }
 })

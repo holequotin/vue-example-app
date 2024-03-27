@@ -37,11 +37,11 @@ import { ref, watchEffect } from 'vue'
 // import { MessageType } from '../../utils/MessageType';
 const alertStore = useAlertStore()
 const showAlert = ref(false)
+console.log('in base')
 watchEffect(() => {
     if (alertStore.messageState != '') {
         console.log('Show Alert', alertStore.messageState)
         showAlert.value = true
-        //alertStore.typeState = MessageType.INFO
         setTimeout(() => {
             showAlert.value = false
             alertStore.messageState = ''

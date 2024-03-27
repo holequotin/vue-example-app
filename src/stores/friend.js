@@ -7,8 +7,7 @@ import { MessageType } from '../utils/MessageType'
 export const useFriendsStore = defineStore('friends', () => {
     const friends = ref([])
     async function getAllFriends() {
-        const token = localStorage.getItem('token')
-        friendService.getFriends(token)
+        friendService.getFriends()
             .then((response) => {
                 friends.value = response.data
             })

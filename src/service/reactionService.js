@@ -4,26 +4,39 @@ class ReactionService {
   constructor(api) {
     this.api = api
   }
-  async removeReaction(postId) {
-    const endpoint = '/reactions'
+
+  async getReactionsByPost(postId, type = null, page=1, perPage=5) {
+    const endpoint = `/posts/${postId}/reactions`
+    const token = localStorage.getItem('token')
+    return this.api.get(endpoint, {
+      headers: {
+        'Content-Type': 'application/json', // Set content type if needed
+        Authorization: `Bearer ${token}`
+      },
+      params : {
+        page: page,
+        perPage: perPage,
+        type: type
+      }
+    })
+  }
+
+  async removeReaction(reactionId) {
+    const endpoint = `/reactions/${reactionId}`
     const token = localStorage.getItem('token')
     return this.api.delete(endpoint, {
       headers: {
         'Content-Type': 'application/json', // Set content type if needed
         Authorization: `Bearer ${token}`
       },
-      data: {
-        post_id: postId
-      }
     })
   }
-  async updateReaction(postId, reactionType) {
-    const endpoint = '/reactions'
+  async updateReaction(reactionId, reactionType) {
+    const endpoint = `/reactions/${reactionId}`
     const token = localStorage.getItem('token')
     return this.api.patch(
       endpoint,
       {
-        post_id: postId,
         type: reactionType
       },
       {

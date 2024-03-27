@@ -17,8 +17,8 @@
             ></v-text-field>
             <v-text-field
                 label="Confirm password"
-                v-model="confirmPassword.value.value"
-                :error-messages="confirmPassword.errorMessage.value"
+                v-model="password_confirmation.value.value"
+                :error-messages="password_confirmation.errorMessage.value"
                 type="password"
             ></v-text-field>
             <v-btn outline color="success" dark block @click="submit">Change Password</v-btn>
@@ -57,15 +57,16 @@ defineRule('min',(value,params) => {
 
 const {handleSubmit} = useForm({
     validationSchema : {
-        password : 'required|min:6',
-        confirmPassword: (value) => {
+        'password' : 'required|min:6',
+        password_confirmation: (value) => {
             if(value === password.value.value) return true
             return 'Password not match'
         }
     }
 })
 const submit = handleSubmit(values => {
-    userService.resetPassword(token.value,values.password)
+    alert(JSON.stringify(values));
+    userService.resetPassword(token.value,values.password, values.password_confirmation)
         .then((response) => {
             console.log(response)
             alertStore.showAlert('Reset Password Successfully','success')
@@ -76,5 +77,5 @@ const submit = handleSubmit(values => {
         })
 })
 const password = useField('password');
-const confirmPassword = useField('confirmPassword');
+const password_confirmation = useField('password_confirmation');
 </script>

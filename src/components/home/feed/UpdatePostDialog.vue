@@ -1,12 +1,12 @@
 <template>
-    <BaseDialog :dialog="props.dialog" @toggle="$emit('toggle')" :width="600">
+    <BaseDialog :dialog="props.dialog" @toggle="close" :width="600">
         <template #title>
             <span>
-                Create Post
+                Update Post
             </span>
         </template>
         <template #content>
-            <PostCard type="dialog" :post="post" width="100%" class="overflow-auto">
+            <PostCard type="dialog" :post="newPostData" width="100%" class="overflow-auto">
                 <template #text>
                     <v-textarea label="" variant="solo" auto-grow placeholder="What's your mind?"
                         v-model="newPostData.body"></v-textarea>
@@ -16,11 +16,14 @@
                         <v-file-input label="File input" hide-input class="custom-file-input"
                             v-model="newPostData.images" multiple></v-file-input>
                     </v-container>
+                    <h3>Delete image</h3>
+                    <v-checkbox v-for="image in post.images" :label="image.id" v-model="newPostData.delete_image_id"
+                        :value="image.id" v-bind:key="image.id"></v-checkbox>
                     <v-select :items="postType" density="compact" label="Type" v-model="newPostData.type"></v-select>
                 </template>
                 <template #actions>
                     <v-container grid-list-xs>
-                        <v-btn outline color="primary" dark block :disabled="isDiabled" @click="storePost">Post</v-btn>
+                        <v-btn outline color="primary" dark block :disabled="isDiabled" @click="update">Update</v-btn>
                     </v-container>
                 </template>
             </PostCard>
@@ -30,15 +33,11 @@
 <script setup>
 import BaseDialog from './BaseDialog.vue';
 import PostCard from './PostCard.vue';
-import { computed, ref, watchEffect } from 'vue'
-import { useUserStore } from '../../../stores/user';
+import { computed, ref } from 'vue'
 import { postService } from '../../../service/postService'
-import { usePostStore } from '../../../stores/post'
 import { errorHandler } from '../../../utils/errorHandler';
-const props = defineProps(['dialog'])
-const userStore = useUserStore()
-const postStore = usePostStore()
-const emit = defineEmits(['toggle'])
+const props = defineProps(['dialog', 'post'])
+const emit = defineEmits(['toggle', 'after'])
 
 const postType = [
     { title: 'Public', value: "public" },
@@ -46,39 +45,34 @@ const postType = [
     { title: 'Private', value: "private" },
 ]
 const newPostData = ref({
-    body: null,
+    ...props.post,
     images: null,
-    type: "public"
+    delete_image_id: []
 })
+
 const isDiabled = computed(() => {
     if (newPostData.value.body || newPostData.value.images) return false;
     return true
 })
-const post = ref({
-    id: -1,
-    content: null,
-    imgPath: null,
-    user: {},
-    reactions: [],
-    comments: []
-})
-function storePost() {
-    const data = {
-        body: newPostData.value.body ? newPostData.value.body : null,
-        images: newPostData.value.images ? newPostData.value.images : null,
-        type: newPostData.value.type
-    }
-    // alert(JSON.stringify(data))
-    postService.storePost(data).then((response) => {
-        console.log(response.data)
-        emit('toggle')
-        postStore.getAllPost()
-    }).catch((error) => {
-        console.log(error)
-        errorHandler(error)
-    })
+
+function update() {
+    postService.updatePost(props.post.id, newPostData.value)
+        .then((response) => {
+            console.log(response.data)
+            emit('after')
+        })
+        .catch((error) => {
+            errorHandler(error)
+        })
+    close()
 }
-watchEffect(() => {
-    post.value.user = userStore.user
-})
+
+function close() {
+    newPostData.value = {
+        ...props.post,
+        images: null,
+        delete_image_id: []
+    }
+    emit('toggle')
+}
 </script>

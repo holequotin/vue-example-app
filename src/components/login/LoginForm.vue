@@ -49,9 +49,12 @@ const login = handleSubmit((values) => {
     }
     userService.login(data)
         .then((response) => {
+            if(response.data.message)
+            {
+                alertStore.showAlert(response.data.message, MessageType.INFO)
+                return
+            }
             const token = response.data.access_token
-            //TO DO: Save user to store
-
             localStorage.setItem('token', token)
             router.replace({ name: 'home' })
             alertStore.showAlert('Login successfully', MessageType.SUCCESS)

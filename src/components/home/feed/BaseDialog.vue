@@ -4,7 +4,7 @@
         <v-dialog v-model="props.dialog" :width="props.width ? props.width : 800">
             <v-card>
                 <template #append>
-                    <v-btn icon="mdi-close" variant="plain" @click="$emit('toggle')"></v-btn>
+                    <v-btn icon="mdi-close" variant="plain" @click="dialog = $emit('toggle')"></v-btn>
                 </template>
                 <v-card-title class="d-flex justify-center align-center">
                     <slot name="title">
@@ -19,8 +19,8 @@
     </div>
 </template>
 <script setup>
-import { defineProps } from 'vue';
+import { defineProps, defineEmits } from 'vue';
 
+const emit = defineEmits(['toggle'])
 const props = defineProps(['dialog','width'])
-defineEmits(['toggle'])
 </script>

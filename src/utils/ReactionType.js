@@ -1,10 +1,9 @@
-const ReactionType = {
-    Like : 0,
-    Love : 1,
-    Haha : 2,
-    Wow : 3,
-    Sad : 4,
-    Angry : 5,
-}
-
+const ReactionType = new Map([
+    ['like', 'Like'],
+    ['love', 'Love'],
+    ['haha', 'Haha'],
+    ['wow', 'Wow'],
+    ['sad', 'Sad'],
+    [null, 'None']
+])
 export {ReactionType}

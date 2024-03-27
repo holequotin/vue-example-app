@@ -3,43 +3,64 @@
         <template v-slot:prepend>
             <div class="d-flex justify-start">
                 <v-avatar color="blue-darken-2" size="large">
-                    <span class="text-h5">{{ avatarChar }}</span>
+                    <v-img v-if="post.user.avatar" alt="John" :src="post.user.avatar"></v-img>
+                    <span v-else class="text-h5">{{ avatarChar }}</span>
                 </v-avatar>
                 <div class="ml-3">
-                    <RouterLink :to="{name: 'profile-parent', params: {id : post.user.id}}" style="color: white;"><v-card-title>{{ post.user.name }}</v-card-title></RouterLink>
+                    <RouterLink :to="{ name: 'profile-parent', params: { id: post.user.id } }" style="color: white;">
+                        <v-card-title>{{ post.user.name }}</v-card-title>
+                    </RouterLink>
                     <v-card-subtitle>
-                        {{ props.post.createdAt ? formatedDate : null }}
+                        {{ props.post.created_at ? formatedDate : null }}
                     </v-card-subtitle>
                 </div>
             </div>
         </template>
         <template v-slot:append>
-            <v-btn variant="plain" icon="mdi-dots-horizontal"></v-btn>
-            <v-btn variant="plain" icon="mdi-close" v-if="$props.type === 'feed'"></v-btn>
+            <v-menu v-if="userStore.user.id == post.user.id">
+                <template v-slot:activator="{ props }">
+                    <v-btn variant="plain" icon="mdi-dots-horizontal" v-bind="props"></v-btn>
+                </template>
+
+                <v-list>
+                    <v-list-item @click="dialog = true">
+                        <v-list-item-title>Edit</v-list-item-title>
+                    </v-list-item>
+                    <v-list-item @click="deletePost">
+                        <v-list-item-title>Delete</v-list-item-title>
+                    </v-list-item>
+                </v-list>
+            </v-menu>
+            <UpdatePostDialog :dialog="dialog" @toggle="toggle" @after="$emit('update')" :post="post">
+            </UpdatePostDialog>
         </template>
         <slot name="text">
-            <v-card-text v-if="props.post.content">
-                {{ props.post.content }}
+            <v-card-text v-if="props.post.body">
+                {{ props.post.body }}
             </v-card-text>
         </slot>
         <slot name="image">
-            <v-img width="100%" aspect-ratio="16/9" cover v-if="props.post.imgPath" :src="props.post.imgPath"></v-img>
+            <v-row>
+                <v-col>
+                    <v-img v-for="image in props.post.images" v-bind:key="image.id" width="100%" aspect-ratio="16/9"
+                        cover :src="image.url"></v-img>
+                </v-col>
+            </v-row>
         </slot>
         <!--reaction infomation-->
         <slot name="actions">
-            <PostInfo :post-reactions="post.reactions"></PostInfo>
+            <PostInfo :post="post"></PostInfo>
             <v-divider></v-divider>
-            <!--actions in post-->
             <v-container grid-list-xs fluid>
-                <PostActions :post-reactions="post.reactions" :post="post" :type="props.type" @comment-click="toggleDialog">
+                <PostActions :post="post">
                 </PostActions>
             </v-container>
             <v-divider></v-divider>
-            <slot name="comment-list">
+            <!-- <slot name="comment-list">
                 <CommentList :comments="post.comments" :type="props.type" @load-comment="toggleDialog"></CommentList>
             </slot>
             <v-divider></v-divider>
-            <PostDialog :dialog="dialog" @toggle="dialog = !dialog" :post="post"></PostDialog>
+            <PostDialog :dialog="dialog" @toggle="dialog = !dialog" :post="post"></PostDialog> -->
         </slot>
     </v-card>
 </template>
@@ -47,21 +68,38 @@
 <script setup>
 import PostActions from './PostActions.vue'
 import PostInfo from './PostInfo.vue';
-import PostDialog from './PostDialog.vue';
+import UpdatePostDialog from './UpdatePostDialog.vue';
+import { defineEmits } from 'vue';
 import moment from 'moment'
+import { useUserStore } from '../../../stores/user';
 import { computed, ref } from 'vue';
-import CommentList from './CommentList.vue';
+import { postService } from '../../../service/postService';
+import { errorHandler } from '../../../utils/errorHandler';
 
-//const userStore = useUserStore()
+
+const emit = defineEmits(['delete', 'update'])
+const userStore = useUserStore()
 const props = defineProps(['post', 'type'])
 const dialog = ref(false)
 const formatedDate = computed(() => {
-    return moment(props.post.createdAt).fromNow()
+    return moment(props.post.created_at).fromNow()
 })
 const avatarChar = computed(() => {
     return props.post.user.name[0];
 })
-function toggleDialog() {
+
+function deletePost() {
+    postService.deletePost(props.post.id)
+        .then((response) => {
+            console.log(response.data)
+            emit('delete');
+        })
+        .catch((error) => {
+            errorHandler(error)
+        })
+}
+
+function toggle() {
     dialog.value = !dialog.value
 }
 </script>

@@ -2,7 +2,8 @@
   <v-menu>
     <template v-slot:activator="{ props }">
       <v-avatar color="red" :size="55" class="ma-2" v-bind="props">
-        <span class="text-h5">{{ userStore.avatarChar }}</span>
+        <v-img v-if="userStore.user.avatar" alt="John" :src="userStore.user.avatar"></v-img>
+        <span v-else class="text-h5">{{ userStore.avatarChar }}</span>
       </v-avatar>
     </template>
     <v-list>

@@ -8,15 +8,16 @@
                         {{ user.name }}
                     </v-card-title>
                 </RouterLink>
-                <v-card-content class="content" v-if="props.comment.content">
+                <v-card-content class="content" v-if="props.comment.body">
                     <v-textarea variant="solo" v-model="commentContent" v-if="onEditing"></v-textarea>
-                    <p v-else> {{ props.comment.content }}</p>
+                    <p v-else> {{ props.comment.body }}</p>
                 </v-card-content>
                 <slot name="image">
                     <v-file-input label="File input" hide-input class="custom-file-input" v-model="updateImage"
                         v-if="onEditing"></v-file-input>
-                    <v-img width="100%" aspect-ratio="16/9" cover v-if="props.comment.imgPath"
-                        :src="props.comment.imgPath"></v-img>
+                    <v-img width="100%" aspect-ratio="16/9" cover v-if="props.comment.url"
+                        :src="props.comment.url"></v-img>
+                    <v-checkbox label="Delete image" v-if="onEditing" v-model="deleteImage"></v-checkbox>
                 </slot>
             </v-card-item>
             <v-card-actions v-if="onEditing" class="d-flex justify-space-around" width="auto">
@@ -50,28 +51,31 @@ import { RouterLink } from 'vue-router';
 import { ref } from 'vue'
 import { errorHandler } from '../../../utils/errorHandler';
 const props = defineProps(['user', 'comment']);
-const commentContent = ref(props.comment.content)
+const emit = defineEmits(['deleted'])
+const commentContent = ref(props.comment.body)
 const onEditing = ref(false)
 const updateImage = ref(null)
 const userStore = useUserStore()
 const postStore = usePostStore()
+const deleteImage = ref(false)
 function deleteComment() {
     commentService.deleteComment(props.comment.id).then((response) => {
-        //show alert?
         console.log(response)
-        postStore.deleteComment(props.comment.post_id, props.comment)
+        emit('deleted')
     }).catch((error) => {
         errorHandler(error)
     })
 }
 function updateComment() {
     const data = {
-        content: commentContent.value,
-        image: updateImage.value ? updateImage.value[0] : null
+        body: commentContent.value,
+        image: updateImage.value ? updateImage.value[0] : null,
+        delete_image: deleteImage.value ? 1 : 0
     }
     commentService.updateComment(props.comment.id, data).then((response) => {
+        console.log(response.data)
         onEditing.value = false
-        postStore.updateComment(props.comment.post_id, response.data)
+        emit('deleted')
     }).catch((error) => {
         errorHandler(error)
     })

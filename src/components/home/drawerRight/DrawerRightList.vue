@@ -11,11 +11,4 @@
 // import { ref } from 'vue'
 import UserListItem from '../drawerLeft/UserListItem.vue';
 const props = defineProps(['friends']);
-// const users = ref([
-//     { name: 'Friend Name'},
-//     { name: 'Friend Name', avatar: 'https://cdn.vuetifyjs.com/images/john.jpg' },
-//     { name: 'Friend Name', avatar: 'https://cdn.vuetifyjs.com/images/john.jpg' },
-//     { name: 'Friend Name', avatar: 'https://cdn.vuetifyjs.com/images/john.jpg' },
-//     { name: 'Friend Name', avatar: 'https://cdn.vuetifyjs.com/images/john.jpg' }
-// ])
 </script>

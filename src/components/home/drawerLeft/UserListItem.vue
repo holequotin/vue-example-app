@@ -1,11 +1,9 @@
 <template>
     <v-list-item key="0" :value="props.user">
         <template v-slot:prepend>
-            <v-avatar v-if="props.user.avatar">
-                <v-img :src="props.user.avatar" alt="John"></v-img>
-            </v-avatar>
-            <v-avatar v-else color="red">
-                <span class="text-h5">{{ avatarChar }}</span>
+            <v-avatar color="red">
+                <v-img v-if="user.avatar" alt="John" :src="user.avatar"></v-img>
+                <span class="text-h5" v-else>{{ avatarChar }}</span>
             </v-avatar>
         </template>
         <v-list-item-title >{{ props.user.name }}</v-list-item-title>

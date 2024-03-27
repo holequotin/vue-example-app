@@ -6,25 +6,24 @@ import { errorHandler } from '../utils/errorHandler'
 
 
 export const useUserStore = defineStore('user',() => {
-    const user = ref({})
+    const user = ref({
+        id : 1,
+        name : '',
+        email : ''
+    })
     const avatarChar = computed(() => {
         if(user.value.name) {
             return user.value.name[0]
         }
         return 'A'
     })
-    function getUser() {
+    async function getUser() {
         userService.getUser()
             .then((response) => {
                 const userData = response.data
                 user.value = userData
             })
             .catch((error) => {
-                // console.log(error.response.status)
-                // router.replace({name: 'login'})
-                // const message = getMessage(error)
-                // const alertStore = useAlertStore()
-                // alertStore.showAlert(message,MessageType.ERROR)
                 errorHandler(error)
             })
     }

@@ -3,11 +3,12 @@ class CommentService {
   constructor(api) {
     this.api = api
   }
-  async getCommentByPost(postId) {
+  async getCommentByPost(postId, page=1, perPage=4) {
     const token = localStorage.getItem('token')
-    return this.api.get('/comments', {
+    return this.api.get(`/posts/${postId}/comments`, {
       params: {
-        post_id: postId
+        page: page,
+        perPage: perPage
       },
       headers: {
         'Content-Type': 'application/json',

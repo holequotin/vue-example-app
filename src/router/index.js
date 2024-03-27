@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import { isAuthenticated } from '../utils/auth'
+// import { isAuthenticated } from '../utils/auth'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -7,6 +7,11 @@ const router = createRouter({
       path: '/home',
       name: 'home',
       component: () => import('../views/HomeView.vue')
+    },
+    {
+      path: '/friend_request',
+      name: 'friend_request',
+      component: () => import('../views/FriendRequest.vue')
     },
     {
       path: '/about',
@@ -20,10 +25,10 @@ const router = createRouter({
       path: '/login',
       name: 'login',
       component: () => import('../views/LoginView.vue'),
-      beforeEnter : ()  => {
-        if(isAuthenticated()) return {name: 'home'}
-        return true
-      }
+      // beforeEnter : ()  => {
+      //   if(isAuthenticated()) return {name: 'home'}
+      //   return true
+      // }
     },
     {
       path: '/profile/:id',

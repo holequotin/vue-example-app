@@ -14,6 +14,7 @@
     "@vee-validate/rules": "^4.12.1",
     "@vee-validate/zod": "^4.12.0",
     "axios": "^1.6.2",
+    "jwt-decode": "^4.0.0",
     "moment": "^2.29.4",
     "pinia": "^2.1.7",
     "vee-validate": "^4.12.0",
@@ -29,7 +30,9 @@
     "@vue/eslint-config-prettier": "^8.0.0",
     "eslint": "^8.49.0",
     "eslint-plugin-vue": "^9.17.0",
+    "laravel-echo": "^1.15.3",
     "prettier": "^3.0.3",
+    "pusher-js": "^8.4.0-rc2",
     "vite": "^4.4.11"
   }
 }

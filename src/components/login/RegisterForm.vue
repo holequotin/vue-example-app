@@ -32,9 +32,6 @@
                             {{ confirmPassword.errorMessage.value }}
                             <v-text-field label="Confirm Password*" type="password" required v-model="confirmPassword.value.value" :error-messages="confirmPassword.errorMessage.value"></v-text-field>
                         </v-col>
-                        <v-col cols="12" sm="6">
-                            <v-select :items="['Men', 'Women']" label="Gender*" required v-model="gender.value.value" :error-messages="gender.errorMessage.value"></v-select>
-                        </v-col>
                         <v-col cols="12" sm="12">
                             <v-btn round color="primary" dark block type="submit" @click="submit" :loading="loading">Register</v-btn>
                         </v-col>
@@ -84,7 +81,6 @@ const {handleSubmit} = useForm({
             if(value === password.value.value) return true
             return 'Password not match'
         },
-        gender: 'required'
     }
 })
 
@@ -92,7 +88,6 @@ const name = useField('name');
 const emailField = useField('email')
 const password = useField('password');
 const confirmPassword = useField('confirmPassword');
-const gender = useField('gender')
 
 const submit = handleSubmit(values => {
     // alert(JSON.stringify(values, null, 2))
@@ -106,7 +101,6 @@ const submit = handleSubmit(values => {
     userService.register(data)
         .then(function (response) {
             loading.value = false
-            // alert(response.data)
             console.log(response)
             alertStore.showAlert('Register complete','success')
             dialog.value = false
@@ -115,7 +109,6 @@ const submit = handleSubmit(values => {
             const message = error.response.data.message || error.message
             errorMessage.value = message
             loading.value = false
-            //alert(JSON.stringify(message))
             setTimeout(() => {
                 errorMessage.value = ''
             },5000)
