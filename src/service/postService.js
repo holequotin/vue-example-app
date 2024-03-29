@@ -1,8 +1,10 @@
 import axios from '../apis/axios'
+
 class PostService {
   constructor(api) {
     this.api = api
   }
+
   async getAllPost(page = 1, perPage = 5) {
     const token = localStorage.getItem('token')
     console.log(
@@ -30,6 +32,7 @@ class PostService {
       }
     })
   }
+
   async getPostsByUser(userId, page = 1, perPage = 5) {
     const token = localStorage.getItem('token')
     return this.api.get(`/users/${userId}/posts`, {
@@ -44,6 +47,7 @@ class PostService {
       }
     })
   }
+
   async storePost(data) {
     const token = localStorage.getItem('token')
     return this.api.post('/posts', data, {
@@ -69,14 +73,27 @@ class PostService {
   async updatePost(postId, data) {
     const token = localStorage.getItem('token')
     data._method = 'patch'
-    return this.api.post(`/posts/${postId}`,data, {
-        headers: {
-            'Content-Type': 'multipart/form-data',
-            Authorization: `Bearer ${token}`,
-            Accept: 'application/json'
-          }
+    return this.api.post(`/posts/${postId}`, data, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        Authorization: `Bearer ${token}`,
+        Accept: 'application/json'
+      }
+    })
+  }
+
+  async getPostById(postId) {
+    const token = localStorage.getItem('token')
+    console.log('token', token)
+    return this.api.get(`/posts/${postId}`, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        Authorization: `Bearer ${token}`,
+        Accept: 'application/json'
+      }
     })
   }
 }
+
 const postService = new PostService(axios)
 export { postService }

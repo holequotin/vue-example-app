@@ -28,13 +28,14 @@
     </BaseDialog>
 </template>
 <script setup>
-import BaseDialog from './BaseDialog.vue';
-import PostCard from './PostCard.vue';
+import BaseDialog from './BaseDialog.vue'
+import PostCard from './PostCard.vue'
 import { computed, ref, watchEffect } from 'vue'
-import { useUserStore } from '../../../stores/user';
-import { postService } from '../../../service/postService'
-import { usePostStore } from '../../../stores/post'
-import { errorHandler } from '../../../utils/errorHandler';
+import { useUserStore } from '@/stores/user'
+import { postService } from '@/service/postService'
+import { usePostStore } from '@/stores/post'
+import { errorHandler } from '@/utils/errorHandler'
+
 const props = defineProps(['dialog'])
 const userStore = useUserStore()
 const postStore = usePostStore()
@@ -72,7 +73,7 @@ function storePost() {
     postService.storePost(data).then((response) => {
         console.log(response.data)
         emit('toggle')
-        postStore.getAllPost()
+      postStore.posts.unshift(response.data.post)
     }).catch((error) => {
         console.log(error)
         errorHandler(error)

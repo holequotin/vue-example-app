@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
-// import { isAuthenticated } from '../utils/auth'
+import { isAuthenticated } from '../utils/auth'
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -25,14 +26,13 @@ const router = createRouter({
       path: '/login',
       name: 'login',
       component: () => import('../views/LoginView.vue'),
-      // beforeEnter : ()  => {
-      //   if(isAuthenticated()) return {name: 'home'}
-      //   return true
-      // }
+      beforeEnter: () => {
+        if (isAuthenticated()) return { name: 'home' }
+        return true
+      }
     },
     {
       path: '/profile/:id',
-      // TODO: Add guard here
       children : [
         {
           path : 'friends',
@@ -47,6 +47,11 @@ const router = createRouter({
       ]
     },
     {
+      path: '/post/:id',
+      component: () => import('../views/post/PostView.vue'),
+      name: 'show-post'
+    },
+    {
       path: '/forget_password',
       component: () => import('../views/authentication/ForgetPassword.vue'),
       name: 'forget-password'
@@ -57,7 +62,7 @@ const router = createRouter({
     }
   ]
 })
-// router.beforeEach((to) => {
-//   if(to.name != 'login' && !isAuthenticated()) return {name : 'login'}
-// })
+router.beforeEach((to) => {
+  if (to.name != 'login' && !isAuthenticated()) return { name: 'login' }
+})
 export default router

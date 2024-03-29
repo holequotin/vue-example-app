@@ -31,13 +31,16 @@
     </BaseDialog>
 </template>
 <script setup>
-import BaseDialog from './BaseDialog.vue';
-import PostCard from './PostCard.vue';
+import BaseDialog from './BaseDialog.vue'
+import PostCard from './PostCard.vue'
 import { computed, ref } from 'vue'
-import { postService } from '../../../service/postService'
-import { errorHandler } from '../../../utils/errorHandler';
+import { postService } from '@/service/postService'
+import { errorHandler } from '@/utils/errorHandler'
+import { usePostStore } from '@/stores/post'
+
+const postStore = usePostStore()
 const props = defineProps(['dialog', 'post'])
-const emit = defineEmits(['toggle', 'after'])
+const emit = defineEmits(['toggle'])
 
 const postType = [
     { title: 'Public', value: "public" },
@@ -59,7 +62,7 @@ function update() {
     postService.updatePost(props.post.id, newPostData.value)
         .then((response) => {
             console.log(response.data)
-            emit('after')
+          postStore.updatePost(response.data.post)
         })
         .catch((error) => {
             errorHandler(error)

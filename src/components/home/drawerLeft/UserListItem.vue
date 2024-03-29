@@ -1,5 +1,6 @@
 <template>
-    <v-list-item key="0" :value="props.user">
+  <v-list-item key="0" :value="props.user"
+               @click="this.$router.push({name : 'profile-parent', params : {id: user.id}})">
         <template v-slot:prepend>
             <v-avatar color="red">
                 <v-img v-if="user.avatar" alt="John" :src="user.avatar"></v-img>
@@ -11,8 +12,9 @@
 </template>
 
 <script setup>
-import {computed} from 'vue'
-import {getAvatarChar} from '../../../utils/stringUtils'
+import { computed } from 'vue'
+import { getAvatarChar } from '../../../utils/stringUtils'
+
 const props = defineProps(['user'])
 const avatarChar = computed(() => {
     if(props.user.name) {
