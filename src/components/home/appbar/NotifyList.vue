@@ -1,44 +1,48 @@
 <script setup>
-import { ref } from 'vue'
 import NotifyItem from '@/components/home/appbar/NotifyItem.vue'
+import { useNotificationStore } from '@/stores/notification'
 import { notificationService } from '@/service/notificationService'
-// import { errorHandler } from '@/utils/errorHandler'
+import { errorHandler } from '@/utils/errorHandler'
+import { useAlertStore } from '@/stores/alert'
+import { MessageType } from '@/utils/MessageType'
 
-const items = ref([])
-const currentPage = ref(0)
-const meta = ref({})
 
-async function getNotifications() {
-  if (currentPage.value < meta.value?.last_page || currentPage.value === 0) {
-    notificationService.getNotifications(currentPage.value + 1, 5)
-      .then((response) => {
-        console.log(response.data.data, currentPage.value, meta.value?.last_page)
-        currentPage.value = response.data.meta.current_page
-        meta.value = response.data.meta
-        items.value.push(...response.data.data)
-      })
-      .catch((error) => {
-        console.log(error)
-      })
-  }
-}
+const notificationStore = useNotificationStore()
+const alertStore = useAlertStore()
 
 async function load({ done }) {
   // Perform API call
-  await getNotifications()
+  await notificationStore.getNotifications()
   done('empty')
+}
+
+function markAllAsRead() {
+  notificationService.markAllAsRead()
+    .then((response) => {
+      notificationStore.markAllAsRead()
+      alertStore.showAlert(response.data.message, MessageType.SUCCESS)
+    })
+    .catch((error) => {
+      errorHandler(error)
+    })
 }
 </script>
 
 <template>
-  <h1>{{ items.length }}</h1>
   <v-menu>
     <template v-slot:activator="{ props }">
-      <v-btn class="ma-2" variant="tonal" icon="mdi-bell-outline" size="large" :elevation="12" v-bind="props"></v-btn>
+      <v-badge color="red" style="margin-top: 20px" v-if="notificationStore.meta?.unread_count"
+               :content="notificationStore.meta.unread_count">
+        <v-icon icon="mdi-bell-outline" size="x-large" v-bind="props"></v-icon>
+      </v-badge>
+      <v-icon icon="mdi-bell-outline" size="x-large" v-bind="props" v-else style="margin-top: 20px"></v-icon>
     </template>
-    <v-infinite-scroll :height="500" :items="items" :onLoad="load" color="secondary" class="infinite">
-      <template v-for="(item, index) in items" :key="item">
-        <NotifyItem :title="item.type" :body="item.id"></NotifyItem>
+    <v-infinite-scroll :height="500" color="secondary" class="infinite" :onLoad="load">
+      <v-btn class="ma-2" @click="markAllAsRead">
+        Mark all as read
+      </v-btn>
+      <template v-for="notification in notificationStore.notifications" :key="notification">
+        <NotifyItem :notify="notification"></NotifyItem>
       </template>
     </v-infinite-scroll>
   </v-menu>

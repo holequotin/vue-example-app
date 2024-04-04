@@ -9,7 +9,7 @@ export const useFriendsStore = defineStore('friends', () => {
     async function getAllFriends() {
         friendService.getFriends()
             .then((response) => {
-                friends.value = response.data
+                friends.value = response.data.data
             })
             .catch((error) => {
                 const message = getMessage(error);

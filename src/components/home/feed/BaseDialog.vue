@@ -14,6 +14,8 @@
                 <slot name="content">
                     This is content
                 </slot>
+                <slot name="actions">
+                </slot>
             </v-card>
         </v-dialog>
     </div>

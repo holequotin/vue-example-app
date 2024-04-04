@@ -5,8 +5,7 @@
 </template>
 <script setup>
 import DrawerRightList from './DrawerRightList.vue';
-import { useFriendsStore } from '../../../stores/friend';
+import { useFriendsStore } from '@/stores/friend';
 const friendStore = useFriendsStore()
-console.log('in right')
 friendStore.getAllFriends()
 </script>

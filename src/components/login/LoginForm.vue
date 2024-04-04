@@ -23,11 +23,11 @@
 import RegisterForm from './RegisterForm.vue';
 import { useRouter } from 'vue-router'
 import { useField, useForm } from 'vee-validate'
-import { useUserStore } from '../../stores/user';
-import { useAlertStore } from '../../stores/alert';
-import { MessageType } from '../../utils/MessageType';
-import { getMessage } from '../../utils/errorHandler';
-import { userService } from '../../service/userService';
+import { useUserStore } from '@/stores/user';
+import { useAlertStore } from '@/stores/alert';
+import { MessageType } from '@/utils/MessageType';
+import { getMessage } from '@/utils/errorHandler';
+import { userService } from '@/service/userService';
 import { RouterLink } from 'vue-router';
 const router = useRouter()
 

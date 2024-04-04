@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import { isAuthenticated } from '../utils/auth'
+import { isAuthenticated } from '@/utils/auth'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -59,10 +59,16 @@ const router = createRouter({
     {
       path: '/reset_password',
       component: () => import('../views/authentication/ResetPassword.vue')
+    },
+    {
+      path: '/search',
+      component: () => import('../views/SearchView.vue'),
+      name: 'search',
     }
   ]
 })
 router.beforeEach((to) => {
-  if (to.name != 'login' && !isAuthenticated()) return { name: 'login' }
+  if(to.name === 'forget-password'){return true}
+  if (to.name !== 'login' && !isAuthenticated()) return { name: 'login' }
 })
 export default router

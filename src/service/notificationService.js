@@ -1,4 +1,5 @@
 import axios from '../apis/axios'
+import { da } from 'vuetify/locale'
 
 class NotificationService {
   constructor(api) {
@@ -19,6 +20,38 @@ class NotificationService {
       }
     }
     return this.api.get(endpoint, config)
+  }
+
+  async markAsRead(notificationId) {
+    const endpoint = `/notifications/${notificationId}`
+    const token = localStorage.getItem('token')
+    const data = {
+      _method : 'patch'
+    }
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      },
+    }
+
+    return this.api.post(endpoint, data, config)
+  }
+
+  async markAllAsRead() {
+    const endpoint = '/notifications'
+    const token = localStorage.getItem('token')
+    const data = {
+      _method : 'patch'
+    }
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      },
+    }
+
+    return this.api.post(endpoint,data,config)
   }
 }
 

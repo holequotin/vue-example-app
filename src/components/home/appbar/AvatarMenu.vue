@@ -2,7 +2,7 @@
   <v-menu>
     <template v-slot:activator="{ props }">
       <v-avatar color="red" :size="55" class="ma-2" v-bind="props">
-        <v-img v-if="userStore.user.avatar" alt="John" :src="userStore.user.avatar"></v-img>
+        <v-img v-if="checkURL(userStore.user.avatar)" alt="John" :src="userStore.user.avatar"></v-img>
         <span v-else class="text-h5">{{ userStore.avatarChar }}</span>
       </v-avatar>
     </template>
@@ -22,6 +22,7 @@ import { useRouter } from 'vue-router';
 import { MessageType } from '../../../utils/MessageType';
 import { errorHandler} from '../../../utils/errorHandler';
 import { RouterLink } from 'vue-router';
+import { checkURL } from '@/utils/fileUtils'
 const userStore = useUserStore()
 const alertStore = useAlertStore()
 const router = useRouter()

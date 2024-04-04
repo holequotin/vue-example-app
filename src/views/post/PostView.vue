@@ -16,7 +16,7 @@ watchEffect(() => {
   postService.getPostById(currPostId.value)
     .then(response => {
       console.log(response)
-      post.value = response.data
+      post.value = response.data.post
     })
     .catch((error) => {
       errorHandler(error)
@@ -30,9 +30,9 @@ watchEffect(() => {
       <AppBar></AppBar>
     </template>
     <template #main>
-      <v-main class="d-flex align-center justify-center flex-column" style="min-height: 300px; height: 80vh">
+      <v-main class="d-flex align-center justify-center flex-column" style="min-height: 300px;">
         <div style="width: 70%;">
-          <PostCard :post="post" v-if="post" />
+          <PostCard v-if="post" :post="post" type="feed"></PostCard>
         </div>
       </v-main>
     </template>

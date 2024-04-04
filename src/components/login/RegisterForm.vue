@@ -52,9 +52,9 @@ import { ref,computed } from 'vue'
 import { defineRule } from 'vee-validate';
 import {useField, useForm} from 'vee-validate'
 import { required, email,min} from '@vee-validate/rules';
-import { useAlertStore } from '../../stores/alert';
+import { useAlertStore } from '@/stores/alert';
 import ALertBase from '../notify/AlertBase.vue'
-import { userService } from '../../service/userService';
+import { userService } from '@/service/userService';
 
 defineRule('required',value => {
     return required(value)? true : 'This field is required'
@@ -69,8 +69,8 @@ const alertStore = useAlertStore()
 const errorMessage = ref('')
 const loading = ref(false)
 const showError = computed(() => {
-    if(errorMessage.value) return true
-    return false
+    return !!errorMessage.value;
+
 })
 const {handleSubmit} = useForm({
     validationSchema : {
@@ -89,8 +89,7 @@ const emailField = useField('email')
 const password = useField('password');
 const confirmPassword = useField('confirmPassword');
 
-const submit = handleSubmit(values => {
-    // alert(JSON.stringify(values, null, 2))
+const submitForm = handleSubmit(values => {
     const data = {
         email: values.email,
         name: values.name,

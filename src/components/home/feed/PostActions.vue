@@ -11,23 +11,26 @@
             </v-btn>
         </v-col>
         <v-col>
-            <v-btn variant="plain" block prepend-icon="mdi-share-outline">
+            <v-btn variant="plain" block prepend-icon="mdi-share-outline" @click="shareDialog=true">
                 Share
             </v-btn>
         </v-col>
-        <CommentDialog @toggle="commentDialog = !commentDialog" :dialog="commentDialog" :post="props.post"></CommentDialog>
+        <CommentDialog v-if="commentDialog" @toggle="commentDialog = !commentDialog" :dialog="commentDialog" :post="props.post"></CommentDialog>
+        <SharePostDialog v-if="shareDialog" @toggle="shareDialog = !shareDialog" :dialog="shareDialog" :id="props.post.id"></SharePostDialog>
     </v-row>
 
 </template>
 <script setup>
 import {ref} from 'vue'
-import { ReactionType } from '../../../utils/ReactionType';
-import {reactionService} from '../../../service/reactionService'
-import { errorHandler } from '../../../utils/errorHandler';
+import { ReactionType } from '@/utils/ReactionType';
+import {reactionService} from '@/service/reactionService'
+import { errorHandler } from '@/utils/errorHandler';
 import CommentDialog from './CommentDialog.vue';
+import SharePostDialog from '@/components/home/feed/SharePostDialog.vue'
 
 const props = defineProps(['post'])
 const select = ref(null)
+const shareDialog = ref(false)
 
 if(props.post.current_reaction != null)
 {

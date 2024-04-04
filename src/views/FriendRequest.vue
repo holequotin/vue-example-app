@@ -23,10 +23,10 @@ import BaseLayout from './base/BaseLayout.vue';
 import AppBar from '../components/home/appbar/AppBar.vue'
 import DrawerLeft from '../components/home/drawerLeft/DrawerLeft.vue';
 import DrawerRight from '../components/home/drawerRight/DrawerRight.vue';
-import { useUserStore } from '../stores/user';
+import { useUserStore } from '@/stores/user';
 import { ref, watchEffect } from 'vue';
-import { friendService } from '../service/friendService'
-import { errorHandler } from '../utils/errorHandler';
+import { friendService } from '@/service/friendService'
+import { errorHandler } from '@/utils/errorHandler';
 import FriendRequest from '../components/friends/FriendRequest.vue';
 
 
@@ -47,7 +47,7 @@ function getFriendRequests(page) {
     friendService.getFriendRequests(page)
         .then((response) => {
             console.log(response.data)
-            friendships.value = response.data
+            friendships.value = response.data.data
         })
         .catch((error) => {
             errorHandler(error)

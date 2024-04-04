@@ -84,7 +84,6 @@ class PostService {
 
   async getPostById(postId) {
     const token = localStorage.getItem('token')
-    console.log('token', token)
     return this.api.get(`/posts/${postId}`, {
       headers: {
         'Content-Type': 'multipart/form-data',
@@ -92,6 +91,20 @@ class PostService {
         Accept: 'application/json'
       }
     })
+  }
+
+  async sharePost(data) {
+    const endpoint = '/posts/share'
+    const token = localStorage.getItem('token')
+    const config = {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        Authorization: `Bearer ${token}`,
+        Accept: 'application/json'
+      }
+    }
+
+    return this.api.post(endpoint,data,config);
   }
 }
 

@@ -12,7 +12,7 @@
 
 <script setup>
 import AvatarIcon from './AvatarIcon.vue';
-import { useUserStore } from '../../../stores/user';
+import { useUserStore } from '@/stores/user';
 import CreatePostDialog from './CreatePostDialog.vue';
 import {ref} from 'vue'
 const userStore = useUserStore()

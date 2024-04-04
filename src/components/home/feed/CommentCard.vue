@@ -8,10 +8,10 @@
                         {{ user.name }}
                     </v-card-title>
                 </RouterLink>
-                <v-card-content class="content" v-if="props.comment.body">
+                <v-card-item class="content" v-if="props.comment.body">
                     <v-textarea variant="solo" v-model="commentContent" v-if="onEditing"></v-textarea>
                     <p v-else> {{ props.comment.body }}</p>
-                </v-card-content>
+                </v-card-item>
                 <slot name="image">
                     <v-file-input label="File input" hide-input class="custom-file-input" v-model="updateImage"
                         v-if="onEditing"></v-file-input>
@@ -44,19 +44,17 @@
 </template>
 <script setup>
 import AvatarIcon from './AvatarIcon.vue';
-import { useUserStore } from '../../../stores/user';
-import { commentService } from '../../../service/commentService'
-import { usePostStore } from '../../../stores/post';
+import { useUserStore } from '@/stores/user';
+import { commentService } from '@/service/commentService'
 import { RouterLink } from 'vue-router';
 import { ref } from 'vue'
-import { errorHandler } from '../../../utils/errorHandler';
+import { errorHandler } from '@/utils/errorHandler';
 const props = defineProps(['user', 'comment']);
-const emit = defineEmits(['deleted'])
+const emit = defineEmits(['deleted', 'updated'])
 const commentContent = ref(props.comment.body)
 const onEditing = ref(false)
 const updateImage = ref(null)
 const userStore = useUserStore()
-const postStore = usePostStore()
 const deleteImage = ref(false)
 function deleteComment() {
     commentService.deleteComment(props.comment.id).then((response) => {
@@ -75,7 +73,7 @@ function updateComment() {
     commentService.updateComment(props.comment.id, data).then((response) => {
         console.log(response.data)
         onEditing.value = false
-        emit('deleted')
+        emit('updated', response.data.comment)
     }).catch((error) => {
         errorHandler(error)
     })
@@ -89,5 +87,6 @@ function updateComment() {
 
 .content {
     font-size: 15px;
+    text-align: left;
 }
 </style>

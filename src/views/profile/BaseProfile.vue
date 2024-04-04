@@ -18,9 +18,9 @@
                   <EditAvatarDialiog v-if="editAvatar" @toggle="editAvatar = !editAvatar" @after="changed"
                                      :dialog="editAvatar">
                   </EditAvatarDialiog>
-                  <v-avatar color="surface-variant" size="150" style="margin-top : -100px;">
-                    <v-img v-if="user.avatar" :src="user.avatar" cover></v-img>
-                    <span v-else class="text-h5">{{ avatarChar }}</span>
+                  <v-avatar color="red" size="150" style="margin-top : -100px;">
+                    <v-img v-if="checkURL(user.avatar)" :src="user.avatar" cover></v-img>
+                    <span v-else class="text-h5">{{ user.name ? user.name[0] : "A"}}</span>
                   </v-avatar>
                   <h1 style="margin-left: 20px;">{{ user.name }}</h1>
                 </div>
@@ -110,6 +110,7 @@ import { errorHandler } from '@/utils/errorHandler'
 import { MessageType } from '@/utils/MessageType'
 import ProfileDialog from '../../components/profile/ProfileDialog.vue'
 import EditAvatarDialiog from '../../components/profile/EditAvatarDialiog.vue'
+import { checkURL } from '@/utils/fileUtils'
 
 const route = useRoute()
 const currUserId = ref(1)
@@ -142,7 +143,7 @@ const avatarChar = computed(() => {
 function getFriends() {
   friendService.getFriendsByUser(currUserId.value)
     .then((response) => {
-      friends.value = response.data
+      friends.value = response.data.data
     })
     .catch((error) => {
       errorHandler(error)

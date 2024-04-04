@@ -44,7 +44,7 @@ import {useField, useForm} from 'vee-validate'
 import { required, email} from '@vee-validate/rules';
 import { ref } from 'vue'
 import axios from '../../apis/axios'
-import {errorHandler} from '../../utils/errorHandler'
+import {errorHandler} from '@/utils/errorHandler'
 import { RouterLink } from 'vue-router';
 const send = ref(false)
 

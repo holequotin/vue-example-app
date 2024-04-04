@@ -3,12 +3,15 @@
       <template v-slot:prepend>
         <div class="d-flex justify-start">
           <v-avatar color="blue-darken-2" size="large">
-            <v-img v-if="post.user.avatar" alt="John" :src="post.user.avatar"></v-img>
+            <v-img v-if="checkURL(post.user.avatar)" alt="John" :src="post.user.avatar"></v-img>
             <span v-else class="text-h5">{{ avatarChar }}</span>
           </v-avatar>
           <div class="ml-3">
             <RouterLink :to="{ name: 'profile-parent', params: { id: post.user.id } }" style="color: white;">
-              <v-card-title>{{ post.user.name }}</v-card-title>
+              <div class="d-flex align-items-center">
+                <v-card-title>{{ post.user.name }}</v-card-title>
+                <div class="ml-10 mt-1" v-if="props.post.shared_post">Shared the post</div>
+              </div>
             </RouterLink>
             <v-card-subtitle>
               {{ props.post.created_at ? formatedDate : null }}
@@ -46,16 +49,18 @@
                    cover :src="image.url"></v-img>
           </v-col>
         </v-row>
+        <PostCard v-if="props.post.shared_post" :post="props.post.shared_post" type="aa" style="width: 97%"></PostCard>
       </slot>
       <!--reaction infomation-->
       <slot name="actions">
-        <PostInfo :post="post"></PostInfo>
-        <v-divider></v-divider>
-        <v-container grid-list-xs fluid>
-          <PostActions :post="post">
-          </PostActions>
-        </v-container>
-        <v-divider></v-divider>
+        <div v-if="type === 'feed'">
+          <PostInfo :post="post"></PostInfo>
+          <v-divider></v-divider>
+          <v-container grid-list-xs fluid>
+            <PostActions :post="post">
+            </PostActions>
+          </v-container>
+        </div>
       </slot>
     </v-card>
 </template>
@@ -70,6 +75,7 @@ import { computed, ref } from 'vue'
 import { postService } from '@/service/postService'
 import { errorHandler } from '@/utils/errorHandler'
 import { usePostStore } from '@/stores/post'
+import { checkURL } from '@/utils/fileUtils'
 
 const postStore = usePostStore()
 const userStore = useUserStore()

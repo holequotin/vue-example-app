@@ -1,6 +1,6 @@
 <template>
     <AppBar></AppBar>
-    <v-layout class="rounded rounded-md">
+    <v-layout class="rounded rounded-md d-flex justify-center align-center">
       <AlertBase :message="alertStore.messageState" :type="alertStore.typeState" v-show="showAlert"
                  @action="alertStore.actionState" />
         <slot name="appbar">
@@ -33,12 +33,12 @@
 
 <script setup>
 import AlertBase from '../../components/notify/AlertBase.vue'
-import { useAlertStore } from '../../stores/alert'
+import { useAlertStore } from '@/stores/alert'
 import { ref, watchEffect } from 'vue'
-// import { MessageType } from '../../utils/MessageType';
+import { useNotificationStore } from '@/stores/notification'
 const alertStore = useAlertStore()
 const showAlert = ref(false)
-console.log('in base')
+const notificationStore = useNotificationStore()
 watchEffect(() => {
     if (alertStore.messageState != '') {
         console.log('Show Alert', alertStore.messageState)
@@ -50,6 +50,7 @@ watchEffect(() => {
         }, 5000)
     }
 })
+notificationStore.getNotifications()
 </script>
 <style scoped>
 .bounder {

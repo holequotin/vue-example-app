@@ -112,6 +112,25 @@ class UserService {
 
     return this.api.post(endpoint,data,config)
   }
+
+  async searchUser(name, page = 1, perPage = 5) {
+    console.log('Name search', name)
+    const endpoint = '/users'
+    const token = localStorage.getItem('token')
+    const config = {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        Authorization: `Bearer ${token}`,
+        Accept: 'application/json'
+      },
+      params: {
+        name: name,
+        page: page,
+        perPage: perPage,
+      }
+    }
+    return this.api.get(endpoint,config)
+  }
 }
 const userService = new UserService(axios)
 export { userService }
