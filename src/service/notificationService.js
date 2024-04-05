@@ -1,5 +1,4 @@
 import axios from '../apis/axios'
-import { da } from 'vuetify/locale'
 
 class NotificationService {
   constructor(api) {

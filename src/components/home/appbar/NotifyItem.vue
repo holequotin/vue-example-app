@@ -20,6 +20,8 @@ const title = computed(() => {
       return 'Friend request'
     case 'App\\Notifications\\CommentCreatedNotification':
       return 'Commented'
+    case 'App\\Notifications\\GroupRequestNotification':
+      return 'Join group request'
     default:
       return props.notify.type
   }
@@ -31,6 +33,8 @@ const event = computed(() => {
       return toFriendRequest
     case 'App\\Notifications\\CommentCreatedNotification':
       return toPost
+    case 'App\\Notifications\\GroupRequestNotification':
+      return () => console.log('To group request')
     default:
       return () => console.log('Clicked on notify item')
   }

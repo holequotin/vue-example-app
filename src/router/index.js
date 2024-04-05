@@ -64,6 +64,11 @@ const router = createRouter({
       path: '/search',
       component: () => import('../views/SearchView.vue'),
       name: 'search',
+    },
+    {
+      path: '/groups',
+      component: () => import('../views/GroupsView.vue'),
+      name: 'groups'
     }
   ]
 })
