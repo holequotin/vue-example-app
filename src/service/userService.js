@@ -1,4 +1,5 @@
 import axios from '../apis/axios'
+
 class UserService {
   constructor(api) {
     this.api = api
@@ -114,7 +115,6 @@ class UserService {
   }
 
   async searchUser(name, page = 1, perPage = 5) {
-    console.log('Name search', name)
     const endpoint = '/users'
     const token = localStorage.getItem('token')
     const config = {

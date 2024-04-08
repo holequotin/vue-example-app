@@ -13,7 +13,9 @@ const props = defineProps(['group'])
           <span v-else class="text-h5">{{ props.group.name[0].toUpperCase() }}</span>
         </v-avatar>
         <div class="ml-3">
-          <v-card-title>{{ props.group.name }}</v-card-title>
+          <RouterLink :to="{name: 'group-view', params: {id : props.group.id}}">
+            <v-card-title>{{ props.group.name }}</v-card-title>
+          </RouterLink>
         </div>
       </div>
     </template>

@@ -43,8 +43,18 @@ const router = createRouter({
           path: '',
           component: () => import('../views/profile/BaseProfile.vue'),
           name: 'profile-parent'
+        },
+        {
+          path: 'groups',
+          component: () => import('../views/profile/GroupsProfile.vue'),
+          name: 'profile-group'
         }
       ]
+    },
+    {
+      path: '/groups/:id',
+      component: () => import('../views/groups/GroupView.vue'),
+      name: 'group-view'
     },
     {
       path: '/post/:id',

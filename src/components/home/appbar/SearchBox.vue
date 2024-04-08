@@ -13,15 +13,17 @@
 <script setup>
 import { useRouter } from 'vue-router'
 import { ref } from 'vue'
+import { useSearchStore } from '@/stores/search'
+
 const searchValue = ref('')
 const router = useRouter()
-import { useSearchStore } from '@/stores/search'
 
 const searchStore = useSearchStore()
 function search() {
   if(searchValue.value.trim()) {
-    searchStore.$reset()
-    searchStore.searchUsers(searchValue.value)
+    searchStore.reset()
+    searchStore.searchUsers(searchValue.value, 1, 6)
+    searchStore.searchGroups(searchValue.value, 1, 6)
     router.push({name: 'search',query: {search: searchValue.value}})
   }
 }

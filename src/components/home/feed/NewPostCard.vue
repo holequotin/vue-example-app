@@ -7,15 +7,18 @@
             </v-container>
         </v-card-item>
     </v-card>
-    <CreatePostDialog :dialog="dialog" @toggle="dialog = !dialog"></CreatePostDialog>
+  <CreatePostDialog :dialog="dialog" @toggle="dialog = !dialog" :group="props.group"></CreatePostDialog>
 </template>
 
 <script setup>
-import AvatarIcon from './AvatarIcon.vue';
-import { useUserStore } from '@/stores/user';
-import CreatePostDialog from './CreatePostDialog.vue';
-import {ref} from 'vue'
+import AvatarIcon from './AvatarIcon.vue'
+import { useUserStore } from '@/stores/user'
+import CreatePostDialog from './CreatePostDialog.vue'
+import { ref } from 'vue'
+
 const userStore = useUserStore()
+const props = defineProps(['group'])
+userStore.getUser()
 const dialog = ref(false)
 </script>
 <style scoped>

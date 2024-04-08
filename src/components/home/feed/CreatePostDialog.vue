@@ -36,7 +36,7 @@ import { postService } from '@/service/postService'
 import { usePostStore } from '@/stores/post'
 import { errorHandler } from '@/utils/errorHandler'
 
-const props = defineProps(['dialog'])
+const props = defineProps(['dialog', 'group'])
 const userStore = useUserStore()
 const postStore = usePostStore()
 const emit = defineEmits(['toggle'])
@@ -64,11 +64,15 @@ const post = ref({
     comments: []
 })
 function storePost() {
-    const data = {
+  let data = {
         body: newPostData.value.body ? newPostData.value.body : null,
         images: newPostData.value.images ? newPostData.value.images : null,
         type: newPostData.value.type
     }
+  if (props.group) {
+    data = { ...data, group_id: props.group.id }
+  }
+
     // alert(JSON.stringify(data))
     postService.storePost(data).then((response) => {
         console.log(response.data)

@@ -12,35 +12,30 @@ import { errorHandler } from '@/utils/errorHandler'
 
 const userStore = useUserStore()
 const groups = ref([])
-const currentPage = ref(0)
-const meta = ref(null)
+const meta = ref({
+  last_page: 1
+})
+const page = ref(1)
 
 
 userStore.getUser()
 
-async function load({ done }) {
-  await getGroups()
-  done('empty')
-}
 
 function getGroups() {
-  if ((currentPage.value === 0 || meta.value?.last_page) && userStore.user) {
-    groupService.getGroupByUser(userStore.user.id, currentPage.value + 1, 20)
-      .then((response) => {
-        currentPage.value = response.data.meta.current_page
-        meta.value = response.data.meta
-        groups.value.push(...response.data.data)
-      })
-      .catch((error) => {
-        errorHandler(error)
-      })
-  }
+  groupService.getGroupByUser(userStore.user.id, page.value, 6)
+    .then((response) => {
+      meta.value = response.data.meta
+      groups.value = response.data.data
+    })
+    .catch((error) => {
+      errorHandler(error)
+    })
 }
 
+getGroups()
 </script>
 
 <template>
-  <v-infinite-scroll :onLoad="load">
     <BaseLayout>
       <template #appbar>
         <AppBar></AppBar>
@@ -49,6 +44,14 @@ function getGroups() {
         <v-main class="d-flex align-center justify-center flex-column" style="min-height: 300px; width: 100%">
           <div style="width: 70%">
             <GroupCard v-for="group in groups" :group="group" :key="group.id"></GroupCard>
+          </div>
+          <div class="text-center">
+            <v-pagination
+              v-model="page"
+              :length="meta.last_page"
+              :total-visible="7"
+              @update:model-value="getGroups"
+            ></v-pagination>
           </div>
         </v-main>
       </template>
@@ -59,7 +62,6 @@ function getGroups() {
         <DrawerRight></DrawerRight>
       </template>
     </BaseLayout>
-  </v-infinite-scroll>
 </template>
 
 <style scoped>

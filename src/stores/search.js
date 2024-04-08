@@ -2,38 +2,46 @@ import { ref } from 'vue'
 import { defineStore } from 'pinia'
 import { userService } from '@/service/userService'
 import { errorHandler } from '@/utils/errorHandler'
+import { groupService } from '@/service/groupService'
 
 export const useSearchStore = defineStore('search', () => {
   const users = ref([])
-  const meta = ref(null)
-  const currentPage = ref(0)
+  const groups = ref([])
+  const type = ref('users')
 
-  function $reset() {
+  const meta = ref({
+    last_page: 1
+  })
+
+  function reset() {
     users.value = []
-    meta.value = null
-    currentPage.value = 0
-  }
-
-  async function searchUsers(name) {
-    const isNotLastPage = currentPage.value < meta.value?.last_page
-    const isNotStartLoad = currentPage.value === 0
-    const hasSearchValue = !!name
-    console.table({
-      'isNotLastPage': isNotLastPage,
-      'isNotStartLoad': isNotStartLoad,
-      'hasSearchValue': hasSearchValue
-    })
-    if ((isNotLastPage || isNotStartLoad) && hasSearchValue) {
-      userService.searchUser(name, currentPage.value + 1, 20)
-        .then((response) => {
-          meta.value = response.data.meta
-          currentPage.value = meta.value.current_page
-          users.value.push(...response.data.data)
-        })
-        .catch((error) => {
-          errorHandler(error)
-        })
+    groups.value = []
+    meta.value = {
+      last_page: 1
     }
   }
-  return {users, $reset, searchUsers}
+
+  async function searchUsers(name, page = 1, perPage = 20) {
+    userService.searchUser(name, page, perPage)
+      .then((response) => {
+        meta.value = response.data.meta
+        users.value = response.data.data
+      })
+      .catch((error) => {
+        errorHandler(error)
+      })
+  }
+
+  async function searchGroups(name, page = 1, perPage = 20) {
+    groupService.searchGroup(name, page, perPage)
+      .then((response) => {
+        meta.value = response.data.meta
+        groups.value = response.data.data
+      })
+      .catch((error) => {
+        errorHandler(error)
+      })
+  }
+
+  return { users, groups, type, meta, reset, searchUsers, searchGroups }
 })

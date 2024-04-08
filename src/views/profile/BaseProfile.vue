@@ -20,7 +20,7 @@
                   </EditAvatarDialiog>
                   <v-avatar color="red" size="150" style="margin-top : -100px;">
                     <v-img v-if="checkURL(user.avatar)" :src="user.avatar" cover></v-img>
-                    <span v-else class="text-h5">{{ user.name ? user.name[0] : "A"}}</span>
+                    <span v-else class="text-h5">{{ user.name ? user.name[0] : 'A' }}</span>
                   </v-avatar>
                   <h1 style="margin-left: 20px;">{{ user.name }}</h1>
                 </div>
@@ -45,7 +45,11 @@
                     color="primary" variant="plain">Friends
                   </v-btn>
                 </RouterLink>
-
+                <RouterLink :to="{ name: 'profile-group', params: { id: $route.params.id } }">
+                  <v-btn
+                    color="primary" variant="plain">Groups
+                  </v-btn>
+                </RouterLink>
               </v-container>
             </v-container>
           </v-card>
@@ -99,7 +103,7 @@ import AppBar from '../../components/home/appbar/AppBar.vue'
 import FriendButton from '../../components/profile/FriendButton.vue'
 import NewPostCard from '../../components/home/feed/NewPostCard.vue'
 import PostCard from '../../components/home/feed/PostCard.vue'
-import { computed, provide, ref, watchEffect } from 'vue'
+import { provide, ref, watchEffect } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
 import { userService } from '@/service/userService'
 import { friendService } from '@/service/friendService'
@@ -133,11 +137,6 @@ watchEffect(() => {
   getUser()
   getFriends()
   getFriendship()
-})
-
-const avatarChar = computed(() => {
-  if (!user?.value?.name) return 'A'
-  return user.value.name[0].toUpperCase()
 })
 
 function getFriends() {
