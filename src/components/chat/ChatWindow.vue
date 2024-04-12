@@ -12,6 +12,7 @@ import { useUserStore } from '@/stores/user'
 const props = defineProps(['id'])
 const route = useRoute()
 const perPage = ref(15)
+const body = ref('')
 
 const meta = ref({
   last_page: 1,
@@ -68,6 +69,25 @@ async function getMessage(id, perPage = 15) {
     })
 }
 
+async function sendMessage() {
+  body.value = body.value.trim()
+  console.log(body.value)
+  if (body.value) {
+    const data = {
+      body: body.value,
+      to_user_id: props.id
+    }
+    messageService.storeMessage(data)
+      .then(response => {
+        messages.value.push(response.data)
+        body.value = ''
+      })
+      .catch(error => {
+        errorHandler(error)
+      })
+  }
+}
+
 async function load({ done }) {
   await getMessage(route.params.id, perPage.value)
   if (meta.value.current_page === meta.value.last_page) done('empty')
@@ -103,7 +123,7 @@ async function load({ done }) {
       name="footer"
       app
     >
-      <v-text-field append-icon="mdi-send" @click:append="console.log('Send message')"></v-text-field>
+      <v-text-field append-icon="mdi-send" @click:append="sendMessage" v-model="body"></v-text-field>
     </v-footer>
   </v-container>
 </template>

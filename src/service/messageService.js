@@ -6,7 +6,7 @@ class MessageService {
   }
 
   async getMessages(id, page, perPage) {
-    const endpoint = `messages/${id}`
+    const endpoint = `/messages/${id}`
     const token = localStorage.getItem('token')
     const config = {
       headers: {
@@ -21,6 +21,19 @@ class MessageService {
     }
 
     return this.api.get(endpoint, config)
+  }
+
+  async storeMessage(data) {
+    const endpoint = `/messages`
+    const token = localStorage.getItem('token')
+    const config = {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        Authorization: `Bearer ${token}`,
+        Accept: 'application/json'
+      }
+    }
+    return this.api.post(endpoint, data, config)
   }
 }
 
