@@ -27,14 +27,15 @@
     </BaseDialog>
 </template>
 <script setup>
-import BaseDialog from '../home/feed/BaseDialog.vue';
-import { ref, computed, watchEffect } from 'vue'
-import { useAlertStore } from '../../stores/alert';
-import { useUserStore } from '../../stores/user';
-import { userService } from '../../service/userService';
-import { MessageType } from '../../utils/MessageType';
-import { errorHandler } from '../../utils/errorHandler';
-import { usePostStore } from '../../stores/post';
+import BaseDialog from '../home/feed/BaseDialog.vue'
+import { computed, ref, watchEffect } from 'vue'
+import { useAlertStore } from '@/stores/alert'
+import { useUserStore } from '@/stores/user'
+import { userService } from '@/service/userService'
+import { MessageType } from '@/utils/MessageType'
+import { errorHandler } from '@/utils/errorHandler'
+import { usePostStore } from '@/stores/post'
+
 const props = defineProps(['dialog'])
 const emit = defineEmits(['toggle', 'after'])
 

@@ -6,7 +6,7 @@
                     :error-messages="emailField.errors.value"></v-text-field>
                 <v-text-field name="password" placeholder="Enter password" v-model="password.value.value"
                     :error-messages="password.errors.value" type="password"></v-text-field>
-                <v-btn round color="primary" dark block @click="login">Login</v-btn>
+              <v-btn round color="primary" block @click="login">Login</v-btn>
             </v-form>
 
             <v-container class="fill-height align-center justify-center">
@@ -14,21 +14,20 @@
             </v-container>
             <v-divider></v-divider>
             <RegisterForm></RegisterForm>
-            <!-- <v-btn round color="success" dark block>Register</v-btn> -->
         </v-card-item>
     </v-card>
 </template>
 
 <script setup>
-import RegisterForm from './RegisterForm.vue';
-import { useRouter } from 'vue-router'
+import RegisterForm from './RegisterForm.vue'
+import { RouterLink, useRouter } from 'vue-router'
 import { useField, useForm } from 'vee-validate'
-import { useUserStore } from '@/stores/user';
-import { useAlertStore } from '@/stores/alert';
-import { MessageType } from '@/utils/MessageType';
-import { getMessage } from '@/utils/errorHandler';
-import { userService } from '@/service/userService';
-import { RouterLink } from 'vue-router';
+import { useUserStore } from '@/stores/user'
+import { useAlertStore } from '@/stores/alert'
+import { MessageType } from '@/utils/MessageType'
+import { getMessage } from '@/utils/errorHandler'
+import { userService } from '@/service/userService'
+
 const router = useRouter()
 
 const alertStore = useAlertStore()

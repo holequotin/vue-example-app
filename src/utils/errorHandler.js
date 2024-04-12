@@ -1,6 +1,7 @@
 import router from '../router'
 import { useAlertStore } from '../stores/alert'
 import { MessageType } from './MessageType'
+
 const alertStore = useAlertStore()
 const getMessage = function (error) {
   if (error.response) {
@@ -23,7 +24,7 @@ const errorHandler = function (error) {
       alertStore.showAlert('Not Found', MessageType.ERROR)
       break;
     default:
-      alertStore.showAlert(error.response.data.message, MessageType.ERROR)
+      alertStore.showAlert(error.response.data.error, MessageType.ERROR)
       break
   }
 }

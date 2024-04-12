@@ -17,6 +17,11 @@ const notificationHandler = function(data) {
     case 'App\\Notifications\\FriendRequestNotification':
       alertStore.showAlert('Some one send your friend request', MessageType.INFO)
       break
+    case 'App\\Notifications\\GroupRequestNotification':
+      alertStore.showAlert('Some one want to join your group', MessageType.INFO, () => router.push({
+        name: 'group_request'
+      }))
+      break
     default:
       alertStore.showAlert(data.type, MessageType.ERROR)
       break

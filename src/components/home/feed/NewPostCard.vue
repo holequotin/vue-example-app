@@ -7,7 +7,8 @@
             </v-container>
         </v-card-item>
     </v-card>
-  <CreatePostDialog :dialog="dialog" @toggle="dialog = !dialog" :group="props.group"></CreatePostDialog>
+  <CreatePostDialog :dialog="dialog" @toggle="dialog = !dialog" :group="props.group"
+                    @created="$emit('created')"></CreatePostDialog>
 </template>
 
 <script setup>
@@ -18,6 +19,7 @@ import { ref } from 'vue'
 
 const userStore = useUserStore()
 const props = defineProps(['group'])
+defineEmits(['created'])
 userStore.getUser()
 const dialog = ref(false)
 </script>

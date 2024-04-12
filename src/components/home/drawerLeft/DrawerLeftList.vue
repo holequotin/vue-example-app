@@ -14,16 +14,15 @@
     </v-list>
 </template>
 <script setup>
-// import DrawerLeftListItem from './DrawerLeftListItem.vue';
 import { ref, watchEffect } from 'vue'
 import UserListItem from './UserListItem.vue'
 import { useUserStore } from '@/stores/user'
 
 const items = ref([
-    { text: 'Friends', icon: 'mdi-account-multiple', to: 'friend_request' },
-    { text: 'Feeds', icon: 'mdi-newspaper-variant-multiple-outline', to: 'friend_request' },
+  { text: 'Friend request', icon: 'mdi-account-multiple', to: 'friend_request' },
+  { text: 'Group join request', icon: 'mdi-newspaper-variant-multiple-outline', to: 'group_request' },
   { text: 'Groups', icon: 'mdi-account-group', to: 'groups' },
-    { text: 'Chat', icon: 'mdi-facebook-messenger', to: 'friend_request' }
+  { text: 'Chat', icon: 'mdi-facebook-messenger', to: 'chat' }
 ])
 const userStore = useUserStore()
 const user = ref({})

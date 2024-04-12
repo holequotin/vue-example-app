@@ -100,7 +100,7 @@ class GroupService {
   }
 
   async getJoinStatus(id) {
-    const endpoint = `/groups/${id}/join/status`
+    const endpoint = `/groups/${id}/join-status`
     const token = localStorage.getItem('token')
     const config = {
       headers: {
@@ -129,6 +129,95 @@ class GroupService {
     }
 
     return this.api.get(endpoint, config)
+  }
+
+  async sendRequest(id) {
+    const endpoint = `/groups/${id}/request`
+    const token = localStorage.getItem('token')
+    const config = {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        Authorization: `Bearer ${token}`,
+        Accept: 'application/json'
+      }
+    }
+
+    return this.api.post(endpoint, {}, config)
+  }
+
+  async getJoinGroupRequests(page = 1, perPage = 15) {
+    const endpoint = `/groups/request`
+    const token = localStorage.getItem('token')
+    const config = {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        Authorization: `Bearer ${token}`,
+        Accept: 'application/json'
+      },
+      params: {
+        page: page,
+        perPage: perPage
+      }
+    }
+
+    return this.api.get(endpoint, config)
+  }
+
+  async accept(groupId, userId) {
+    const endpoint = `groups/${groupId}/accept/${userId}`
+    const token = localStorage.getItem('token')
+    const config = {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        Authorization: `Bearer ${token}`,
+        Accept: 'application/json'
+      }
+    }
+
+    return this.api.patch(endpoint, {}, config)
+  }
+
+  async remove(groupId, userId) {
+    const endpoint = `groups/${groupId}/remove/${userId}`
+    const token = localStorage.getItem('token')
+    const config = {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        Authorization: `Bearer ${token}`,
+        Accept: 'application/json'
+      }
+    }
+
+    return this.api.delete(endpoint, config)
+  }
+
+  async createGroup(data) {
+    const endpoint = 'groups'
+    const token = localStorage.getItem('token')
+    const config = {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        Authorization: `Bearer ${token}`,
+        Accept: 'application/json'
+      }
+    }
+
+    return this.api.post(endpoint, data, config)
+  }
+
+  async updateGroup(id, data) {
+    data._method = 'patch'
+    const endpoint = `groups/${id}`
+    const token = localStorage.getItem('token')
+    const config = {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        Authorization: `Bearer ${token}`,
+        Accept: 'application/json'
+      }
+    }
+
+    return this.api.post(endpoint, data, config)
   }
 }
 

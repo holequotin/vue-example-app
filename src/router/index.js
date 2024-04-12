@@ -15,6 +15,11 @@ const router = createRouter({
       component: () => import('../views/FriendRequest.vue')
     },
     {
+      path: '/group_request',
+      name: 'group_request',
+      component: () => import('../views/groups/GroupJoinRequest.vue')
+    },
+    {
       path: '/about',
       name: 'about',
       // route level code-splitting
@@ -79,6 +84,11 @@ const router = createRouter({
       path: '/groups',
       component: () => import('../views/GroupsView.vue'),
       name: 'groups'
+    },
+    {
+      path: '/chat/:id?',
+      component: () => import('../views/chat/ChatView.vue'),
+      name: 'chat'
     }
   ]
 })

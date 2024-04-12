@@ -10,6 +10,7 @@ import { errorHandler } from '@/utils/errorHandler'
 import GroupButton from '@/components/group/GroupButton.vue'
 import NewPostCard from '@/components/home/feed/NewPostCard.vue'
 import PostCard from '@/components/home/feed/PostCard.vue'
+import EditGroupDialog from '@/components/group/EditGroupDialog.vue'
 
 const route = useRoute()
 const group = ref({
@@ -18,9 +19,21 @@ const group = ref({
   'url': 'http://localhost:8000/storage/',
   'type': '1',
   'created_at': '2024-04-08T01:33:32.000000Z',
-  'updated_at': '2024-04-08T01:33:32.000000Z'
+  'updated_at': '2024-04-08T01:33:32.000000Z',
+  'owner': {
+    'id': 21,
+    'name': 'Alene Klein',
+    'email': 'heaney.fletcher@example.org',
+    'avatar': 'http://localhost:8000/storage/avatars/21/zBocVFF3Govgm9cFeQc4JFnIcdPPvf2weP8wlDzU.png'
+  }
 })
 
+const groupType = computed(() => {
+  if (group.value.type === '1') return 'Public group'
+  return 'Private group'
+})
+
+const dialog = ref(false)
 const page = ref(1)
 const meta = ref({
   last_page: 1
@@ -46,7 +59,7 @@ watchEffect(() => {
   getMembers(route.params.id)
 })
 
-function getGroup(id) {
+async function getGroup(id) {
   groupService.getGroupById(id)
     .then((response) => {
       group.value = response.data
@@ -91,6 +104,17 @@ function getMembers(id) {
       console.error(error)
     })
 }
+
+function created() {
+  page.value = 1
+  getPosts(route.params.id)
+}
+
+async function edited() {
+  await getGroup(route.params.id)
+  console.table(group.value)
+}
+
 </script>
 
 <template>
@@ -100,7 +124,8 @@ function getMembers(id) {
     </template>
     <template #main>
       <v-main style="min-height: 300px">
-        <v-card class="d-flex justify-center" max-height="500px">
+        <EditGroupDialog :dialog="dialog" :group="group" @toggle="dialog = !dialog" @edited="edited"></EditGroupDialog>
+        <v-card class="d-flex justify-center" max-height="550px">
           <v-container grid-list-xs fluid class="d-flex justify-start align-center flex-column">
             <v-img min-width="70%" max-height="70%" aspect-ratio="16/9" cover height="500px"
                    src="https://cdn.vuetifyjs.com/images/parallax/material.jpg"></v-img>
@@ -110,10 +135,16 @@ function getMembers(id) {
                   <v-img v-if="checkURL(group.url)" :src="group.url" cover></v-img>
                   <span v-else class="text-h5">{{ group.name ? group.name[0] : 'A' }}</span>
                 </v-avatar>
-                <h1 style="margin-left: 20px;">{{ group.name }}</h1>
+                <div>
+                  <h1 style="margin-left: 20px;">{{ group.name }}</h1>
+                  <v-chip style="margin-left: 20px;">
+                    {{ groupType }}
+                  </v-chip>
+                </div>
               </div>
               <div class="d-flex justiy-start">
-                <GroupButton :status="status" :group="group" @done="() => getStatus(group.id)"></GroupButton>
+                <GroupButton :status="status" :group="group" @done="() => getStatus(group.id)"
+                             @edit="dialog = true"></GroupButton>
               </div>
             </v-container>
             <v-divider></v-divider>
@@ -135,9 +166,9 @@ function getMembers(id) {
             <h1>Join group to show posts</h1>
           </div>
           <div v-else style="width: 70%">
-            <NewPostCard :group="group"></NewPostCard>
-            <PostCard v-for="post in posts" :key="post" :post="post" type="feed"></PostCard>
-
+            <NewPostCard :group="group" @created="created"></NewPostCard>
+            <PostCard v-for="post in posts" :key="post" :post="post" type="feed"
+                      @deleted="() => getPosts($route.params.id)"></PostCard>
             <div class="text-center">
               <v-pagination
                 v-model="page"
@@ -155,8 +186,8 @@ function getMembers(id) {
             </v-card-title>
             <v-card-item>
               <v-row>
-                <v-col cols="6" v-for="member in members" :key="member.id" class="d-flex justify-start">
-                  <v-card width="100%" class="mb-5" v-for="user in members" :key="user.id">
+                <v-col cols="6" v-for="user in members" :key="user.id" class="d-flex justify-start">
+                  <v-card width="100%">
                     <template v-slot:prepend>
                       <div class="d-flex justify-start">
                         <v-avatar color="blue-darken-2" size="large">
@@ -169,6 +200,11 @@ function getMembers(id) {
                           </RouterLink>
                         </div>
                       </div>
+                    </template>
+                    <template #append>
+                      <v-chip color="green" v-if="group.owner.id === user.id">
+                        Owner
+                      </v-chip>
                     </template>
                   </v-card>
                 </v-col>

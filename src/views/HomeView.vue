@@ -6,11 +6,12 @@
       </template>
       <template #main>
         <v-main class="d-flex align-center justify-center flex-column" style="min-height: 300px;">
-          <div style="width: 70%;">
-            <NewPostCard></NewPostCard>
+          <div style="width: 90%;">
+            <NewPostCard @created="created"></NewPostCard>
           </div>
-          <div style="width: 70%;">
-            <PostCard v-for="post in postStore.posts" :key="post" :post="post" type="feed"></PostCard>
+          <div style="width: 90%;">
+            <PostCard v-for="post in postStore.posts" :key="post" :post="post" type="feed"
+                      @deleted="() => postStore.deletePost(post.id)"></PostCard>
           </div>
         </v-main>
       </template>
@@ -53,4 +54,10 @@ async function load({ done }) {
 
   done('empty')
 }
+
+function created() {
+  postStore.$reset()
+  postStore.getPosts()
+}
+
 </script>

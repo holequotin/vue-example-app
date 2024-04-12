@@ -33,13 +33,14 @@ import PostCard from './PostCard.vue'
 import { computed, ref, watchEffect } from 'vue'
 import { useUserStore } from '@/stores/user'
 import { postService } from '@/service/postService'
-import { usePostStore } from '@/stores/post'
 import { errorHandler } from '@/utils/errorHandler'
+import { useAlertStore } from '@/stores/alert'
+import { MessageType } from '@/utils/MessageType'
 
 const props = defineProps(['dialog', 'group'])
 const userStore = useUserStore()
-const postStore = usePostStore()
-const emit = defineEmits(['toggle'])
+const emit = defineEmits(['toggle', 'created'])
+const alertStore = useAlertStore()
 
 const postType = [
     { title: 'Public', value: "public" },
@@ -76,8 +77,9 @@ function storePost() {
     // alert(JSON.stringify(data))
     postService.storePost(data).then((response) => {
         console.log(response.data)
+      alertStore.showAlert(response.data.message, MessageType.SUCCESS)
         emit('toggle')
-      postStore.posts.unshift(response.data.post)
+      emit('created')
     }).catch((error) => {
         console.log(error)
         errorHandler(error)

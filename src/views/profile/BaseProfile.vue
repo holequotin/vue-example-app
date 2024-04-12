@@ -77,7 +77,8 @@
                 </v-col>
                 <v-col cols="7">
                   <NewPostCard width="100%" v-if="userStore.user?.id == user?.id"></NewPostCard>
-                  <PostCard v-for="post in postStore.posts" type="feed" :post="post" :key="post.id">
+                  <PostCard v-for="post in postStore.posts" type="feed" :post="post" :key="post.id"
+                            @deleted="() => postStore.deletePost(post.id)">
                   </PostCard>
                 </v-col>
               </v-row>
