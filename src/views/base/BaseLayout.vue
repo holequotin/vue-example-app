@@ -1,0 +1,75 @@
+<template>
+    <AppBar></AppBar>
+    <v-layout class="rounded rounded-md d-flex justify-center align-center">
+      <AlertBase :message="alertStore.messageState" :type="alertStore.typeState" v-show="showAlert"
+                 @action="alertStore.actionState" />
+        <slot name="appbar">
+            <v-app-bar title="This is slot app bar">
+
+            </v-app-bar>
+        </slot>
+        <slot name="left-drawer">
+            <v-navigation-drawer location="left" width="360">
+                <v-list>
+                    <v-list-item title="Drawer left"></v-list-item>
+                </v-list>
+            </v-navigation-drawer>
+        </slot>
+
+        <slot name="right-drawer">
+            <v-navigation-drawer location="right" width="360">
+                <v-list>
+                    <v-list-item title="Drawer right"></v-list-item>
+                </v-list>
+            </v-navigation-drawer>
+        </slot>
+        <slot name="main">
+            <v-main class="d-flex align-center justify-center" style="min-height: 300px;">
+                Main Content
+            </v-main>
+        </slot>
+    </v-layout>
+</template>
+
+<script setup>
+import AlertBase from '../../components/notify/AlertBase.vue'
+import { useAlertStore } from '@/stores/alert'
+import { ref, watchEffect } from 'vue'
+import { useNotificationStore } from '@/stores/notification'
+const alertStore = useAlertStore()
+const showAlert = ref(false)
+const notificationStore = useNotificationStore()
+watchEffect(() => {
+    if (alertStore.messageState != '') {
+        console.log('Show Alert', alertStore.messageState)
+        showAlert.value = true
+        setTimeout(() => {
+            showAlert.value = false
+          alertStore.actionState = null
+            alertStore.messageState = ''
+        }, 5000)
+    }
+})
+notificationStore.getNotifications()
+</script>
+<style scoped>
+.bounder {
+    min-height: 100vh;
+    font-weight: normal;
+}
+
+.header {
+    min-height: 10vh;
+}
+
+.footer {
+    min-height: 10vh;
+}
+
+.main {
+    min-height: 80vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+</style>

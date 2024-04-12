@@ -1,25 +1,33 @@
-import { ref} from 'vue'
+import { ref } from 'vue'
 import { defineStore } from 'pinia'
 import { MessageType } from '../utils/MessageType'
 
-export const useAlertStore = defineStore('alerts',() => {
-    const messageState = ref("No Message")
-    const typeState = ref(MessageType.INFO)
+export const useAlertStore = defineStore('alerts', () => {
+  const messageState = ref('')
+  const typeState = ref(MessageType.INFO)
+  const actionState = ref(null)
 
-    function showAlert(message, type) {
-        messageState.value = message,
-        typeState.value = type
-    }
-    
-    function hideAlert() {
-        messageState.value = '',
-        typeState.value = MessageType.NONE
-    }
+  function showAlert(message, type, action = null) {
+    messageState.value = message
+    typeState.value = type
+    actionState.value = action
+  }
 
-    return {
-        messageState,
-        typeState,
-        showAlert,
-        hideAlert
-    }
+  function hideAlert() {
+    messageState.value = '',
+      typeState.value = MessageType.NONE
+  }
+
+  function setAction(action = null) {
+    actionState.value = action
+  }
+
+  return {
+    messageState,
+    typeState,
+    actionState,
+    showAlert,
+    hideAlert,
+    setAction
+  }
 })

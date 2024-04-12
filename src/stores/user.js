@@ -1,24 +1,27 @@
-import {ref} from 'vue'
+import { computed, ref } from 'vue'
 import { defineStore } from 'pinia'
-import { apiService } from '../service/apiService'
-import { useAlertStore } from './alert'
-// import { getMessage } from '../utils/errorHandler'
-import { MessageType } from '../utils/MessageType'
+import { userService } from '@/service/userService'
+import { errorHandler } from '@/utils/errorHandler'
+
 
 export const useUserStore = defineStore('user',() => {
-    const user = ref({})
-    function getUser() {
-        apiService.getUser()
+    const user = ref({
+
+    })
+    const avatarChar = computed(() => {
+        if(user.value.name) {
+            return user.value.name[0]
+        }
+        return 'A'
+    })
+    async function getUser() {
+        userService.getUser()
             .then((response) => {
-                const userData = response.data
-                user.value = userData
+                user.value = response.data
             })
             .catch((error) => {
-                //const message = getMessage(error)
-                console.log(error)
-                const alertStore = useAlertStore()
-                alertStore.showAlert('This error from getUser',MessageType.ERROR)
+                errorHandler(error)
             })
     }
-    return {user,getUser}
+    return {user,getUser,avatarChar}
 })
