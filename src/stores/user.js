@@ -1,15 +1,12 @@
-import {ref, computed} from 'vue'
+import { computed, ref } from 'vue'
 import { defineStore } from 'pinia'
-import { userService } from '../service/userService'
-import { errorHandler } from '../utils/errorHandler'
-
+import { userService } from '@/service/userService'
+import { errorHandler } from '@/utils/errorHandler'
 
 
 export const useUserStore = defineStore('user',() => {
     const user = ref({
-        id : 1,
-        name : '',
-        email : ''
+
     })
     const avatarChar = computed(() => {
         if(user.value.name) {
@@ -20,8 +17,7 @@ export const useUserStore = defineStore('user',() => {
     async function getUser() {
         userService.getUser()
             .then((response) => {
-                const userData = response.data
-                user.value = userData
+                user.value = response.data
             })
             .catch((error) => {
                 errorHandler(error)

@@ -26,18 +26,23 @@ import HomeButton from './HomeButton.vue'
 import NavigationBar from './NavigationBar.vue'
 import AvatarMenu from './AvatarMenu.vue'
 import pusher from '../../../notifications/pusher'
-
 import { notificationHandler } from '@/handler/notificationHandler'
-import { watchEffect } from 'vue'
 import { useUserStore } from '@/stores/user'
 import NotifyList from '@/components/home/appbar/NotifyList.vue'
+import { watchEffect } from 'vue'
+
 
 const userStore = useUserStore()
 
-watchEffect(() => {
-  const channel = pusher.subscribe(`private-App.Models.User.${userStore.user.id}`)
-  channel.bind('Illuminate\\Notifications\\Events\\BroadcastNotificationCreated', function(data) {
+
+function subscribe() {
+  const channelNotify = pusher.subscribe(`private-App.Models.User.${userStore.user.id}`)
+  channelNotify.bind('Illuminate\\Notifications\\Events\\BroadcastNotificationCreated', function(data) {
     notificationHandler(data)
   })
+}
+
+watchEffect(() => {
+  subscribe()
 })
 </script>
