@@ -53,6 +53,8 @@ watchEffect(async () => {
     console.log(fromUserId)
     if (route.name == 'chat' && fromUserId == route.params.id) {
       messageStore.push(data.message)
+    } else if (route.name == 'chat' && fromUserId != route.params.id) {
+      messageStore.newUserMessage(data.message)
     }
   })
 })

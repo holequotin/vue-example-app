@@ -13,7 +13,7 @@ const meta = ref({
 })
 const messageStore = useMessageStore()
 
-async function getLastMessages(page = 1, perPage = 15) {
+async function getLastMessages(page = 1, perPage = 2) {
   messageService.getLastMessages(page, perPage)
     .then(response => {
       messageStore.lastMessages.push(...response.data.data)
@@ -25,7 +25,9 @@ async function getLastMessages(page = 1, perPage = 15) {
 }
 
 async function load({ done }) {
-  await getLastMessages(meta.value.current_page + 1, perPage.value)
+  if (meta.value.current_page < meta.value.last_page) {
+    await getLastMessages(messageStore.lastMessages.length / perPage.value + 1, perPage.value - (messageStore.lastMessages.length % perPage.value))
+  }
   if (meta.value.current_page === meta.value.last_page) done('empty')
   else {
     done('ok')

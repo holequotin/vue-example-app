@@ -42,12 +42,13 @@ const items = [
 </script>
 
 <template>
-    <BaseLayout>
-      <template #appbar>
-        <AppBar></AppBar>
-      </template>
-      <template #main>
-        <v-main class="d-flex align-center justify-center flex-column" style="min-height: 300px; width: 100%">
+  <BaseLayout>
+    <template #appbar>
+      <AppBar></AppBar>
+    </template>
+    <template #main>
+      <v-main class="d-flex align-center justify-center flex-column" style="min-height: 300px; width: 100%">
+        <v-container class="w-25">
           <v-select
             label="Select"
             :items="items"
@@ -55,43 +56,46 @@ const items = [
             v-model="searchStore.type"
             @update:modelValue="change"
           ></v-select>
-          <div style="width: 70%" v-if="searchStore.type === 'users'">
-            <v-card width="100%" class="mb-5" v-for="user in searchStore.users" :key="user.id">
-              <template v-slot:prepend>
-                <div class="d-flex justify-start">
-                  <v-avatar color="blue-darken-2" size="large">
-                    <v-img v-if="checkURL(user.avatar)" alt="John" :src="user.avatar"></v-img>
-                    <span v-else class="text-h5">{{ user.name[0].toUpperCase() }}</span>
-                  </v-avatar>
-                  <div class="ml-3">
-                    <RouterLink :to="{ name: 'profile-parent', params: { id: user.id } }" style="color: white;">
-                      <v-card-title>{{ user.name }}</v-card-title>
-                    </RouterLink>
-                  </div>
+        </v-container>
+        <div v-if="searchStore.type === 'users'" style="width: 70%">
+          <v-card v-for="user in searchStore.users" :key="user.id" class="mb-5" width="100%">
+            <template v-slot:prepend>
+              <div class="d-flex justify-start">
+                <v-avatar color="blue-darken-2" size="large">
+                  <v-img v-if="checkURL(user.avatar)" :src="user.avatar" alt="John"></v-img>
+                  <span v-else class="text-h5">{{ user.name[0].toUpperCase() }}</span>
+                </v-avatar>
+                <div class="ml-3">
+                  <RouterLink :to="{ name: 'profile-parent', params: { id: user.id } }" style="color: white;">
+                    <v-card-title>{{ user.name }}</v-card-title>
+                  </RouterLink>
                 </div>
-              </template>
-            </v-card>
-          </div>
-          <div style="width: 70%" v-if="searchStore.type === 'groups'">
-            <GroupCard v-for="group in searchStore.groups" :key="group" :group="group"></GroupCard>
-          </div>
-          <div class="text-center">
-            <v-pagination
-              v-model="page"
-              :length="searchStore.meta.last_page"
-              :total-visible="7"
-              @update:model-value="getData"
-            ></v-pagination>
-          </div>
-        </v-main>
-      </template>
-      <template #left-drawer>
-        <DrawerLeft></DrawerLeft>
-      </template>
-      <template #right-drawer>
-        <DrawerRight></DrawerRight>
-      </template>
-    </BaseLayout>
+              </div>
+            </template>
+          </v-card>
+          <h1 v-if="searchStore.users.length === 0" class="text-center">No user matched</h1>
+        </div>
+        <div v-if="searchStore.type === 'groups'" style="width: 70%">
+          <GroupCard v-for="group in searchStore.groups" :key="group" :group="group"></GroupCard>
+          <h1 v-if="searchStore.groups.length === 0" class="text-center">No group matched</h1>
+        </div>
+        <div class="text-center">
+          <v-pagination
+            v-model="page"
+            :length="searchStore.meta.last_page"
+            :total-visible="7"
+            @update:model-value="getData"
+          ></v-pagination>
+        </div>
+      </v-main>
+    </template>
+    <template #left-drawer>
+      <DrawerLeft></DrawerLeft>
+    </template>
+    <template #right-drawer>
+      <DrawerRight></DrawerRight>
+    </template>
+  </BaseLayout>
 </template>
 
 <style scoped>

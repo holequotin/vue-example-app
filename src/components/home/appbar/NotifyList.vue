@@ -59,11 +59,6 @@ notificationStore.getNotifications()
 </template>
 
 <style scoped>
-.notify-card {
-  width: 300px;
-  height: 100px;
-}
-
 .infinite {
   background-color: #615656;
 }
