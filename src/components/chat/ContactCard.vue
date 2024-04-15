@@ -25,7 +25,10 @@ function toChat() {
   <v-card @click="toChat">
     <template #prepend>
       <div class="d-flex justify-start">
-        <v-avatar color="surface-variant" size="48"></v-avatar>
+        <v-avatar v-if="!props.owner" color="blue-darken-2" size="large">
+          <!--        <v-img v-if="checkURL(props.message.from_user.avatar)" alt="John" :src="props.message.from_user.avatar"></v-img>-->
+          <span class="text-h5">{{ user.name[0] }}</span>
+        </v-avatar>
         <div class="ml-3">
           <div class="d-flex align-items-center">
             <v-card-title class="d-inline">{{ user.name }}</v-card-title>

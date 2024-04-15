@@ -1,6 +1,6 @@
 <script setup>
 
-import { computed, ref, watch, watchEffect } from 'vue'
+import { computed, ref, watchEffect } from 'vue'
 import { userService } from '@/service/userService'
 import { errorHandler } from '@/utils/errorHandler'
 import { checkURL } from '@/utils/fileUtils'
@@ -36,8 +36,14 @@ const avatarChar = computed(() => {
 
 watchEffect(async () => {
   if (props.id) {
+    console.log(props.id)
+    messageStore.messages = []
+    meta.value = {
+      last_page: 1,
+      current_page: 0
+    }
     await getUser(props.id)
-    await getMessage(route.params.id, perPage.value)
+    await getMessage(props.id, perPage.value)
   }
 
   pusher.unsubscribe(`private-Chat.User.${userStore.user?.id}`)
@@ -49,14 +55,6 @@ watchEffect(async () => {
       messageStore.push(data.message)
     }
   })
-})
-
-watch(route.params.id, () => {
-  messageStore.$reset()
-  meta.value = {
-    last_page: 1,
-    current_page: 0
-  }
 })
 
 async function getUser(id) {
