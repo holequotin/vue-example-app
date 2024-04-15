@@ -2,11 +2,9 @@
 import { computed } from 'vue'
 import { useUserStore } from '@/stores/user'
 import { useRouter } from 'vue-router'
-import { useMessageStore } from '@/stores/message'
 
 const userStore = useUserStore()
 const router = useRouter()
-const messageStore = useMessageStore()
 
 const props = defineProps(['message'])
 const user = computed(() => {

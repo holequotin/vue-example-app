@@ -83,7 +83,7 @@ function sendRequest() {
   <v-btn v-if="showLeave" @click="leave" variant="outlined" color="error">Leave</v-btn>
   <v-btn v-if="showWaiting" @click="cancelRequest" color="warning" variant="outlined">Cancel request</v-btn>
   <v-btn v-if="showSendRequest" @click="sendRequest" variant="outlined" color="primary">Send request</v-btn>
-  <v-btn v-if="showEdit" @click="emits('edit')" color="primary" variant="outlined">Edit group</v-btn>
+  <v-btn v-if="showEdit" color="primary" icon="mdi-pencil" variant="outlined" @click="emits('edit')"></v-btn>
 </template>
 
 <style scoped>

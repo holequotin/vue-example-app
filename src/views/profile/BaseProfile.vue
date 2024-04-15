@@ -13,7 +13,7 @@
               <v-container class="d-flex justify-space-around" style="width: 90%;">
                 <div class="d-flex justify-start">
                   <v-btn outline color="primary" dark v-if="currUserId == userStore.user.id"
-                         @click="editAvatar = true">Edit avatar
+                         variant="outlined" @click="editAvatar = true">Edit avatar
                   </v-btn>
                   <EditAvatarDialiog v-if="editAvatar" @toggle="editAvatar = !editAvatar" @after="changed"
                                      :dialog="editAvatar">
@@ -25,10 +25,16 @@
                   <h1 style="margin-left: 20px;">{{ user.name }}</h1>
                 </div>
                 <div class="d-flex justiy-start">
-                  <FriendButton :friendship="friendship" v-if="userStore.user.id != currUserId"
-                                @send="sendRequest" @unfriend="unfriend" @cancel="cancel" @accept="accept"
-                                @refuse="refuse"></FriendButton>
-                  <v-btn outline color="primary" dark v-else @click="edit = true">Edit profile</v-btn>
+                  <div v-if="userStore.user.id != currUserId" class="d-flex justify-start">
+                    <FriendButton :friendship="friendship"
+                                  @accept="accept" @cancel="cancel" @refuse="refuse" @send="sendRequest"
+                                  @unfriend="unfriend"></FriendButton>
+                    <v-btn class="ml-2" color="primary" prepend-icon="mdi-facebook-messenger" @click="toMessage">
+                      Message
+                    </v-btn>
+                  </div>
+                  <v-btn v-else color="primary" dark outline variant="outlined" @click="edit = true">Edit profile
+                  </v-btn>
                   <ProfileDialog :dialog="edit" @toggle="edit = !edit" @after="getUser"></ProfileDialog>
                 </div>
               </v-container>
@@ -54,29 +60,10 @@
             </v-container>
           </v-card>
           <slot name="content" :friends="friends">
-            <v-container grid-list-xs style="width: 70%;" class="d-flex flex-row">
+            <v-container class="d-flex flex-row" grid-list-xs style="width: 60%;">
               <v-row>
-                <v-col cols="5">
-                  <v-card>
-                    <v-card-title>
-                      Friends
-                    </v-card-title>
-                    <v-card-item>
-                      <v-row>
-                        <v-col cols="4" v-for="friend in friends" :key="friend.id"
-                               style="height: fit-content;">
-                          <v-img cover :height="150" aspect-ratio="1/1"
-                                 src="https://cdn.vuetifyjs.com/images/parallax/material.jpg"
-                                 class="rounded-lg"></v-img>
-                          <RouterLink :to="`${friend.id}`"><span style="color: white;">{{
-                              friend.name }}</span></RouterLink>
-                        </v-col>
-                      </v-row>
-                    </v-card-item>
-                  </v-card>
-                </v-col>
-                <v-col cols="7">
-                  <NewPostCard width="100%" v-if="userStore.user?.id == user?.id"></NewPostCard>
+                <v-col>
+                  <NewPostCard v-if="userStore.user?.id === user?.id" width="100%"></NewPostCard>
                   <PostCard v-for="post in postStore.posts" type="feed" :post="post" :key="post.id"
                             @deleted="() => postStore.deletePost(post.id)">
                   </PostCard>
@@ -105,7 +92,7 @@ import FriendButton from '../../components/profile/FriendButton.vue'
 import NewPostCard from '../../components/home/feed/NewPostCard.vue'
 import PostCard from '../../components/home/feed/PostCard.vue'
 import { provide, ref, watchEffect } from 'vue'
-import { RouterLink, useRoute } from 'vue-router'
+import { RouterLink, useRoute, useRouter } from 'vue-router'
 import { userService } from '@/service/userService'
 import { friendService } from '@/service/friendService'
 import { useUserStore } from '@/stores/user'
@@ -118,6 +105,7 @@ import EditAvatarDialiog from '../../components/profile/EditAvatarDialiog.vue'
 import { checkURL } from '@/utils/fileUtils'
 
 const route = useRoute()
+const router = useRouter()
 const currUserId = ref(1)
 const test = ref('Hello')
 const friends = ref([])
@@ -242,4 +230,9 @@ function changed() {
   getUser()
   userStore.getUser()
 }
+
+function toMessage() {
+  router.push({ name: 'chat', params: { id: route.params.id } })
+}
+
 </script>
