@@ -49,7 +49,7 @@ watchEffect(async () => {
   pusher.unsubscribe(`private-Chat.User.${userStore.user?.id}`)
   const channelChat = pusher.subscribe(`private-Chat.User.${userStore.user?.id}`)
   channelChat.bind('App\\Events\\MessageCreated', function(data) {
-    const fromUserId = data.message.from_user_id
+    const fromUserId = data.message.from_user.id
     console.log(fromUserId)
     if (route.name == 'chat' && fromUserId == route.params.id) {
       messageStore.push(data.message)
