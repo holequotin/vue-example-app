@@ -36,10 +36,12 @@ const userStore = useUserStore()
 
 
 function subscribe() {
+  pusher.unsubscribe(`private-App.Models.User.${userStore.user.id}`)
   const channelNotify = pusher.subscribe(`private-App.Models.User.${userStore.user.id}`)
   channelNotify.bind('Illuminate\\Notifications\\Events\\BroadcastNotificationCreated', function(data) {
     notificationHandler(data)
   })
+  console.log(pusher.channels)
 }
 
 watchEffect(() => {

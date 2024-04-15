@@ -35,12 +35,11 @@
 import AlertBase from '../../components/notify/AlertBase.vue'
 import { useAlertStore } from '@/stores/alert'
 import { ref, watchEffect } from 'vue'
-import { useNotificationStore } from '@/stores/notification'
+
 const alertStore = useAlertStore()
 const showAlert = ref(false)
-const notificationStore = useNotificationStore()
 watchEffect(() => {
-    if (alertStore.messageState != '') {
+  if (alertStore.messageState !== '') {
         console.log('Show Alert', alertStore.messageState)
         showAlert.value = true
         setTimeout(() => {
@@ -50,7 +49,6 @@ watchEffect(() => {
         }, 5000)
     }
 })
-notificationStore.getNotifications()
 </script>
 <style scoped>
 .bounder {

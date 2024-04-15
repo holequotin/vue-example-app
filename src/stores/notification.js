@@ -1,23 +1,29 @@
 import { defineStore } from 'pinia'
-import { computed, ref } from 'vue'
+import { ref } from 'vue'
 import { notificationService } from '@/service/notificationService'
 
 export const useNotificationStore = defineStore('notifications', () => {
   const notifications = ref([])
-  const meta = ref(null)
-  const currentPage = ref(0)
+  const meta = ref({
+    last_page: 1,
+    current_page: 0,
+    unread_count: 0
+  })
 
   function $reset() {
     notifications.value = []
-    meta.value = null
-    currentPage.value = 0
+    meta.value = {
+      last_page: 1,
+      current_page: 0,
+      unread_count: 0
+    }
   }
 
   async function getNotifications() {
-    if (currentPage.value < meta.value?.last_page || currentPage.value === 0) {
-      notificationService.getNotifications(currentPage.value + 1, 5)
+    if (meta.value?.current_page < meta.value?.last_page || meta.value?.current_page === 0) {
+      console.log('Get notification')
+      notificationService.getNotifications(meta.value?.current_page + 1, 15)
         .then((response) => {
-          currentPage.value = response.data.meta.current_page
           meta.value = response.data.meta
           notifications.value.push(...response.data.data)
         })
@@ -29,17 +35,18 @@ export const useNotificationStore = defineStore('notifications', () => {
 
   async function updateNotification(notification) {
     notifications.value = notifications.value.map((item) => {
-      if(item.id !== notification.id) return item;
-      return notification;
+      if (item.id !== notification.id) return item
+      return notification
     })
   }
 
   function markAllAsRead() {
     notifications.value = notifications.value.map((item) => {
-      if(!item.read_at) return {...item, read_at: true}
+      if (!item.read_at) return { ...item, read_at: true }
       return item
     })
     meta.value.unread_count = 0
   }
-  return { notifications, getNotifications, $reset, updateNotification, meta, markAllAsRead}
+
+  return { notifications, getNotifications, $reset, updateNotification, meta, markAllAsRead }
 })

@@ -7,19 +7,6 @@ class PostService {
 
   async getAllPost(page = 1, perPage = 5) {
     const token = localStorage.getItem('token')
-    console.log(
-      this.api.get('/posts', {
-        params: {
-          page: page,
-          perPage: perPage
-        },
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          Authorization: `Bearer ${token}`,
-          Accept: 'application/json'
-        }
-      })
-    )
     return this.api.get('/posts', {
       params: {
         page: page,
