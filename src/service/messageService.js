@@ -35,6 +35,24 @@ class MessageService {
     }
     return this.api.post(endpoint, data, config)
   }
+
+  async getLastMessages(page, perPage) {
+    const endpoint = `/messages/last-messages`
+    const token = localStorage.getItem('token')
+    const config = {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        Authorization: `Bearer ${token}`,
+        Accept: 'application/json'
+      },
+      params: {
+        page: page,
+        perPage: perPage
+      }
+    }
+
+    return this.api.get(endpoint, config)
+  }
 }
 
 const messageService = new MessageService(axios)
