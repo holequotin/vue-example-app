@@ -16,7 +16,8 @@
                         <v-file-input label="File input" hide-input class="custom-file-input"
                             v-model="newPostData.images" multiple></v-file-input>
                     </v-container>
-                    <v-select :items="postType" density="compact" label="Type" v-model="newPostData.type"></v-select>
+                  <v-select v-model="newPostData.type" :disabled="props.group" :items="postType" density="compact"
+                            label="Type"></v-select>
                 </template>
                 <template #actions>
                     <v-container grid-list-xs>
@@ -42,6 +43,15 @@ const userStore = useUserStore()
 const emit = defineEmits(['toggle', 'created'])
 const alertStore = useAlertStore()
 
+
+const defaultType = computed(() => {
+  if (props.group) {
+    if (props.group.type === '1') return 'public'
+    return 'private'
+  }
+  return 'public'
+})
+
 const postType = [
     { title: 'Public', value: "public" },
     { title: 'Friends', value: "friends" },
@@ -50,7 +60,7 @@ const postType = [
 const newPostData = ref({
     body: null,
     images: null,
-    type: "public"
+  type: defaultType.value
 })
 const isDiabled = computed(() => {
     if (newPostData.value.body || newPostData.value.images) return false;
@@ -85,6 +95,7 @@ function storePost() {
         errorHandler(error)
     })
 }
+
 watchEffect(() => {
     post.value.user = userStore.user
 })

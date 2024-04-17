@@ -10,7 +10,7 @@
                 Comment
             </v-btn>
         </v-col>
-        <v-col>
+      <v-col v-if="props.post.group?.type === '1' || !props.post.group">
             <v-btn variant="plain" block prepend-icon="mdi-share-outline" @click="shareDialog=true">
                 Share
             </v-btn>
@@ -21,11 +21,11 @@
 
 </template>
 <script setup>
-import {ref} from 'vue'
-import { ReactionType } from '@/utils/ReactionType';
-import {reactionService} from '@/service/reactionService'
-import { errorHandler } from '@/utils/errorHandler';
-import CommentDialog from './CommentDialog.vue';
+import { ref } from 'vue'
+import { ReactionType } from '@/utils/ReactionType'
+import { reactionService } from '@/service/reactionService'
+import { errorHandler } from '@/utils/errorHandler'
+import CommentDialog from './CommentDialog.vue'
 import SharePostDialog from '@/components/home/feed/SharePostDialog.vue'
 
 const props = defineProps(['post'])
