@@ -14,7 +14,6 @@ const data = ref({
   name: '',
   type: { title: 'Public', value: 1 }
 })
-
 const image = ref(null)
 
 const items = [

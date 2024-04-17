@@ -21,7 +21,7 @@ import { useUserStore } from '@/stores/user'
 const items = ref([
   { text: 'Friend request', icon: 'mdi-account-multiple', to: 'friend_request' },
   { text: 'Group join request', icon: 'mdi-newspaper-variant-multiple-outline', to: 'group_request' },
-  { text: 'Groups', icon: 'mdi-account-group', to: 'groups' },
+  { text: 'Groups', icon: 'mdi-account-group', to: 'group-feed' },
   { text: 'Chat', icon: 'mdi-facebook-messenger', to: 'chat' }
 ])
 const userStore = useUserStore()

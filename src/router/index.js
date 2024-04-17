@@ -82,8 +82,23 @@ const router = createRouter({
     },
     {
       path: '/groups',
-      component: () => import('../views/GroupsView.vue'),
-      name: 'groups'
+      children: [
+        {
+          path: 'feed',
+          component: () => import('../views/groups/GroupFeed.vue'),
+          name: 'group-feed'
+        },
+        {
+          path: 'join',
+          component: () => import('../views/GroupsView.vue'),
+          name: 'group-join'
+        },
+        {
+          path: '/',
+          component: () => import('../views/GroupsView.vue'),
+          name: 'group-parent'
+        }
+      ]
     },
     {
       path: '/chat/:id?',

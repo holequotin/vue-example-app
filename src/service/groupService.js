@@ -219,6 +219,24 @@ class GroupService {
 
     return this.api.post(endpoint, data, config)
   }
+
+  async getGroupPosts(page = 1, perPage = 15) {
+    const endpoint = `groups/feed`
+    const token = localStorage.getItem('token')
+    const config = {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        Authorization: `Bearer ${token}`,
+        Accept: 'application/json'
+      },
+      params: {
+        page: page,
+        perPage: perPage
+      }
+    }
+
+    return this.api.get(endpoint, config)
+  }
 }
 
 const groupService = new GroupService(axios)
