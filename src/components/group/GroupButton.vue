@@ -12,7 +12,7 @@ const userStore = useUserStore()
 const alertStore = useAlertStore()
 
 const showJoin = computed(() => {
-  return props.status == null && props.group.type == '1'
+  return (props.status == null && props.group.type == '1') || (props.status == '0' && props.group.type == '1')
 })
 
 const showLeave = computed(() => {

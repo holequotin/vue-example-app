@@ -24,7 +24,7 @@ const errorHandler = function (error) {
       alertStore.showAlert('Not Found', MessageType.ERROR)
       break;
     default:
-      alertStore.showAlert(error.response.data.error, MessageType.ERROR)
+      alertStore.showAlert(error.response.data.message || error.response.data.error, MessageType.ERROR)
       break
   }
 }

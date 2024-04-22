@@ -39,8 +39,6 @@ function create() {
       errorHandler(error)
     })
 }
-
-//test ssh key
 </script>
 
 <template>
