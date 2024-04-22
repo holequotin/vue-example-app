@@ -1,5 +1,5 @@
 import router from '../router'
-import { useAlertStore } from '../stores/alert'
+import { useAlertStore } from '@/stores/alert'
 import { MessageType } from './MessageType'
 
 const alertStore = useAlertStore()
@@ -22,6 +22,7 @@ const errorHandler = function (error) {
       break
     case 404:
       alertStore.showAlert('Not Found', MessageType.ERROR)
+      router.replace({ name: 'NotFound' })
       break;
     default:
       alertStore.showAlert(error.response.data.message || error.response.data.error, MessageType.ERROR)

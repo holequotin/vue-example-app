@@ -54,6 +54,13 @@
         </v-col>
       </v-row>
       <PostCard v-if="props.post.shared_post" :post="props.post.shared_post" type="aa" style="width: 97%"></PostCard>
+      <v-alert
+        v-if="post.shared_post == null && post.shared_post_id != null"
+        type="error"
+        variant="outlined"
+      >
+        This content isn't available at the moment
+      </v-alert>
     </slot>
     <!--reaction infomation-->
     <slot name="actions">

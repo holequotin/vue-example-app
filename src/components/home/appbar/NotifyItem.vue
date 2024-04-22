@@ -34,7 +34,7 @@ const event = computed(() => {
     case 'App\\Notifications\\CommentCreatedNotification':
       return toPost
     case 'App\\Notifications\\GroupRequestNotification':
-      return () => console.log('To group request')
+      return toJoinGroupRequest
     default:
       return () => console.log('Clicked on notify item')
   }
@@ -48,6 +48,11 @@ const toPost = () => {
 const toFriendRequest = () => {
   markAsRead()
   router.push({ name: 'friend_request' })
+}
+
+const toJoinGroupRequest = () => {
+  markAsRead()
+  router.push({ name: 'group_request' })
 }
 
 const markAsRead = () => {

@@ -11,8 +11,13 @@ import GroupButton from '@/components/group/GroupButton.vue'
 import NewPostCard from '@/components/home/feed/NewPostCard.vue'
 import PostCard from '@/components/home/feed/PostCard.vue'
 import EditGroupDialog from '@/components/group/EditGroupDialog.vue'
+import { useUserStore } from '@/stores/user'
+import { useAlertStore } from '@/stores/alert'
+import { MessageType } from '@/utils/MessageType'
 
 const route = useRoute()
+const userStore = useUserStore()
+const alertStore = useAlertStore()
 const group = ref({
   'id': 3,
   'name': 'Kristopher Mitchell',
@@ -112,7 +117,17 @@ function created() {
 
 async function edited() {
   await getGroup(route.params.id)
-  console.table(group.value)
+}
+
+function removeUser(groupId, userId) {
+  groupService.remove(groupId, userId)
+    .then(response => {
+      alertStore.showAlert('Remove user successfully', MessageType.SUCCESS)
+      getMembers(groupId)
+    })
+    .catch(error => {
+      errorHandler(error)
+    })
 }
 
 </script>
@@ -205,6 +220,10 @@ async function edited() {
                       <v-chip color="green" v-if="group.owner.id === user.id">
                         Owner
                       </v-chip>
+                      <v-btn v-if="group.owner.id !== user.id && group.owner.id === userStore.user?.id" color="error"
+                             variant="outlined"
+                             @click="() => removeUser(group.id, user.id)">Remove
+                      </v-btn>
                     </template>
                   </v-card>
                 </v-col>
