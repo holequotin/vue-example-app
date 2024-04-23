@@ -37,10 +37,13 @@ import { computed, ref } from 'vue'
 import { postService } from '@/service/postService'
 import { errorHandler } from '@/utils/errorHandler'
 import { usePostStore } from '@/stores/post'
+import { useAlertStore } from '@/stores/alert'
+import { MessageType } from '@/utils/MessageType'
 
 const postStore = usePostStore()
 const props = defineProps(['dialog', 'post'])
 const emit = defineEmits(['toggle'])
+const alertStore = useAlertStore()
 
 const postType = [
     { title: 'Public', value: "public" },
@@ -63,6 +66,7 @@ function update() {
         .then((response) => {
             console.log(response.data)
           postStore.updatePost(response.data.post)
+          alertStore.showAlert('Update post successfully', MessageType.SUCCESS)
         })
         .catch((error) => {
             errorHandler(error)
