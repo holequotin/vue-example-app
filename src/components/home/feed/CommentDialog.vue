@@ -7,7 +7,7 @@
     </template>
     <template #content>
       <v-list lines="two">
-        <v-infinite-scroll :onLoad="load">
+        <v-infinite-scroll :onLoad="load" mode="manual">
           <v-list-item v-for="comment in comments" :key="comment">
             <CommentCard :comment="comment" :user="comment.user" @deleted="() => deleteComment(comment)" @updated="updateComment"></CommentCard>
           </v-list-item>
@@ -58,7 +58,11 @@ async function getComments() {
 
 async function load({ done }) {
   await getComments()
-  done('empty')
+  if (meta.value?.last_page === meta.value?.current_page) {
+    done('empty')
+  } else {
+    done('ok')
+  }
 }
 
 function addComment(comment) {
@@ -76,4 +80,6 @@ function deleteComment(comment) {
     return item.id != comment.id
   })
 }
+
+getComments()
 </script>

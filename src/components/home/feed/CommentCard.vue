@@ -10,7 +10,7 @@
                 </RouterLink>
                 <v-card-item class="content" v-if="props.comment.body">
                     <v-textarea variant="solo" v-model="commentContent" v-if="onEditing"></v-textarea>
-                    <p v-else> {{ props.comment.body }}</p>
+                  <p v-else class="pa-0"> {{ props.comment.body }}</p>
                 </v-card-item>
                 <slot name="image">
                     <v-file-input label="File input" hide-input class="custom-file-input" v-model="updateImage"
@@ -43,12 +43,13 @@
     </div>
 </template>
 <script setup>
-import AvatarIcon from './AvatarIcon.vue';
-import { useUserStore } from '@/stores/user';
+import AvatarIcon from './AvatarIcon.vue'
+import { useUserStore } from '@/stores/user'
 import { commentService } from '@/service/commentService'
-import { RouterLink } from 'vue-router';
+import { RouterLink } from 'vue-router'
 import { ref } from 'vue'
-import { errorHandler } from '@/utils/errorHandler';
+import { errorHandler } from '@/utils/errorHandler'
+
 const props = defineProps(['user', 'comment']);
 const emit = defineEmits(['deleted', 'updated'])
 const commentContent = ref(props.comment.body)
