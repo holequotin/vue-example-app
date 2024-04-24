@@ -36,7 +36,6 @@ const avatarChar = computed(() => {
 
 watchEffect(async () => {
   if (props.id) {
-    console.log(props.id)
     messageStore.messages = []
     meta.value = {
       last_page: 1,
@@ -50,7 +49,6 @@ watchEffect(async () => {
   const channelChat = pusher.subscribe(`private-Chat.User.${userStore.user?.id}`)
   channelChat.bind('App\\Events\\MessageCreated', function(data) {
     const fromUserId = data.message.from_user.id
-    console.log(fromUserId)
     if (route.name == 'chat' && fromUserId == route.params.id) {
       messageStore.push(data.message)
     } else if (route.name == 'chat' && fromUserId != route.params.id) {
@@ -83,7 +81,6 @@ async function getMessage(id, perPage = 15) {
 
 async function sendMessage() {
   body.value = body.value.trim()
-  console.log(body.value)
   if (body.value) {
     const data = {
       body: body.value,

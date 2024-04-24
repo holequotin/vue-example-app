@@ -15,7 +15,6 @@ watchEffect(() => {
   currPostId.value = route.params.id
   postService.getPostById(currPostId.value)
     .then(response => {
-      console.log(response)
       post.value = response.data.post
     })
     .catch((error) => {

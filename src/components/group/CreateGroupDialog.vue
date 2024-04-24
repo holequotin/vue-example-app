@@ -12,7 +12,7 @@ const alertStore = useAlertStore()
 const emits = defineEmits(['toggle', 'created'])
 const data = ref({
   name: '',
-  type: { title: 'Public', value: 1 }
+  type: '1'
 })
 const image = ref(null)
 
@@ -24,7 +24,7 @@ const items = [
 function create() {
   let groupData = {
     ...data.value,
-    type: data.value.type.value,
+    type: data.value.type,
     image: image.value ? image.value[0] : null
   }
 

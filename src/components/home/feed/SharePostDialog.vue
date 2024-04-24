@@ -32,6 +32,7 @@ import { useUserStore } from '@/stores/user'
 import { usePostStore } from '@/stores/post'
 import { errorHandler } from '@/utils/errorHandler'
 import { useAlertStore } from '@/stores/alert'
+import { MessageType } from '@/utils/MessageType'
 
 const props = defineProps(['dialog', 'id'])
 const userStore = useUserStore()

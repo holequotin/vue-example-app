@@ -20,12 +20,12 @@
 </template>
 
 <script setup>
-import { computed } from 'vue';
-import { friendService } from '@/service/friendService';
-import { useAlertStore } from '@/stores/alert';
-import { MessageType } from '@/utils/MessageType';
-import { errorHandler } from '@/utils/errorHandler';
-import { useFriendsStore } from '@/stores/friend';
+import { computed } from 'vue'
+import { friendService } from '@/service/friendService'
+import { useAlertStore } from '@/stores/alert'
+import { MessageType } from '@/utils/MessageType'
+import { errorHandler } from '@/utils/errorHandler'
+import { useFriendsStore } from '@/stores/friend'
 
 const props = defineProps(['friendship'])
 const emits = defineEmits(['accept', 'refuse'])
@@ -38,7 +38,6 @@ const avatarChar = computed(() => {
 function accept() {
     friendService.accept(props.friendship.id)
         .then((response) => {
-            console.log(response.data)
             alertStore.showAlert('Accepted', MessageType.SUCCESS)
             friendStore.getAllFriends();
             emits('accept');
