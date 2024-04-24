@@ -22,7 +22,7 @@
             <DrawerLeft></DrawerLeft>
         </template>
         <template #right-drawer>
-            <DrawerRight></DrawerRight>
+          <div></div>
         </template>
     </BaseLayout>
 </template>
@@ -30,7 +30,6 @@
 import BaseLayout from './base/BaseLayout.vue'
 import AppBar from '../components/home/appbar/AppBar.vue'
 import DrawerLeft from '../components/home/drawerLeft/DrawerLeft.vue'
-import DrawerRight from '../components/home/drawerRight/DrawerRight.vue'
 import { useUserStore } from '@/stores/user'
 import { ref, watchEffect } from 'vue'
 import { friendService } from '@/service/friendService'

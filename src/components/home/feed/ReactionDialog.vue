@@ -12,7 +12,7 @@
         </v-row>
       </v-container>
       <v-list lines="two">
-        <v-infinite-scroll :onLoad="load">
+        <v-infinite-scroll :onLoad="load" mode="manual">
           <v-list-item v-for="reaction in reactions[type].reactions" :key="reaction.id">
             <v-list-item-title>{{ reaction.user.name }}</v-list-item-title>
             <v-list-item-subtitle>{{ reaction.type }}</v-list-item-subtitle>
@@ -73,7 +73,7 @@ function close() {
 async function getReactions(type) {
   const currentType = reactions.value[type]
   if(currentType.currentPage === 0 || currentType.currentPage < currentType.meta?.last_page) {
-    reactionService.getReactionsByPost(props.post.id, type, currentType.currentPage + 1, 6)
+    reactionService.getReactionsByPost(props.post.id, type, currentType.currentPage + 1, 15)
       .then((response) => {
         console.log(response.data)
         reactions.value[type].reactions.push(...response.data.data)
@@ -88,7 +88,12 @@ async function getReactions(type) {
 
 async function load({done}) {
   await getReactions(type.value)
-  done('empty')
+  if (reactions.value[type.value].meta.current_page === reactions.value[type.value].meta.last_page) {
+    done('empty')
+  } else {
+    console.log()
+    done('ok')
+  }
 }
 
 const convertMapToArray = (map) => {
@@ -96,8 +101,6 @@ const convertMapToArray = (map) => {
     return { title, value }
   })
 }
-
+getReactions(type.value)
 const items = convertMapToArray(ReactionType)
-
-console.log('reaction type',type.value)
 </script>

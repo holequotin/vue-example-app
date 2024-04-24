@@ -23,7 +23,7 @@
       <DrawerLeft></DrawerLeft>
     </template>
     <template #right-drawer>
-      <DrawerRight></DrawerRight>
+      <div></div>
     </template>
   </BaseLayout>
 </template>
@@ -33,7 +33,6 @@ import { ref, watchEffect } from 'vue'
 import BaseLayout from '@/views/base/BaseLayout.vue'
 import AppBar from '@/components/home/appbar/AppBar.vue'
 import DrawerLeft from '@/components/home/drawerLeft/DrawerLeft.vue'
-import DrawerRight from '@/components/home/drawerRight/DrawerRight.vue'
 import JoinGroupCard from '@/components/group/JoinGroupCard.vue'
 import { groupService } from '@/service/groupService'
 import { errorHandler } from '@/utils/errorHandler'

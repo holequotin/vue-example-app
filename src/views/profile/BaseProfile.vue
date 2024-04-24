@@ -124,19 +124,8 @@ watchEffect(() => {
   postStore.$reset()
   userStore.getUser()
   getUser()
-  getFriends()
   getFriendship()
 })
-
-function getFriends() {
-  friendService.getFriendsByUser(currUserId.value)
-    .then((response) => {
-      friends.value = response.data.data
-    })
-    .catch((error) => {
-      errorHandler(error)
-    })
-}
 
 function getUser() {
   userService.getUserById(currUserId.value)

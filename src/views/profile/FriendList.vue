@@ -17,15 +17,49 @@
                     </v-col>
                 </v-row>
             </v-card-item>
+          <v-card-actions class="d-flex justify-center align-center">
+            <div class="text-center">
+              <v-pagination
+                v-model="page"
+                :length="meta.last_page"
+                :total-visible="7"
+                @update:model-value="() => getFriends(props.id, page, perPage)"
+              ></v-pagination>
+            </div>
+          </v-card-actions>
         </v-card>
     </v-container>
 </template>
 <script setup>
-import { inject } from 'vue'
 import { RouterLink } from 'vue-router'
 import { checkURL } from '@/utils/fileUtils'
+import { ref, watchEffect } from 'vue'
+import { friendService } from '@/service/friendService'
+import { errorHandler } from '@/utils/errorHandler'
 
-const friends = inject('friends')
+const friends = ref([])
+const props = defineProps(['id'])
+const perPage = ref(12)
+const meta = ref({
+  last_page: 1
+})
+const page = ref(1)
+
+function getFriends(id, page, perPage) {
+  friendService.getFriendsByUser(id, page, perPage)
+    .then((response) => {
+      friends.value = response.data.data
+      meta.value = response.data.meta
+    })
+    .catch((error) => {
+      errorHandler(error)
+    })
+}
+
+watchEffect(() => {
+  getFriends(props.id, page.value, perPage.value)
+})
+
 </script>
 <style scoped>
  .color-link {

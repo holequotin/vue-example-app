@@ -8,7 +8,7 @@
 </template>
 
 <script setup>
-// import { ref } from 'vue'
-import UserListItem from '../drawerLeft/UserListItem.vue';
+import UserListItem from '../drawerLeft/UserListItem.vue'
+
 const props = defineProps(['friends']);
 </script>

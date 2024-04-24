@@ -15,7 +15,7 @@ export const usePostStore = defineStore('posts', () => {
 
   async function getPosts() {
     if (currentPage.value === 0 || meta.value?.last_page) {
-      postService.getAllPost(currentPage.value + 1, 5)
+      postService.getAllPost(currentPage.value + 1, 15)
         .then((response) => {
           currentPage.value = response.data.meta.current_page
           meta.value = response.data.meta

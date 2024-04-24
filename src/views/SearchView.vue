@@ -2,7 +2,6 @@
 
 import DrawerLeft from '@/components/home/drawerLeft/DrawerLeft.vue'
 import AppBar from '@/components/home/appbar/AppBar.vue'
-import DrawerRight from '@/components/home/drawerRight/DrawerRight.vue'
 import BaseLayout from '@/views/base/BaseLayout.vue'
 import { useRoute } from 'vue-router'
 import { useUserStore } from '@/stores/user'
@@ -93,7 +92,7 @@ const items = [
       <DrawerLeft></DrawerLeft>
     </template>
     <template #right-drawer>
-      <DrawerRight></DrawerRight>
+      <div></div>
     </template>
   </BaseLayout>
 </template>

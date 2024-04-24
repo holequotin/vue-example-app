@@ -1,5 +1,6 @@
 import axios from '../apis/axios'
 import { jwtDecode } from 'jwt-decode'
+
 class FriendService {
   constructor(api) {
     this.api = api
@@ -16,12 +17,16 @@ class FriendService {
     })
   }
 
-  async getFriendsByUser(userId) {
+  async getFriendsByUser(userId, page = 1, perPage = 6) {
     const token = localStorage.getItem('token')
     return this.api.get(`/users/${userId}/friends`, {
       headers: {
         'Content-Type': 'application/json', // Set content type if needed
         Authorization: `Bearer ${token}`
+      },
+      params: {
+        page: page,
+        perPage: perPage
       }
     })
   }

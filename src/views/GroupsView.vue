@@ -1,6 +1,5 @@
 <script setup>
 import AppBar from '@/components/home/appbar/AppBar.vue'
-import DrawerRight from '@/components/home/drawerRight/DrawerRight.vue'
 import BaseLayout from '@/views/base/BaseLayout.vue'
 import { useUserStore } from '@/stores/user'
 import GroupCard from '@/components/group/GroupCard.vue'
@@ -56,7 +55,7 @@ getGroups()
         <DrawerLeftGroup></DrawerLeftGroup>
       </template>
       <template #right-drawer>
-        <DrawerRight></DrawerRight>
+        <div></div>
       </template>
     </BaseLayout>
 </template>

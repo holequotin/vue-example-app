@@ -31,7 +31,7 @@ const meta = ref({
 const page = ref(1)
 
 function getGroups() {
-  groupService.getGroupByUser(route.params.id, page.value, 6)
+  groupService.getGroupByUser(route.params.id, page.value, 12)
     .then((response) => {
       meta.value = response.data.meta
       groups.value = response.data.data
