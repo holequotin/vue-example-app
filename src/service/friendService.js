@@ -102,6 +102,20 @@ class FriendService {
       }
     )
   }
+
+  async getMutualFriends(userId, page = 1, perPage = 6) {
+    const token = localStorage.getItem('token')
+    return this.api.get(`/friendships/mutual/${userId}`, {
+      headers: {
+        'Content-Type': 'application/json', // Set content type if needed
+        Authorization: `Bearer ${token}`
+      },
+      params: {
+        page: page,
+        perPage: perPage
+      }
+    })
+  }
 }
 
 const friendService = new FriendService(axios)
