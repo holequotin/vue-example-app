@@ -116,6 +116,18 @@ class FriendService {
       }
     })
   }
+
+  async getFriendSuggestion() {
+    const token = localStorage.getItem('token')
+    const endpoint = 'users/suggestion'
+
+    return this.api.get(endpoint, {
+      headers: {
+        'Content-Type': 'application/json', // Set content type if needed
+        Authorization: `Bearer ${token}`
+      }
+    })
+  }
 }
 
 const friendService = new FriendService(axios)

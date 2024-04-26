@@ -47,7 +47,7 @@ const toPost = () => {
 
 const toFriendRequest = () => {
   markAsRead()
-  router.push({ name: 'friend_request' })
+  router.push({ name: 'friend-request' })
 }
 
 const toJoinGroupRequest = () => {

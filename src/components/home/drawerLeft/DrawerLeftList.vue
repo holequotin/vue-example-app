@@ -19,7 +19,7 @@ import UserListItem from './UserListItem.vue'
 import { useUserStore } from '@/stores/user'
 
 const items = ref([
-  { text: 'Friend request', icon: 'mdi-account-multiple', to: 'friend_request' },
+  { text: 'Friends', icon: 'mdi-account-multiple', to: 'friend-request' },
   { text: 'Join Group Request', icon: 'mdi-newspaper-variant-multiple-outline', to: 'group_request' },
   { text: 'Groups', icon: 'mdi-account-group', to: 'group-feed' },
   { text: 'Chat', icon: 'mdi-facebook-messenger', to: 'chat' }

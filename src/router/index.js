@@ -10,11 +10,6 @@ const router = createRouter({
       component: () => import('../views/HomeView.vue')
     },
     {
-      path: '/friend_request',
-      name: 'friend_request',
-      component: () => import('../views/FriendRequest.vue')
-    },
-    {
       path: '/group_request',
       name: 'group_request',
       component: () => import('../views/groups/GroupJoinRequest.vue')
@@ -22,9 +17,6 @@ const router = createRouter({
     {
       path: '/about',
       name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
       component: () => import('../views/AboutView.vue')
     },
     {
@@ -97,6 +89,21 @@ const router = createRouter({
           path: '/',
           component: () => import('../views/GroupsView.vue'),
           name: 'group-parent'
+        }
+      ]
+    },
+    {
+      path: '/friends',
+      children: [
+        {
+          path: 'request',
+          component: () => import('../views/FriendRequest.vue'),
+          name: 'friend-request'
+        },
+        {
+          path: 'suggestion',
+          component: import('../views/friend/FriendSuggestion.vue'),
+          name: 'friend-suggestion'
         }
       ]
     },

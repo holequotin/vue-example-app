@@ -19,7 +19,7 @@
             </v-main>
         </template>
         <template #left-drawer>
-            <DrawerLeft></DrawerLeft>
+          <DrawerLeftFriend></DrawerLeftFriend>
         </template>
         <template #right-drawer>
           <div></div>
@@ -29,12 +29,12 @@
 <script setup>
 import BaseLayout from './base/BaseLayout.vue'
 import AppBar from '../components/home/appbar/AppBar.vue'
-import DrawerLeft from '../components/home/drawerLeft/DrawerLeft.vue'
 import { useUserStore } from '@/stores/user'
 import { ref, watchEffect } from 'vue'
 import { friendService } from '@/service/friendService'
 import { errorHandler } from '@/utils/errorHandler'
 import FriendRequest from '../components/friends/FriendRequest.vue'
+import DrawerLeftFriend from '@/components/friends/DrawerLeftFriend.vue'
 
 
 const userStore = useUserStore()
