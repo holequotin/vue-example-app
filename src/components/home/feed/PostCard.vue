@@ -12,7 +12,7 @@
               <v-card-title class="d-inline">{{ post.user.name }}</v-card-title>
               <div class="ml-5 mt-1" v-if="props.post.shared_post">Shared the post</div>
               <span class="d-inline ml-5 w-75" v-if="post.group">posted in <RouterLink
-                :to="{name:'group-view', params: {id : post.group.id}}"><v-card-title
+                :to="{name:'group-view', params: {slug : post.group.slug}}"><v-card-title
                 style="display: inline; width: 50%"
                 class="ml-5">{{ post.group.name }}</v-card-title></RouterLink></span>
             </div>
@@ -38,7 +38,7 @@
           </v-list-item>
         </v-list>
       </v-menu>
-      <UpdatePostDialog :dialog="dialog" @toggle="toggle" :post="post">
+      <UpdatePostDialog :dialog="dialog" :post="post" @edited="$emit('edited')" @toggle="toggle">
       </UpdatePostDialog>
     </template>
     <slot name="text">
@@ -92,7 +92,7 @@ import { MessageType } from '@/utils/MessageType'
 const userStore = useUserStore()
 const alertStore = useAlertStore()
 const props = defineProps(['post', 'type'])
-const emits = defineEmits(['deleted'])
+const emits = defineEmits(['deleted', 'edited'])
 const dialog = ref(false)
 const formatedDate = computed(() => {
   return moment(props.post.created_at).fromNow()

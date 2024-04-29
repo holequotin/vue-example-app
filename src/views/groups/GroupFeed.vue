@@ -6,7 +6,10 @@ import { ref } from 'vue'
 import GroupFeedCard from '@/components/group/GroupFeedCard.vue'
 import { groupService } from '@/service/groupService'
 import { errorHandler } from '@/utils/errorHandler'
+import { useUserStore } from '@/stores/user'
 
+const userStore = useUserStore()
+userStore.getUser()
 const posts = ref([])
 const meta = ref({
   last_page: 1,
@@ -34,6 +37,12 @@ async function load({ done }) {
   }
 }
 
+function deletePost(postId) {
+  posts.value = posts.value.filter((item) => {
+    return item.id !== postId
+  })
+}
+
 getGroupPosts()
 
 </script>
@@ -47,7 +56,8 @@ getGroupPosts()
       <v-main class="d-flex justify-center align-center">
         <v-infinite-scroll class="w-75" mode="manual" @load="load">
           <v-container fluid>
-            <GroupFeedCard v-for="post in posts" :key="post.id" :post="post"></GroupFeedCard>
+            <GroupFeedCard v-for="post in posts" :key="post.id" :post="post"
+                           @deleted="() => deletePost(post.id)"></GroupFeedCard>
           </v-container>
         </v-infinite-scroll>
       </v-main>

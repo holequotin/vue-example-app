@@ -49,7 +49,7 @@ function refuse() {
             <v-card-title style="display: inline">{{ props.request.user.name }}</v-card-title>
           </RouterLink>
           <span style="display: inline; margin-left: 15px; margin-right: 15px">request to join</span>
-          <RouterLink :to="{name: 'group-view', params: {id : props.request.group.id}}">
+          <RouterLink :to="{name: 'group-view', params: {slug : props.request.group.slug}}">
             <v-card-title style="display: inline">{{ props.request.group.name }}</v-card-title>
           </RouterLink>
         </div>

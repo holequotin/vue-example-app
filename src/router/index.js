@@ -49,7 +49,7 @@ const router = createRouter({
       ]
     },
     {
-      path: '/groups/:id',
+      path: '/groups/:slug',
       component: () => import('../views/groups/GroupView.vue'),
       name: 'group-view'
     },

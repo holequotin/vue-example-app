@@ -39,8 +39,8 @@ class GroupService {
     return this.api.get(endpoint, config)
   }
 
-  async getGroupById(id) {
-    const endpoint = `/groups/${id}`
+  async getGroupBySlug(slug) {
+    const endpoint = `/groups/${slug}`
     const token = localStorage.getItem('token')
     const config = {
       headers: {

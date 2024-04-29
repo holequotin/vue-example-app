@@ -3,7 +3,7 @@ import AppBar from '@/components/home/appbar/AppBar.vue'
 import BaseLayout from '@/views/base/BaseLayout.vue'
 import { useUserStore } from '@/stores/user'
 import GroupCard from '@/components/group/GroupCard.vue'
-import { ref } from 'vue'
+import { ref, watchEffect } from 'vue'
 import { groupService } from '@/service/groupService'
 import { errorHandler } from '@/utils/errorHandler'
 import DrawerLeftGroup from '@/components/group/DrawerLeftGroup.vue'
@@ -16,18 +16,23 @@ const meta = ref({
 const page = ref(1)
 userStore.getUser()
 
-function getGroups() {
-  groupService.getGroupByUser(userStore.user.id, page.value, 6)
-    .then((response) => {
-      meta.value = response.data.meta
-      groups.value = response.data.data
-    })
-    .catch((error) => {
-      errorHandler(error)
-    })
+async function getGroups() {
+  if (userStore.user?.id) {
+    groupService.getGroupByUser(userStore.user.id, page.value, 6)
+      .then((response) => {
+        meta.value = response.data.meta
+        groups.value = response.data.data
+      })
+      .catch((error) => {
+        errorHandler(error)
+      })
+  }
 }
 
-getGroups()
+watchEffect(() => {
+  getGroups()
+})
+//getGroups()
 </script>
 
 <template>

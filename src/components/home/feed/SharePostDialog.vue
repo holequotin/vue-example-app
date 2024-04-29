@@ -27,7 +27,7 @@
 import BaseDialog from './BaseDialog.vue'
 import PostCard from './PostCard.vue'
 import { postService } from '@/service/postService'
-import { ref, watchEffect } from 'vue'
+import { ref } from 'vue'
 import { useUserStore } from '@/stores/user'
 import { usePostStore } from '@/stores/post'
 import { errorHandler } from '@/utils/errorHandler'
@@ -76,8 +76,7 @@ function sharePost() {
       errorHandler(error)
     })
 }
-watchEffect(() => {
-  userStore.getUser()
-  post.value.user = userStore.user
-})
+
+userStore.getUser()
+post.value.user = userStore.user
 </script>

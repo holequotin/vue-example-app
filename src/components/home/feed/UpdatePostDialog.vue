@@ -42,7 +42,7 @@ import { MessageType } from '@/utils/MessageType'
 
 const postStore = usePostStore()
 const props = defineProps(['dialog', 'post'])
-const emit = defineEmits(['toggle'])
+const emit = defineEmits(['toggle', 'edited'])
 const alertStore = useAlertStore()
 
 const postType = [
@@ -64,7 +64,8 @@ const isDiabled = computed(() => {
 function update() {
     postService.updatePost(props.post.id, newPostData.value)
         .then((response) => {
-            console.log(response.data)
+          console.log(response.data)
+          emit('edited')
           postStore.updatePost(response.data.post)
           alertStore.showAlert('Update post successfully', MessageType.SUCCESS)
         })

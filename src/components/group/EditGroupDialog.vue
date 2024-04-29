@@ -6,15 +6,17 @@ import { errorHandler } from '@/utils/errorHandler'
 import { useAlertStore } from '@/stores/alert'
 import { groupService } from '@/service/groupService'
 import { MessageType } from '@/utils/MessageType'
+import { useRouter } from 'vue-router'
 
 const props = defineProps(['dialog', 'group'])
 const alertStore = useAlertStore()
+const router = useRouter()
 
 const emits = defineEmits(['toggle', 'edited'])
 
 const data = ref({
-  name: 'Default name',
-  type: { title: 'Public', value: '1' }
+  name: props.group.name,
+  type: props.group.type
 })
 
 const image = ref(null)
@@ -35,7 +37,7 @@ function update() {
     .then(response => {
       console.log(response.data)
       alertStore.showAlert('Update group successfully', MessageType.SUCCESS)
-      emits('edited')
+      router.replace({ name: 'group-view', params: { slug: response.data.slug } })
       emits('toggle')
     })
     .catch(error => {
@@ -45,10 +47,6 @@ function update() {
 
 watchEffect(() => {
   console.log(JSON.stringify(data.value))
-  data.value = {
-    name: props.group.name,
-    type: props.group.type
-  }
 })
 
 </script>

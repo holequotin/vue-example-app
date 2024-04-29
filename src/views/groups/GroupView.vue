@@ -3,7 +3,7 @@
 import { checkURL } from '@/utils/fileUtils'
 import BaseLayout from '@/views/base/BaseLayout.vue'
 import AppBar from '@/components/home/appbar/AppBar.vue'
-import { computed, ref, watchEffect } from 'vue'
+import { computed, ref, watch, watchEffect } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
 import { groupService } from '@/service/groupService'
 import { errorHandler } from '@/utils/errorHandler'
@@ -58,14 +58,17 @@ const canShowPost = computed(() => {
 })
 
 watchEffect(() => {
-  getGroup(route.params.id)
-  getPosts(route.params.id)
-  getStatus(route.params.id)
-  getMembers(route.params.id)
+  getGroup(route.params.slug)
 })
 
-async function getGroup(id) {
-  groupService.getGroupById(id)
+watch(group, function() {
+  getPosts(group.value.id)
+  getStatus(group.value.id)
+  getMembers(group.value.id)
+})
+
+async function getGroup(slug) {
+  groupService.getGroupBySlug(slug)
     .then((response) => {
       group.value = response.data
     })
@@ -112,11 +115,11 @@ function getMembers(id) {
 
 function created() {
   page.value = 1
-  getPosts(route.params.id)
+  getPosts(group.value.id)
 }
 
 async function edited() {
-  await getGroup(route.params.id)
+  await getGroup(route.params.slug)
 }
 
 function removeUser(groupId, userId) {
@@ -139,7 +142,8 @@ function removeUser(groupId, userId) {
     </template>
     <template #main>
       <v-main style="min-height: 300px">
-        <EditGroupDialog :dialog="dialog" :group="group" @toggle="dialog = !dialog" @edited="edited"></EditGroupDialog>
+        <EditGroupDialog v-if="dialog" :dialog="dialog" :group="group" @edited="edited"
+                         @toggle="dialog = !dialog"></EditGroupDialog>
         <v-card class="d-flex justify-center" max-height="550px">
           <v-container grid-list-xs fluid class="d-flex justify-start align-center flex-column">
             <v-img min-width="70%" max-height="70%" aspect-ratio="16/9" cover height="500px"
@@ -183,7 +187,7 @@ function removeUser(groupId, userId) {
           <div v-else style="width: 70%">
             <NewPostCard :group="group" @created="created"></NewPostCard>
             <PostCard v-for="post in posts" :key="post" :post="post" type="feed"
-                      @deleted="() => getPosts($route.params.id)"></PostCard>
+                      @deleted="() => getPosts(group.id)" @edited="() => getPosts(group.id)"></PostCard>
             <div class="text-center">
               <v-pagination
                 v-model="page"

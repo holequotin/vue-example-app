@@ -32,7 +32,7 @@ const isOwner = computed(() => props.group.owner?.id == userStore.user.id)
           <span v-else class="text-h5">{{ props.group.name[0].toUpperCase() }}</span>
         </v-avatar>
         <div class="ml-3">
-          <RouterLink :to="{name: 'group-view', params: {id : props.group.id}}">
+          <RouterLink :to="{name: 'group-view', params: {slug : props.group.slug}}">
             <v-card-title>{{ props.group.name }}</v-card-title>
           </RouterLink>
         </div>

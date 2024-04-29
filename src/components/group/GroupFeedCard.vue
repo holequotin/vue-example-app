@@ -6,8 +6,15 @@ import PostActions from '@/components/home/feed/PostActions.vue'
 import UpdatePostDialog from '@/components/home/feed/UpdatePostDialog.vue'
 import { useUserStore } from '@/stores/user'
 import { computed, ref } from 'vue'
+import { postService } from '@/service/postService'
+import { useAlertStore } from '@/stores/alert'
+import { MessageType } from '@/utils/MessageType'
+import { errorHandler } from '@/utils/errorHandler'
 
+
+const alertStore = useAlertStore()
 const props = defineProps(['post'])
+const emits = defineEmits(['deleted'])
 const userStore = useUserStore()
 const dialog = ref(false)
 const groupType = computed(() => {
@@ -17,6 +24,17 @@ const groupType = computed(() => {
 
 function toggle() {
   dialog.value = !dialog.value
+}
+
+function deletePost() {
+  postService.deletePost(props.post.id)
+    .then(response => {
+      alertStore.showAlert('Delete post successfully', MessageType.SUCCESS)
+      emits('deleted')
+    })
+    .catch(error => {
+      errorHandler(error)
+    })
 }
 </script>
 
@@ -29,7 +47,7 @@ function toggle() {
           <span v-else class="text-h5">{{ post.group.name[0] }}</span>
         </v-avatar>
         <div class="ml-3">
-          <RouterLink :to="{ name: 'group-view', params: { id: post.group.id } }" style="color: white;">
+          <RouterLink :to="{ name: 'group-view', params: { slug: post.group.slug } }" style="color: white;">
             <div class="d-flex align-items-center">
               <v-card-title class="d-inline">{{ post.group.name }}</v-card-title>
               <v-chip class="ml-3">
@@ -59,12 +77,12 @@ function toggle() {
           <v-list-item v-if="userStore.user.id === props.post.user.id" @click="dialog = true">
             <v-list-item-title>Edit</v-list-item-title>
           </v-list-item>
-          <v-list-item @click="() => console.log('Delete post')">
+          <v-list-item @click="deletePost">
             <v-list-item-title>Delete</v-list-item-title>
           </v-list-item>
         </v-list>
       </v-menu>
-      <UpdatePostDialog :dialog="dialog" :post="props.post" @toggle="toggle">
+      <UpdatePostDialog :dialog="dialog" :post="props.post" @edited="$emit('edited')" @toggle="toggle">
       </UpdatePostDialog>
     </template>
     <slot name="text">
