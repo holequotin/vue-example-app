@@ -23,6 +23,7 @@
                     <span v-else class="text-h5">{{ user.name ? user.name[0] : 'A' }}</span>
                   </v-avatar>
                   <h1 style="margin-left: 20px;">{{ user.name }}</h1>
+                  <h1 v-if="nickname" class="ml-3">({{ nickname }})</h1>
                 </div>
                 <div class="d-flex justiy-start">
                   <div v-if="userStore.user.id != currUserId" class="d-flex justify-start">
@@ -91,7 +92,7 @@ import AppBar from '../../components/home/appbar/AppBar.vue'
 import FriendButton from '../../components/profile/FriendButton.vue'
 import NewPostCard from '../../components/home/feed/NewPostCard.vue'
 import PostCard from '../../components/home/feed/PostCard.vue'
-import { provide, ref, watchEffect } from 'vue'
+import { computed, provide, ref, watchEffect } from 'vue'
 import { RouterLink, useRoute, useRouter } from 'vue-router'
 import { userService } from '@/service/userService'
 import { friendService } from '@/service/friendService'
@@ -125,6 +126,16 @@ watchEffect(() => {
   userStore.getUser()
   getUser()
   getFriendship()
+})
+
+const nickname = computed(() => {
+  if (friendship.value) {
+    if (friendship.value.from_user.id === userStore.user.id) {
+      return friendship.value.to_user_nickname
+    }
+    return friendship.value.from_user_nickname
+  }
+  return null
 })
 
 function getUser() {

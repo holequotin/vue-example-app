@@ -12,7 +12,9 @@
                         <span v-else class="text-h5">{{ friend.name[0].toUpperCase() }}</span>
                       </v-avatar>
                         <div style="margin-left: 20px;">
-                            <RouterLink :to="`/profile/${friend.id}`"><span style="font-size: larger;" class="color-link">{{ friend.name }}</span></RouterLink>
+                          <RouterLink :to="`/profile/${friend.id}`"><span class="color-link" style="font-size: larger;">{{ friend.name
+                            }}</span><span v-if="friend.nickname" class="color-link ml-2"
+                                           style="font-size: larger;">({{ friend.nickname }})</span></RouterLink>
                         </div>
                     </v-col>
                 </v-row>
