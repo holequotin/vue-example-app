@@ -14,6 +14,7 @@ import EditGroupDialog from '@/components/group/EditGroupDialog.vue'
 import { useUserStore } from '@/stores/user'
 import { useAlertStore } from '@/stores/alert'
 import { MessageType } from '@/utils/MessageType'
+import { GroupRole } from '@/utils/GroupRole'
 
 const route = useRoute()
 const userStore = useUserStore()
@@ -106,6 +107,7 @@ function getMembers(id) {
   groupService.getMembers(id)
     .then((response) => {
       members.value = response.data.data
+      console.log(members)
       metaMember.value = response.data.meta
     })
     .catch((error) => {
@@ -205,28 +207,33 @@ function removeUser(groupId, userId) {
             </v-card-title>
             <v-card-item>
               <v-row>
-                <v-col cols="6" v-for="user in members" :key="user.id" class="d-flex justify-start">
+                <v-col v-for="member in members" :key="member" class="d-flex justify-start" cols="6">
                   <v-card width="100%">
                     <template v-slot:prepend>
                       <div class="d-flex justify-start">
                         <v-avatar color="blue-darken-2" size="large">
-                          <v-img v-if="checkURL(user.avatar)" alt="John" :src="user.avatar"></v-img>
-                          <span v-else class="text-h5">{{ user.name[0].toUpperCase() }}</span>
+                          <v-img v-if="checkURL(member.user.avatar)" :src="member.user.avatar" alt="John"></v-img>
+                          <span v-else class="text-h5">{{ member.user.name[0].toUpperCase() }}</span>
                         </v-avatar>
                         <div class="ml-3">
-                          <RouterLink :to="{ name: 'profile-parent', params: { id: user.id } }" style="color: white;">
-                            <v-card-title>{{ user.name }}</v-card-title>
+                          <RouterLink :to="{ name: 'profile-parent', params: { id: member.user.id } }"
+                                      style="color: white;">
+                            <v-card-title>{{ member.user.name }}</v-card-title>
                           </RouterLink>
                         </div>
                       </div>
                     </template>
                     <template #append>
-                      <v-chip color="green" v-if="group.owner.id === user.id">
+                      <v-chip v-if="group.owner.id === member.user.id" color="green">
                         Owner
                       </v-chip>
-                      <v-btn v-if="group.owner.id !== user.id && group.owner.id === userStore.user?.id" color="error"
+                      <v-chip v-if="member.role == GroupRole.ADMIN" color="blue">
+                        Admin
+                      </v-chip>
+                      <v-btn v-if="group.owner.id !== member.user.id && group.owner.id === userStore.user?.id"
+                             color="error"
                              variant="outlined"
-                             @click="() => removeUser(group.id, user.id)">Remove
+                             @click="() => removeUser(group.id, member.user.id)">Remove
                       </v-btn>
                     </template>
                   </v-card>
