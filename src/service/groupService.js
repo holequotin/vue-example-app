@@ -237,6 +237,56 @@ class GroupService {
 
     return this.api.get(endpoint, config)
   }
+
+  async updateGroupRole(data, groupId) {
+    const endpoint = `/group-user/${groupId}/role`
+    const token = localStorage.getItem('token')
+
+    const config = {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        Authorization: `Bearer ${token}`,
+        Accept: 'application/json'
+      }
+    }
+
+    return this.api.post(endpoint, data, config)
+  }
+
+  async getUsersCanInvite(groupId, page = 1, perPage = 15) {
+    const endpoint = `/invitations/${groupId}/can-invite`
+    const token = localStorage.getItem('token')
+
+    const config = {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        Authorization: `Bearer ${token}`,
+        Accept: 'application/json'
+      },
+
+      params: {
+        page: page,
+        perPage: perPage
+      }
+    }
+
+    return this.api.get(endpoint, config)
+  }
+
+  async inviteUser(data) {
+    const endpoint = '/invitations'
+    const token = localStorage.getItem('token')
+
+    const config = {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        Authorization: `Bearer ${token}`,
+        Accept: 'application/json'
+      }
+    }
+
+    return this.api.post(endpoint, data, config)
+  }
 }
 
 const groupService = new GroupService(axios)

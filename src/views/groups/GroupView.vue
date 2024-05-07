@@ -34,12 +34,22 @@ const group = ref({
   }
 })
 
+const roleItems = ref([
+  { title: 'Member', value: GroupRole.MEMBER },
+  { title: 'Admin', value: GroupRole.ADMIN }
+])
+
 const groupType = computed(() => {
   if (group.value.type === '1') return 'Public group'
   return 'Private group'
 })
 
 const dialog = ref(false)
+const roleDialog = ref(false)
+const role = ref({
+  id: 1,
+  value: GroupRole.ADMIN
+})
 const page = ref(1)
 const meta = ref({
   last_page: 1
@@ -62,10 +72,17 @@ watchEffect(() => {
   getGroup(route.params.slug)
 })
 
-watch(group, function() {
+watch([group, roleDialog], function() {
   getPosts(group.value.id)
   getStatus(group.value.id)
   getMembers(group.value.id)
+
+  if (roleDialog.value === false) {
+    role.value = {
+      id: 1,
+      value: GroupRole.MEMBER
+    }
+  }
 })
 
 async function getGroup(slug) {
@@ -107,7 +124,6 @@ function getMembers(id) {
   groupService.getMembers(id)
     .then((response) => {
       members.value = response.data.data
-      console.log(members)
       metaMember.value = response.data.meta
     })
     .catch((error) => {
@@ -129,6 +145,36 @@ function removeUser(groupId, userId) {
     .then(response => {
       alertStore.showAlert('Remove user successfully', MessageType.SUCCESS)
       getMembers(groupId)
+    })
+    .catch(error => {
+      errorHandler(error)
+    })
+}
+
+const showRoleDialog = (userId) => {
+  role.value.id = userId
+  roleDialog.value = true
+}
+
+const updateRole = (userId, newRole) => {
+  members.value = members.value.map((item) => {
+    if (item.user.id == userId) return { ...item, role: newRole }
+
+    return item
+  })
+}
+
+const setRole = (groupId, userId) => {
+  const data = {
+    user_id: userId,
+    role: role.value.value,
+    _method: 'patch'
+  }
+  groupService.updateGroupRole(data, groupId)
+    .then(response => {
+      alertStore.showAlert(response.data.message, MessageType.SUCCESS)
+      updateRole(userId, data.role)
+      roleDialog.value = false
     })
     .catch(error => {
       errorHandler(error)
@@ -230,11 +276,29 @@ function removeUser(groupId, userId) {
                       <v-chip v-if="member.role == GroupRole.ADMIN" color="blue">
                         Admin
                       </v-chip>
-                      <v-btn v-if="group.owner.id !== member.user.id && group.owner.id === userStore.user?.id"
-                             color="error"
-                             variant="outlined"
-                             @click="() => removeUser(group.id, member.user.id)">Remove
-                      </v-btn>
+                      <v-menu>
+                        <template v-slot:activator="{ props }">
+                          <v-btn icon="mdi-dots-vertical" v-bind="props"></v-btn>
+                        </template>
+
+                        <v-list>
+                          <v-list-item
+                            v-if="group.owner.id !== member.user.id && group.owner.id === userStore.user?.id"
+                            @click="() => showRoleDialog(member.user.id)">
+                            <v-list-item-title>Set role</v-list-item-title>
+                          </v-list-item>
+                          <v-list-item
+                            v-if="group.owner.id !== member.user.id && group.owner.id === userStore.user?.id"
+                            @click="console.log('Set show post type')">
+                            <v-list-item-title>Set show post type</v-list-item-title>
+                          </v-list-item>
+                          <v-list-item
+                            v-if="group.owner.id !== member.user.id && group.owner.id === userStore.user?.id"
+                            @click="removeUser(group.id, member.user.id)">
+                            <v-list-item-title>Remove</v-list-item-title>
+                          </v-list-item>
+                        </v-list>
+                      </v-menu>
                     </template>
                   </v-card>
                 </v-col>
@@ -248,6 +312,31 @@ function removeUser(groupId, userId) {
             </v-card-item>
           </v-card>
         </v-container>
+
+        <v-dialog
+          v-model="roleDialog"
+          width="auto"
+        >
+          <v-card
+            min-width="400"
+            prepend-icon="mdi-update"
+            title="Update role"
+          >
+            <v-form>
+              <v-select v-model="role.value" :items="roleItems">
+
+              </v-select>
+            </v-form>
+            <template v-slot:actions>
+              <v-btn
+                class="ms-auto"
+                text="Ok"
+                @click="() => setRole(group.id,role.id)"
+              ></v-btn>
+            </template>
+          </v-card>
+        </v-dialog>
+
       </v-main>
     </template>
     <template #left-drawer>

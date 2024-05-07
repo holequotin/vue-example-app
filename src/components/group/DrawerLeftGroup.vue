@@ -4,7 +4,8 @@ import CreateGroupDialog from '@/components/group/CreateGroupDialog.vue'
 
 const items = ref([
   { text: 'Feed', icon: 'mdi-newspaper-variant-multiple', to: 'group-feed' },
-  { text: 'Your groups', icon: 'mdi-account-group-outline', to: 'group-join' }
+  { text: 'Your groups', icon: 'mdi-account-group-outline', to: 'group-join' },
+  { text: 'Group invitations', icon: 'mdi-account-multiple-plus', to: 'group-invitations' }
 ])
 
 const dialog = ref(false)

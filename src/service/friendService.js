@@ -128,6 +128,19 @@ class FriendService {
       }
     })
   }
+
+  async setNickName(data, userId) {
+    const token = localStorage.getItem('token')
+    const endpoint = `/friendships/nickname/${userId}`
+    const config = {
+      headers: {
+        'Content-Type': 'application/json', // Set content type if needed
+        Authorization: `Bearer ${token}`
+      }
+    }
+
+    return this.api.patch(endpoint, data, config)
+  }
 }
 
 const friendService = new FriendService(axios)
