@@ -10,7 +10,7 @@
                 Comment
             </v-btn>
         </v-col>
-      <v-col v-if="props.post.group?.type === '1' || !props.post.group">
+      <v-col v-if="post.permissions?.share">
             <v-btn variant="plain" block prepend-icon="mdi-share-outline" @click="shareDialog=true">
                 Share
             </v-btn>

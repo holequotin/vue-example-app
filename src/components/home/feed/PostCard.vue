@@ -24,16 +24,16 @@
       </div>
     </template>
     <template v-slot:append>
-      <v-menu v-if="userStore.user.id == post.user.id || userStore.user.id == post.group?.owner.id">
+      <v-menu>
         <template v-slot:activator="{ props }">
           <v-btn variant="plain" icon="mdi-dots-horizontal" v-bind="props"></v-btn>
         </template>
 
         <v-list>
-          <v-list-item @click="dialog = true" v-if="userStore.user.id == post.user.id">
+          <v-list-item v-if="post.permissions.update" @click="dialog = true">
             <v-list-item-title>Edit</v-list-item-title>
           </v-list-item>
-          <v-list-item @click="deletePost">
+          <v-list-item v-if="post.permissions.delete" @click="deletePost">
             <v-list-item-title>Delete</v-list-item-title>
           </v-list-item>
         </v-list>

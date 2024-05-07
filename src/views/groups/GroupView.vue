@@ -15,6 +15,8 @@ import { useUserStore } from '@/stores/user'
 import { useAlertStore } from '@/stores/alert'
 import { MessageType } from '@/utils/MessageType'
 import { GroupRole } from '@/utils/GroupRole'
+import { ShowPostType } from '@/utils/ShowPostType'
+import { groupUserService } from '@/service/groupUserService'
 
 const route = useRoute()
 const userStore = useUserStore()
@@ -24,6 +26,7 @@ const group = ref({
   'name': 'Kristopher Mitchell',
   'url': 'http://localhost:8000/storage/',
   'type': '1',
+  'admins': [],
   'created_at': '2024-04-08T01:33:32.000000Z',
   'updated_at': '2024-04-08T01:33:32.000000Z',
   'owner': {
@@ -34,9 +37,18 @@ const group = ref({
   }
 })
 
+const isAdmin = computed(() => {
+  return group.value.admins.find(item => item.id == userStore.user?.id)
+})
+
 const roleItems = ref([
   { title: 'Member', value: GroupRole.MEMBER },
   { title: 'Admin', value: GroupRole.ADMIN }
+])
+
+const typeItems = ref([
+  { title: 'All', value: ShowPostType.ALL },
+  { title: 'Partial', value: ShowPostType.PARTIAL }
 ])
 
 const groupType = computed(() => {
@@ -46,9 +58,15 @@ const groupType = computed(() => {
 
 const dialog = ref(false)
 const roleDialog = ref(false)
+const showTypeDialog = ref(false)
 const role = ref({
   id: 1,
   value: GroupRole.ADMIN
+})
+
+const showType = ref({
+  id: 1,
+  value: ShowPostType.ALL
 })
 const page = ref(1)
 const meta = ref({
@@ -72,7 +90,7 @@ watchEffect(() => {
   getGroup(route.params.slug)
 })
 
-watch([group, roleDialog], function() {
+watch([group, roleDialog, showTypeDialog], function() {
   getPosts(group.value.id)
   getStatus(group.value.id)
   getMembers(group.value.id)
@@ -81,6 +99,13 @@ watch([group, roleDialog], function() {
     role.value = {
       id: 1,
       value: GroupRole.MEMBER
+    }
+  }
+
+  if (showTypeDialog.value === false) {
+    showType.value = {
+      id: 1,
+      value: ShowPostType.ALL
     }
   }
 })
@@ -156,12 +181,31 @@ const showRoleDialog = (userId) => {
   roleDialog.value = true
 }
 
+const showPostTypeDialog = (userId) => {
+  showType.value.id = userId
+  showTypeDialog.value = true
+}
+
 const updateRole = (userId, newRole) => {
   members.value = members.value.map((item) => {
     if (item.user.id == userId) return { ...item, role: newRole }
 
     return item
   })
+}
+
+const setShowType = (groupId, userId) => {
+  const data = {
+    type: showType.value.value
+  }
+  groupUserService.setShowPostType(groupId, userId, data)
+    .then(response => {
+      alertStore.showAlert('Update show post type successfully', MessageType.SUCCESS)
+      showTypeDialog.value = false
+    })
+    .catch(error => {
+      errorHandler(error)
+    })
 }
 
 const setRole = (groupId, userId) => {
@@ -283,17 +327,17 @@ const setRole = (groupId, userId) => {
 
                         <v-list>
                           <v-list-item
-                            v-if="group.owner.id !== member.user.id && group.owner.id === userStore.user?.id"
+                            v-if="(group.owner.id !== member.user.id && group.owner.id === userStore.user?.id)"
                             @click="() => showRoleDialog(member.user.id)">
                             <v-list-item-title>Set role</v-list-item-title>
                           </v-list-item>
                           <v-list-item
-                            v-if="group.owner.id !== member.user.id && group.owner.id === userStore.user?.id"
-                            @click="console.log('Set show post type')">
+                            v-if="(group.owner.id !== member.user.id && group.owner.id === userStore.user?.id) || (isAdmin && group.owner.id !== member.user.id)"
+                            @click="showPostTypeDialog(member.user.id)">
                             <v-list-item-title>Set show post type</v-list-item-title>
                           </v-list-item>
                           <v-list-item
-                            v-if="group.owner.id !== member.user.id && group.owner.id === userStore.user?.id"
+                            v-if="(group.owner.id !== member.user.id && group.owner.id === userStore.user?.id) || (isAdmin && group.owner.id !== member.user.id)"
                             @click="removeUser(group.id, member.user.id)">
                             <v-list-item-title>Remove</v-list-item-title>
                           </v-list-item>
@@ -337,6 +381,29 @@ const setRole = (groupId, userId) => {
           </v-card>
         </v-dialog>
 
+        <v-dialog
+          v-model="showTypeDialog"
+          width="auto"
+        >
+          <v-card
+            min-width="400"
+            prepend-icon="mdi-update"
+            title="Update role"
+          >
+            <v-form>
+              <v-select v-model="showType.value" :items="typeItems">
+
+              </v-select>
+            </v-form>
+            <template v-slot:actions>
+              <v-btn
+                class="ms-auto"
+                text="Ok"
+                @click="() => setShowType(group.id,showType.id)"
+              ></v-btn>
+            </template>
+          </v-card>
+        </v-dialog>
       </v-main>
     </template>
     <template #left-drawer>

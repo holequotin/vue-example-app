@@ -86,7 +86,7 @@ function sendRequest() {
   <v-btn v-if="showWaiting" @click="cancelRequest" color="warning" variant="outlined">Cancel request</v-btn>
   <v-btn v-if="showSendRequest" @click="sendRequest" variant="outlined" color="primary">Send request</v-btn>
   <v-btn v-if="showEdit" color="primary" icon="mdi-pencil" variant="outlined" @click="emits('edit')"></v-btn>
-  <v-btn v-if="showLeave" color="primary" prepend-icon="mdi-plus" @click="dialog = true">Invite</v-btn>
+  <v-btn v-if="showLeave || showEdit" color="primary" prepend-icon="mdi-plus" @click="dialog = true">Invite</v-btn>
   <InviteUserDialog v-if="dialog" :id="group.id" :dialog="dialog" @toggle="dialog = !dialog"></InviteUserDialog>
 </template>
 
