@@ -22,6 +22,8 @@ const title = computed(() => {
       return 'Commented'
     case 'App\\Notifications\\GroupRequestNotification':
       return 'Join group request'
+    case `App\\Notifications\\GroupInviteNotification`:
+      return 'Invite to join group'
     default:
       return props.notify.type
   }
@@ -35,6 +37,8 @@ const event = computed(() => {
       return toPost
     case 'App\\Notifications\\GroupRequestNotification':
       return toJoinGroupRequest
+    case `App\\Notifications\\GroupInviteNotification`:
+      return toGroupInviteRequest
     default:
       return () => console.log('Clicked on notify item')
   }
@@ -53,6 +57,11 @@ const toFriendRequest = () => {
 const toJoinGroupRequest = () => {
   markAsRead()
   router.push({ name: 'group_request' })
+}
+
+const toGroupInviteRequest = () => {
+  markAsRead()
+  router.push({ name: 'group-invitations' })
 }
 
 const markAsRead = () => {
