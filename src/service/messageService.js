@@ -53,6 +53,25 @@ class MessageService {
 
     return this.api.get(endpoint, config)
   }
+
+  async getGroupChats(page, perPage) {
+    const endpoint = `/group-chat`
+    const token = localStorage.getItem('token')
+
+    const config = {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        Authorization: `Bearer ${token}`,
+        Accept: 'application/json'
+      },
+      params: {
+        page: page,
+        perPage: perPage
+      }
+    }
+
+    return this.api.get(endpoint, config)
+  }
 }
 
 const messageService = new MessageService(axios)

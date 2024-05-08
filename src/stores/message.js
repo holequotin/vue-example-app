@@ -5,11 +5,13 @@ import { useUserStore } from '@/stores/user'
 export const useMessageStore = defineStore('message', () => {
   const messages = ref([])
   const lastMessages = ref([])
+  const groupChats = ref([])
   const userStore = useUserStore()
 
   function $reset() {
     messages.value = []
     lastMessages.value = []
+    groupChats.value = []
   }
 
   function push(message) {
@@ -32,5 +34,5 @@ export const useMessageStore = defineStore('message', () => {
     }
   }
 
-  return { messages, lastMessages, $reset, push, newUserMessage }
+  return { messages, lastMessages, groupChats, $reset, push, newUserMessage }
 })

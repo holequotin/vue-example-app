@@ -118,6 +118,11 @@ const router = createRouter({
       name: 'chat'
     },
     {
+      path: '/group-chat/:id?',
+      component: () => import('../views/chat/GroupChatView.vue'),
+      name: 'chat-group'
+    },
+    {
       path: '/:pathMatch(.*)*',
       name: 'NotFound',
       component: () => import('../views/common/NotFound.vue')

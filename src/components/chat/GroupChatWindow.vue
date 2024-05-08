@@ -1,15 +1,13 @@
 <script setup>
 
 import { computed, ref, watchEffect } from 'vue'
-import { userService } from '@/service/userService'
 import { errorHandler } from '@/utils/errorHandler'
-import { checkURL } from '@/utils/fileUtils'
-import { messageService } from '@/service/messageService'
 import { useRoute } from 'vue-router'
-import MessageItem from '@/components/chat/MessageItem.vue'
 import { useUserStore } from '@/stores/user'
 import { useMessageStore } from '@/stores/message'
 import pusher from '@/notifications/pusher'
+import { groupChatService } from '@/service/groupChatService'
+import GroupMessageItem from '@/components/chat/GroupMessageItem.vue'
 
 const props = defineProps(['id'])
 const route = useRoute()
@@ -21,17 +19,17 @@ const meta = ref({
   last_page: 1,
   current_page: 0
 })
-const userStore = useUserStore()
 
-const user = ref({
-  'id': 21,
-  'name': 'Alene Klein',
-  'email': 'heaney.fletcher@example.org',
-  'avatar': 'http://localhost:8000/storage/avatars/21/zBocVFF3Govgm9cFeQc4JFnIcdPPvf2weP8wlDzU.png'
+const groupChat = ref({
+  'id': 18,
+  'name': 'New name from user id 4',
+  'created_at': null
 })
 
+const userStore = useUserStore()
+
 const avatarChar = computed(() => {
-  return user.value.name[0]
+  return groupChat.value.name[0]
 })
 
 watchEffect(async () => {
@@ -41,13 +39,13 @@ watchEffect(async () => {
       last_page: 1,
       current_page: 0
     }
-    await getUser(props.id)
-    await getMessage(props.id, perPage.value)
+    await getGroupChat(props.id)
+    await getGroupChatMessage(props.id, perPage.value)
   }
 
-  pusher.unsubscribe(`private-Chat.User.${userStore.user?.id}`)
-  const channelChat = pusher.subscribe(`private-Chat.User.${userStore.user?.id}`)
-  channelChat.bind('App\\Events\\MessageCreated', function(data) {
+  pusher.unsubscribe(`private-Chat.Group.User.${userStore.user?.id}`)
+  const channelChat = pusher.subscribe(`private-Chat.Group.User.${userStore.user?.id}`)
+  channelChat.bind('App\\Events\\GroupChatMessageCreated', function(data) {
     const fromUserId = data.message.from_user.id
     if (route.name == 'chat' && fromUserId == route.params.id) {
       messageStore.push(data.message)
@@ -57,18 +55,18 @@ watchEffect(async () => {
   })
 })
 
-async function getUser(id) {
-  userService.getUserById(id)
+async function getGroupChat(id) {
+  groupChatService.getGroupChatById(id)
     .then(response => {
-      user.value = response.data
+      groupChat.value = response.data
     })
     .catch(error => {
       errorHandler(error)
     })
 }
 
-async function getMessage(id, perPage = 15) {
-  await messageService.getMessages(id, meta.value.current_page + 1, perPage)
+async function getGroupChatMessage(id, perPage = 15) {
+  await groupChatService.getMessage(id, meta.value.current_page + 1, perPage)
     .then(response => {
       messageStore.messages.unshift(...response.data.data.reverse())
       meta.value = response.data.meta
@@ -83,9 +81,9 @@ async function sendMessage() {
   if (body.value) {
     const data = {
       body: body.value,
-      to_user_id: props.id
+      group_chat_id: props.id
     }
-    messageService.storeMessage(data)
+    groupChatService.storeMessage(data)
       .then(response => {
         messageStore.messages.push(response.data)
         body.value = ''
@@ -97,7 +95,7 @@ async function sendMessage() {
 }
 
 async function load({ done }) {
-  await getMessage(route.params.id, perPage.value)
+  await getGroupChatMessage(route.params.id, perPage.value)
   if (meta.value.current_page === meta.value.last_page) done('empty')
   else {
     done('ok')
@@ -111,27 +109,29 @@ async function load({ done }) {
     <v-app-bar>
       <template v-slot:prepend>
         <v-avatar color="blue-darken-2" size="large">
-          <v-img v-if="checkURL(user.avatar)" alt="John" :src="user.avatar"></v-img>
-          <span v-else class="text-h5">{{ avatarChar }}</span>
+          <span class="text-h5">{{ avatarChar }}</span>
         </v-avatar>
       </template>
-      <v-app-bar-title>{{ user.name }}</v-app-bar-title>
+      <v-app-bar-title>{{ groupChat?.name }}</v-app-bar-title>
     </v-app-bar>
     <v-main>
-      <v-infinite-scroll @load="load" side="start" mode="manual" min-height="100%" min-width="100%">
+      <v-infinite-scroll min-height="100%" min-width="100%" mode="manual" side="start" @load="load">
         <v-container fluid>
-          <MessageItem v-for="message in messageStore.messages" :key="message"
-                       :owner="message.from_user.id == userStore.user?.id"
-                       :message="message"
-          ></MessageItem>
+          <GroupMessageItem v-for="message in messageStore.messages"
+                            :key="message"
+                            :message="message"
+                            :owner="message?.user?.id === userStore.user?.id"
+          >
+
+          </GroupMessageItem>
         </v-container>
       </v-infinite-scroll>
     </v-main>
     <v-footer
-      name="footer"
       app
+      name="footer"
     >
-      <v-text-field append-icon="mdi-send" @click:append="sendMessage" v-model="body"></v-text-field>
+      <v-text-field v-model="body" append-icon="mdi-send" @click:append="sendMessage"></v-text-field>
     </v-footer>
   </v-container>
 </template>
