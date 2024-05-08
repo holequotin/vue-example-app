@@ -8,6 +8,8 @@ import { useMessageStore } from '@/stores/message'
 import pusher from '@/notifications/pusher'
 import { groupChatService } from '@/service/groupChatService'
 import GroupMessageItem from '@/components/chat/GroupMessageItem.vue'
+import MembersDialog from '@/components/chat/MembersDialog.vue'
+import AddUserDialog from '@/components/chat/AddUserDialog.vue'
 
 const props = defineProps(['id'])
 const route = useRoute()
@@ -113,6 +115,10 @@ async function load({ done }) {
         </v-avatar>
       </template>
       <v-app-bar-title>{{ groupChat?.name }}</v-app-bar-title>
+      <template #append>
+        <MembersDialog :id="id"></MembersDialog>
+        <AddUserDialog :id="id"></AddUserDialog>
+      </template>
     </v-app-bar>
     <v-main>
       <v-infinite-scroll min-height="100%" min-width="100%" mode="manual" side="start" @load="load">
@@ -122,7 +128,6 @@ async function load({ done }) {
                             :message="message"
                             :owner="message?.user?.id === userStore.user?.id"
           >
-
           </GroupMessageItem>
         </v-container>
       </v-infinite-scroll>

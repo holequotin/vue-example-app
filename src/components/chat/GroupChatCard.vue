@@ -4,7 +4,7 @@ import { useRouter } from 'vue-router'
 const props = defineProps(['groupChat'])
 const router = useRouter()
 const toGroupChat = () => {
-  router.push({ name: 'chat-group', params: { id: 10 } })
+  router.push({ name: 'chat-group', params: { id: props.groupChat.id } })
 }
 </script>
 
