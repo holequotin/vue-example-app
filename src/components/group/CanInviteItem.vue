@@ -2,6 +2,7 @@
 import { errorHandler } from '@/utils/errorHandler'
 import { groupService } from '@/service/groupService'
 import { ref } from 'vue'
+import AvatarIcon from '@/components/home/feed/AvatarIcon.vue'
 
 const props = defineProps(['user', 'groupId'])
 const invited = ref(false)
@@ -25,8 +26,11 @@ async function invite() {
   <v-list-item
     :title="props.user.name"
   >
+    <template #prepend>
+      <AvatarIcon :user="props.user"></AvatarIcon>
+    </template>
     <template #append>
-      <v-btn v-if="!invited" prepend-icon="mdi-plus" variant="text" @click="invite">Invite</v-btn>
+      <v-btn v-if="!invited" color="primary" prepend-icon="mdi-plus" @click="invite">Invite</v-btn>
       <v-btn v-else prepend-icon="mdi-check" variant="text">Invited</v-btn>
     </template>
   </v-list-item>

@@ -2,7 +2,7 @@
 
 import { computed, ref, watchEffect } from 'vue'
 import { errorHandler } from '@/utils/errorHandler'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user'
 import { useMessageStore } from '@/stores/message'
 import pusher from '@/notifications/pusher'
@@ -11,9 +11,12 @@ import GroupMessageItem from '@/components/chat/GroupMessageItem.vue'
 import MembersDialog from '@/components/chat/MembersDialog.vue'
 import AddUserDialog from '@/components/chat/AddUserDialog.vue'
 import LeaveGroupDialog from '@/components/chat/LeaveGroupDialog.vue'
+import { useToast } from 'vue-toastification'
 
 const props = defineProps(['id'])
+const toast = useToast()
 const route = useRoute()
+const router = useRouter()
 const messageStore = useMessageStore()
 const perPage = ref(15)
 const body = ref('')
@@ -49,11 +52,15 @@ watchEffect(async () => {
   pusher.unsubscribe(`private-Chat.Group.User.${userStore.user?.id}`)
   const channelChat = pusher.subscribe(`private-Chat.Group.User.${userStore.user?.id}`)
   channelChat.bind('App\\Events\\GroupChatMessageCreated', function(data) {
-    const fromUserId = data.message.from_user.id
-    if (route.name == 'chat' && fromUserId == route.params.id) {
-      messageStore.push(data.message)
-    } else if (route.name == 'chat' && fromUserId != route.params.id) {
-      messageStore.newUserMessage(data.message)
+    const groupChatId = data.groupChatMessage.group_chat.id
+    if (route.name == 'chat-group' && groupChatId == route.params.id) {
+      messageStore.push(data.groupChatMessage)
+    } else {
+      toast.info('New message', {
+        onClick: () => {
+          router.push({ name: 'chat-group', params: { id: groupChatId } })
+        }
+      })
     }
   })
 })

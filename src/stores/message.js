@@ -34,5 +34,21 @@ export const useMessageStore = defineStore('message', () => {
     }
   }
 
-  return { messages, lastMessages, groupChats, $reset, push, newUserMessage }
+  function newGroupChat(groupChat) {
+    let isExists = false
+
+    groupChats.value = groupChats.value.map((item) => {
+      if (groupChat.id === item.id) {
+        isExists = true
+        return groupChat
+      }
+      return item
+    })
+
+    if (!isExists) {
+      groupChats.value.unshift(groupChat)
+    }
+  }
+
+  return { messages, lastMessages, groupChats, $reset, push, newUserMessage, newGroupChat }
 })
