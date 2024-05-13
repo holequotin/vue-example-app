@@ -5,14 +5,13 @@ import { errorHandler } from '@/utils/errorHandler'
 import { checkURL } from '@/utils/fileUtils'
 import { useUserStore } from '@/stores/user'
 import { GroupChatRole } from '@/utils/GroupChatRole'
-import { useAlertStore } from '@/stores/alert'
-import { MessageType } from '@/utils/MessageType'
+import { useToast } from 'vue-toastification'
 
 const members = ref([])
 const perPage = ref(15)
 const props = defineProps(['id'])
 const userStore = useUserStore()
-const alertStore = useAlertStore()
+const toast = useToast()
 const dialog = ref(false)
 const meta = ref({
   current_page: 0,
@@ -59,7 +58,7 @@ function removeUser(groupChatUserId) {
   groupChatService.removeUser(groupChatUserId)
     .then(response => {
       removeInMembers(groupChatUserId)
-      alertStore.showAlert(response.data.message, MessageType.SUCCESS)
+      toast.success(response.data.message)
     })
     .catch(error => errorHandler(error))
 }
@@ -71,7 +70,7 @@ function updateRole(groupChatUserId, role) {
 
   groupChatService.setRole(groupChatUserId, data)
     .then(response => {
-      alertStore.showAlert(response.data.message, MessageType.SUCCESS)
+      toast.success(response.data.message)
       updateRoleInMembers(groupChatUserId, role)
     })
     .catch(error => errorHandler(error))

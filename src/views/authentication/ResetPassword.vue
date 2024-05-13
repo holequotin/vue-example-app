@@ -27,18 +27,17 @@
 </ForgetPassword>
 </template>
 <script setup>
-import ForgetPassword from './ForgetPassword.vue';
-import { defineRule } from 'vee-validate';
-import {useField, useForm} from 'vee-validate'
-import { required,min} from '@vee-validate/rules';
-import { useRoute,useRouter } from 'vue-router';
-import {ref} from 'vue'
-import {userService} from '../../service/userService'
-import { useAlertStore } from '../../stores/alert';
+import ForgetPassword from './ForgetPassword.vue'
+import { defineRule, useField, useForm } from 'vee-validate'
+import { min, required } from '@vee-validate/rules'
+import { useRoute, useRouter } from 'vue-router'
+import { ref } from 'vue'
+import { userService } from '@/service/userService'
+import { useToast } from 'vue-toastification'
 
 const route = useRoute();
 const router = useRouter();
-const alertStore = useAlertStore()
+const toast = useToast()
 const token = ref(route.query.token)
 const user = ref({})
 userService.getUserByToken(token.value)
@@ -69,7 +68,7 @@ const submit = handleSubmit(values => {
     userService.resetPassword(token.value,values.password, values.password_confirmation)
         .then((response) => {
             console.log(response)
-            alertStore.showAlert('Reset Password Successfully','success')
+          toast.success('Reset Password Successfully')
             router.replace({name : 'login'})
         })
         .catch((error) => {

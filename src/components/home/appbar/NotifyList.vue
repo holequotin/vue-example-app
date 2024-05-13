@@ -3,11 +3,10 @@ import NotifyItem from '@/components/home/appbar/NotifyItem.vue'
 import { useNotificationStore } from '@/stores/notification'
 import { notificationService } from '@/service/notificationService'
 import { errorHandler } from '@/utils/errorHandler'
-import { useAlertStore } from '@/stores/alert'
-import { MessageType } from '@/utils/MessageType'
+import { useToast } from 'vue-toastification'
 
 const notificationStore = useNotificationStore()
-const alertStore = useAlertStore()
+const toast = useToast()
 
 async function load({ done }) {
   await notificationStore.getNotifications()
@@ -21,7 +20,7 @@ function markAllAsRead() {
   notificationService.markAllAsRead()
     .then((response) => {
       notificationStore.markAllAsRead()
-      alertStore.showAlert(response.data.message, MessageType.SUCCESS)
+      toast.success(response.data.message)
     })
     .catch((error) => {
       errorHandler(error)

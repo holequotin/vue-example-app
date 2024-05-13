@@ -3,12 +3,11 @@
 import BaseDialog from '@/components/home/feed/BaseDialog.vue'
 import { ref } from 'vue'
 import { errorHandler } from '@/utils/errorHandler'
-import { useAlertStore } from '@/stores/alert'
 import { groupService } from '@/service/groupService'
-import { MessageType } from '@/utils/MessageType'
+import { useToast } from 'vue-toastification'
 
 const props = defineProps(['dialog'])
-const alertStore = useAlertStore()
+const toast = useToast()
 const emits = defineEmits(['toggle', 'created'])
 const data = ref({
   name: '',
@@ -25,13 +24,13 @@ function create() {
   let groupData = {
     ...data.value,
     type: data.value.type,
-    image: image.value ? image.value[0] : null
+    image: image.value
   }
 
   groupService.createGroup(groupData)
     .then((response) => {
       console.log(response.data)
-      alertStore.showAlert('Create group successfully', MessageType.SUCCESS)
+      toast.success('Create group successfully')
       emits('toggle')
       emits('created')
     })

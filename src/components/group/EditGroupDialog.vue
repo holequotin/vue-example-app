@@ -3,13 +3,12 @@
 import BaseDialog from '@/components/home/feed/BaseDialog.vue'
 import { ref, watchEffect } from 'vue'
 import { errorHandler } from '@/utils/errorHandler'
-import { useAlertStore } from '@/stores/alert'
 import { groupService } from '@/service/groupService'
-import { MessageType } from '@/utils/MessageType'
 import { useRouter } from 'vue-router'
+import { useToast } from 'vue-toastification'
 
 const props = defineProps(['dialog', 'group'])
-const alertStore = useAlertStore()
+const toast = useToast()
 const router = useRouter()
 
 const emits = defineEmits(['toggle', 'edited'])
@@ -30,13 +29,13 @@ function update() {
   let groupData = {
     ...data.value,
     type: data.value.type,
-    image: image.value ? image.value[0] : null
+    image: image.value
   }
 
   groupService.updateGroup(props.group.id, groupData)
     .then(response => {
       console.log(response.data)
-      alertStore.showAlert('Update group successfully', MessageType.SUCCESS)
+      toast.success('Update group successfully')
       router.replace({ name: 'group-view', params: { slug: response.data.slug } })
       emits('toggle')
     })

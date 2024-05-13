@@ -23,14 +23,13 @@ import RegisterForm from './RegisterForm.vue'
 import { RouterLink, useRouter } from 'vue-router'
 import { useField, useForm } from 'vee-validate'
 import { useUserStore } from '@/stores/user'
-import { useAlertStore } from '@/stores/alert'
-import { MessageType } from '@/utils/MessageType'
 import { getMessage } from '@/utils/errorHandler'
 import { userService } from '@/service/userService'
+import { useToast } from 'vue-toastification'
 
 const router = useRouter()
 
-const alertStore = useAlertStore()
+const toast = useToast()
 const userStore = useUserStore()
 const { handleSubmit } = useForm({
     validationSchema: {
@@ -50,20 +49,19 @@ const login = handleSubmit((values) => {
         .then((response) => {
             if(response.data.message)
             {
-                alertStore.showAlert(response.data.message, MessageType.INFO)
-
+              toast.info(response.data.message)
               return
             }
             const token = response.data.access_token
             localStorage.setItem('token', token)
             router.replace({ name: 'home' })
-            alertStore.showAlert('Login successfully', MessageType.SUCCESS)
+          toast.success('Login successfully')
             userStore.getUser()
             router.push({ name: 'home' })
         })
         .catch((error) => {
             const message = getMessage(error)
-            alertStore.showAlert(message, MessageType.ERROR)
+          toast.error(message)
         })
 })
 </script>

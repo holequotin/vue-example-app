@@ -2,16 +2,15 @@
 import { ref, watch } from 'vue'
 import { errorHandler } from '@/utils/errorHandler'
 import { groupChatService } from '@/service/groupChatService'
-import { useAlertStore } from '@/stores/alert'
-import { MessageType } from '@/utils/MessageType'
 import { checkURL } from '@/utils/fileUtils'
+import { useToast } from 'vue-toastification'
 
 const usersCanAdd = ref([])
 const perPage = ref(15)
 const props = defineProps(['id'])
 const users = ref([])
 const dialog = ref(false)
-const alertStore = useAlertStore()
+const toast = useToast()
 const metaCanAdd = ref({
   last_page: 1,
   current_page: 0
@@ -46,7 +45,7 @@ function addUsers() {
 
   groupChatService.addUsers(data)
     .then(response => {
-      alertStore.showAlert('Add users successfully', MessageType.SUCCESS)
+      toast.success('Add users successfully')
       dialog.value = false
     })
     .catch(error => {

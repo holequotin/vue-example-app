@@ -9,13 +9,12 @@ import GroupChatCard from '@/components/chat/GroupChatCard.vue'
 import { friendService } from '@/service/friendService'
 import { useUserStore } from '@/stores/user'
 import { groupChatService } from '@/service/groupChatService'
-import { useAlertStore } from '@/stores/alert'
-import { MessageType } from '@/utils/MessageType'
 import { checkURL } from '@/utils/fileUtils'
+import { useToast } from 'vue-toastification'
 
 const perPage = ref(15)
 const userStore = useUserStore()
-const alertStore = useAlertStore()
+const toast = useToast()
 const meta = ref({
   last_page: 1,
   current_page: 0
@@ -123,7 +122,7 @@ function storeGroupChat() {
       }
       groupChatName.value = ''
       users.value = []
-      alertStore.showAlert('Create group chat successfully', MessageType.SUCCESS)
+      toast.success('Create group chat successfully')
     })
     .catch(error => {
       storeGroupChatErrors.value = error.response.data

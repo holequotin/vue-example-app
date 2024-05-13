@@ -37,13 +37,12 @@ import { computed, ref } from 'vue'
 import { postService } from '@/service/postService'
 import { errorHandler } from '@/utils/errorHandler'
 import { usePostStore } from '@/stores/post'
-import { useAlertStore } from '@/stores/alert'
-import { MessageType } from '@/utils/MessageType'
+import { useToast } from 'vue-toastification'
 
 const postStore = usePostStore()
 const props = defineProps(['dialog', 'post'])
 const emit = defineEmits(['toggle', 'edited'])
-const alertStore = useAlertStore()
+const toast = useToast()
 
 const postType = [
     { title: 'Public', value: "public" },
@@ -67,7 +66,7 @@ function update() {
           console.log(response.data)
           emit('edited')
           postStore.updatePost(response.data.post)
-          alertStore.showAlert('Update post successfully', MessageType.SUCCESS)
+          toast.success('Update post successfully')
         })
         .catch((error) => {
             errorHandler(error)

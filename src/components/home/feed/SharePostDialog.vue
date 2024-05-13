@@ -31,13 +31,12 @@ import { ref } from 'vue'
 import { useUserStore } from '@/stores/user'
 import { usePostStore } from '@/stores/post'
 import { errorHandler } from '@/utils/errorHandler'
-import { useAlertStore } from '@/stores/alert'
-import { MessageType } from '@/utils/MessageType'
+import { useToast } from 'vue-toastification'
 
 const props = defineProps(['dialog', 'id'])
 const userStore = useUserStore()
 const postStore = usePostStore()
-const alertStore = useAlertStore()
+const toast = useToast()
 
 const emits = defineEmits(['toggle'])
 
@@ -70,7 +69,7 @@ function sharePost() {
     .then((response) => {
       postStore.posts.unshift(response.data)
       emits('toggle')
-      alertStore.showAlert('Share post successfully', MessageType.SUCCESS)
+      toast.success('Share post successfully')
     })
     .catch((error) => {
       errorHandler(error)

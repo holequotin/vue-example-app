@@ -4,15 +4,14 @@ import { checkURL } from '@/utils/fileUtils'
 import PostInfo from '@/components/home/feed/PostInfo.vue'
 import PostActions from '@/components/home/feed/PostActions.vue'
 import UpdatePostDialog from '@/components/home/feed/UpdatePostDialog.vue'
-import { useUserStore } from '@/stores/user'
 import { computed, ref } from 'vue'
 import { postService } from '@/service/postService'
-import { useAlertStore } from '@/stores/alert'
-import { MessageType } from '@/utils/MessageType'
 import { errorHandler } from '@/utils/errorHandler'
+import { useToast } from 'vue-toastification'
+import { useUserStore } from '@/stores/user'
 
 
-const alertStore = useAlertStore()
+const toast = useToast()
 const props = defineProps(['post'])
 const emits = defineEmits(['deleted'])
 const userStore = useUserStore()
@@ -29,7 +28,7 @@ function toggle() {
 function deletePost() {
   postService.deletePost(props.post.id)
     .then(response => {
-      alertStore.showAlert('Delete post successfully', MessageType.SUCCESS)
+      toast.success('Delete post successfully')
       emits('deleted')
     })
     .catch(error => {

@@ -2,15 +2,14 @@
 import { computed, ref } from 'vue'
 import { groupService } from '@/service/groupService'
 import { errorHandler } from '@/utils/errorHandler'
-import { useAlertStore } from '@/stores/alert'
-import { MessageType } from '@/utils/MessageType'
 import { useUserStore } from '@/stores/user'
 import InviteUserDialog from '@/components/group/InviteUserDialog.vue'
+import { useToast } from 'vue-toastification'
 
 const props = defineProps(['status', 'group'])
 const emits = defineEmits(['done', 'edit'])
 const userStore = useUserStore()
-const alertStore = useAlertStore()
+const toast = useToast()
 const dialog = ref(false)
 
 const showJoin = computed(() => {
@@ -36,7 +35,7 @@ const showEdit = computed(() => {
 function join() {
   groupService.joinGroup(props.group.id)
     .then((response) => {
-      alertStore.showAlert(response.data.message, MessageType.SUCCESS)
+      toast.success(response.data.message)
       emits('done')
     })
     .catch((error) => {
@@ -47,7 +46,7 @@ function join() {
 function leave() {
   groupService.leaveGroup(props.group.id)
     .then((response) => {
-      alertStore.showAlert(response.data.message, MessageType.SUCCESS)
+      toast.success(response.data.message)
       emits('done')
     })
     .catch((error) => {
@@ -59,7 +58,7 @@ function cancelRequest() {
   groupService.leaveGroup(props.group.id)
     .then((response) => {
       console.log(response.data)
-      alertStore.showAlert('Cancel request successfully', MessageType.SUCCESS)
+      toast.success('Cancel request successfully')
       emits('done')
     })
     .catch((error) => {
@@ -70,7 +69,7 @@ function cancelRequest() {
 function sendRequest() {
   groupService.sendRequest(props.group.id)
     .then((response) => {
-      alertStore.showAlert(response.data.message, MessageType.SUCCESS)
+      toast.success(response.data.message)
       emits('done')
     })
     .catch((error) => {

@@ -97,13 +97,12 @@ import { RouterLink, useRoute, useRouter } from 'vue-router'
 import { userService } from '@/service/userService'
 import { friendService } from '@/service/friendService'
 import { useUserStore } from '@/stores/user'
-import { useAlertStore } from '@/stores/alert'
 import { usePostStore } from '@/stores/post'
 import { errorHandler } from '@/utils/errorHandler'
-import { MessageType } from '@/utils/MessageType'
 import ProfileDialog from '../../components/profile/ProfileDialog.vue'
 import EditAvatarDialiog from '../../components/profile/EditAvatarDialiog.vue'
 import { checkURL } from '@/utils/fileUtils'
+import { useToast } from 'vue-toastification'
 
 const route = useRoute()
 const router = useRouter()
@@ -116,7 +115,7 @@ const friendship = ref(null)
 const user = ref({})
 const edit = ref(false)
 const editAvatar = ref(false)
-const alertStore = useAlertStore()
+const toast = useToast()
 provide('friends', friends)
 provide('test', test)
 
@@ -164,7 +163,7 @@ function unfriend() {
   friendService.unfriend(currUserId.value)
     .then((response) => {
       console.log(response.data)
-      alertStore.showAlert('Unfriend successfully', MessageType.SUCCESS)
+      toast.success('Unfriend successfully')
       getFriendship()
     })
     .catch((error) => {
@@ -176,7 +175,7 @@ function sendRequest() {
   friendService.sendRequest(currUserId.value)
     .then((response) => {
       console.log(response.data)
-      alertStore.showAlert('Send friend request successfully', MessageType.SUCCESS)
+      toast.success('Send friend request successfully')
       getFriendship()
     })
     .catch((error) => {
@@ -188,7 +187,7 @@ function accept() {
   friendService.accept(friendship.value.id)
     .then((response) => {
       console.log(response.data)
-      alertStore.showAlert('Accepted', MessageType.SUCCESS)
+      toast.success('Accepted')
       getFriendship()
     })
     .catch((error) => {
@@ -200,7 +199,7 @@ function cancel() {
   friendService.unfriend(currUserId.value)
     .then((response) => {
       console.log(response.data)
-      alertStore.showAlert('Cancel', MessageType.SUCCESS)
+      toast.success('Cancel')
       getFriendship()
     })
     .catch((error) => {
@@ -212,7 +211,7 @@ function refuse() {
   friendService.unfriend(currUserId.value)
     .then((response) => {
       console.log(response.data)
-      alertStore.showAlert('Refuse', MessageType.SUCCESS)
+      toast.success('Refuse')
       getFriendship()
     })
     .catch((error) => {

@@ -3,19 +3,18 @@
 import { checkURL } from '@/utils/fileUtils'
 import { groupService } from '@/service/groupService'
 import { errorHandler } from '@/utils/errorHandler'
-import { useAlertStore } from '@/stores/alert'
-import { MessageType } from '@/utils/MessageType'
+import { useToast } from 'vue-toastification'
 
 const props = defineProps(['request'])
 const emits = defineEmits(['done'])
-const alertStore = useAlertStore()
+const toast = useToast()
 
 console.log(JSON.stringify(props.request))
 
 function accept() {
   groupService.accept(props.request.group.id, props.request.user.id)
     .then(response => {
-      alertStore.showAlert(response.data.message, MessageType.SUCCESS)
+      toast.success(response.data.message)
       emits('done')
     })
     .catch(error => {
@@ -27,7 +26,7 @@ function refuse() {
   groupService.remove(props.request.group.id, props.request.user.id)
     .then(response => {
       console.log(response.data)
-      alertStore.showAlert('Refuse user successfully', MessageType.SUCCESS)
+      toast.success('Refuse user successfully')
       emits('done')
     })
     .catch(error => {

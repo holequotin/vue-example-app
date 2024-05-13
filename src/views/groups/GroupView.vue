@@ -11,16 +11,15 @@ import GroupButton from '@/components/group/GroupButton.vue'
 import NewPostCard from '@/components/home/feed/NewPostCard.vue'
 import PostCard from '@/components/home/feed/PostCard.vue'
 import EditGroupDialog from '@/components/group/EditGroupDialog.vue'
-import { useUserStore } from '@/stores/user'
-import { useAlertStore } from '@/stores/alert'
-import { MessageType } from '@/utils/MessageType'
 import { GroupRole } from '@/utils/GroupRole'
 import { ShowPostType } from '@/utils/ShowPostType'
 import { groupUserService } from '@/service/groupUserService'
+import { useUserStore } from '@/stores/user'
+import { useToast } from 'vue-toastification'
 
 const route = useRoute()
 const userStore = useUserStore()
-const alertStore = useAlertStore()
+const toast = useToast()
 const group = ref({
   'id': 3,
   'name': 'Kristopher Mitchell',
@@ -168,7 +167,7 @@ async function edited() {
 function removeUser(groupId, userId) {
   groupService.remove(groupId, userId)
     .then(response => {
-      alertStore.showAlert('Remove user successfully', MessageType.SUCCESS)
+      toast.success('Remove user successfully')
       getMembers(groupId)
     })
     .catch(error => {
@@ -200,7 +199,7 @@ const setShowType = (groupId, userId) => {
   }
   groupUserService.setShowPostType(groupId, userId, data)
     .then(response => {
-      alertStore.showAlert('Update show post type successfully', MessageType.SUCCESS)
+      toast.success('Update show post type successfully')
       showTypeDialog.value = false
     })
     .catch(error => {
@@ -216,7 +215,7 @@ const setRole = (groupId, userId) => {
   }
   groupService.updateGroupRole(data, groupId)
     .then(response => {
-      alertStore.showAlert(response.data.message, MessageType.SUCCESS)
+      toast.success(response.data.message)
       updateRole(userId, data.role)
       roleDialog.value = false
     })

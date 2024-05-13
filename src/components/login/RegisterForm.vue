@@ -48,13 +48,12 @@
 </template>
 
 <script setup>
-import { ref,computed } from 'vue'
-import { defineRule } from 'vee-validate';
-import {useField, useForm} from 'vee-validate'
-import { required, email,min} from '@vee-validate/rules';
-import { useAlertStore } from '@/stores/alert';
+import { computed, ref } from 'vue'
+import { defineRule, useField, useForm } from 'vee-validate'
+import { email, min, required } from '@vee-validate/rules'
 import ALertBase from '../notify/AlertBase.vue'
-import { userService } from '@/service/userService';
+import { userService } from '@/service/userService'
+import { useToast } from 'vue-toastification'
 
 defineRule('required',value => {
     return required(value)? true : 'This field is required'
@@ -65,7 +64,7 @@ defineRule('email',value => {
 defineRule('min',(value,params) => {
     return min(value,params)?true : `This field need to at least ${params} character`
 })
-const alertStore = useAlertStore()
+const toast = useToast()
 const errorMessage = ref('')
 const loading = ref(false)
 const showError = computed(() => {
@@ -101,7 +100,7 @@ const submitForm = handleSubmit(values => {
         .then(function (response) {
             loading.value = false
             console.log(response)
-            alertStore.showAlert('Register complete','success')
+          toast.success('Register complete')
             dialog.value = false
         })
         .catch(function (error) {

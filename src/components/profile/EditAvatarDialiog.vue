@@ -20,17 +20,16 @@
 <script setup>
 import BaseDialog from '../home/feed/BaseDialog.vue'
 import { computed, defineEmits, ref, watchEffect } from 'vue'
-import { useAlertStore } from '@/stores/alert'
 import { useUserStore } from '@/stores/user'
 import { userService } from '@/service/userService'
-import { MessageType } from '@/utils/MessageType'
 import { errorHandler } from '@/utils/errorHandler'
+import { useToast } from 'vue-toastification'
 
 const props = defineProps(['dialog'])
 const emit = defineEmits(['toggle', 'after'])
 
 const userStore = useUserStore()
-const alertStore = useAlertStore()
+const toast = useToast()
 const user = ref({ ...userStore.user })
 
 const avatar = ref(null);
@@ -52,7 +51,7 @@ function changeAvatar() {
         .then((response) => {
             console.log(response.data)
             emit('after')
-            alertStore.showAlert('Change avatar successfully', MessageType.SUCCESS);
+          toast.success('Change avatar successfully')
             emit('toggle')
         })
         .catch((error) => {

@@ -22,15 +22,14 @@
 <script setup>
 import { computed } from 'vue'
 import { friendService } from '@/service/friendService'
-import { useAlertStore } from '@/stores/alert'
-import { MessageType } from '@/utils/MessageType'
 import { errorHandler } from '@/utils/errorHandler'
 import { useFriendsStore } from '@/stores/friend'
+import { useToast } from 'vue-toastification'
 
 const props = defineProps(['friendship'])
 const emits = defineEmits(['accept', 'refuse'])
 const friendStore = useFriendsStore()
-const alertStore = useAlertStore()
+const toast = useToast()
 const avatarChar = computed(() => {
     return props.friendship.from_user.name[0];
 })
@@ -38,7 +37,7 @@ const avatarChar = computed(() => {
 function accept() {
     friendService.accept(props.friendship.id)
         .then((response) => {
-            alertStore.showAlert('Accepted', MessageType.SUCCESS)
+          toast.success('Accepted')
             friendStore.getAllFriends();
             emits('accept');
         })
@@ -51,7 +50,7 @@ function refuse() {
     friendService.unfriend(props.friendship.from_user.id)
         .then((response) => {
             console.log(response.data)
-            alertStore.showAlert('Refuse', MessageType.SUCCESS)
+          toast.success('Refuse')
             emits('refuse')
         })
         .catch((error) => {

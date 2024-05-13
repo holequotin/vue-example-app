@@ -2,13 +2,12 @@
 import { ref } from 'vue'
 import { groupChatService } from '@/service/groupChatService'
 import { errorHandler } from '@/utils/errorHandler'
-import { useAlertStore } from '@/stores/alert'
-import { MessageType } from '@/utils/MessageType'
 import { useRouter } from 'vue-router'
+import { useToast } from 'vue-toastification'
 
 const dialog = ref(false)
 const props = defineProps(['id'])
-const alertStore = useAlertStore()
+const toast = useToast()
 const router = useRouter()
 
 function leave() {
@@ -16,7 +15,7 @@ function leave() {
     .then(response => {
       dialog.value = false
       router.replace({ name: 'chat-group' })
-      alertStore.showAlert(response.data.message, MessageType.SUCCESS)
+      toast.success(response.data.message)
     })
     .catch(error => errorHandler(error))
 }

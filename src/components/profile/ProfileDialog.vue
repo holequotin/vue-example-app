@@ -29,19 +29,18 @@
 <script setup>
 import BaseDialog from '../home/feed/BaseDialog.vue'
 import { computed, ref, watchEffect } from 'vue'
-import { useAlertStore } from '@/stores/alert'
 import { useUserStore } from '@/stores/user'
 import { userService } from '@/service/userService'
-import { MessageType } from '@/utils/MessageType'
 import { errorHandler } from '@/utils/errorHandler'
 import { usePostStore } from '@/stores/post'
+import { useToast } from 'vue-toastification'
 
 const props = defineProps(['dialog'])
 const emit = defineEmits(['toggle', 'after'])
 
 const userStore = useUserStore()
 const postStore = usePostStore()
-const alertStore = useAlertStore()
+const toast = useToast()
 const user = ref({ ...userStore.user })
 const updateName = computed(() => {
     return user.value.name.trim() != userStore.user.name.trim()
@@ -76,7 +75,7 @@ function updateProfile() {
     userService.update(data)
         .then((response) => {
             console.log(response.data)
-            alertStore.showAlert('Update successfully', MessageType.SUCCESS)
+          toast.success('Update successfully')
             userStore.getUser()
             postStore.getPostsByUser(user.value.id)
             emit('after')
@@ -95,7 +94,7 @@ function changePassword() {
     userService.changePassword(data)
         .then((response) => {
             console.log(response.data)
-            alertStore.showAlert(response.data.message, MessageType.SUCCESS)
+          toast.success(response.data.message)
         })
         .catch((error) => {
             errorHandler(error)

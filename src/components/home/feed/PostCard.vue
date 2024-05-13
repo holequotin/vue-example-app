@@ -86,11 +86,10 @@ import { computed, ref } from 'vue'
 import { postService } from '@/service/postService'
 import { errorHandler } from '@/utils/errorHandler'
 import { checkURL } from '@/utils/fileUtils'
-import { useAlertStore } from '@/stores/alert'
-import { MessageType } from '@/utils/MessageType'
+import { useToast } from 'vue-toastification'
 
 const userStore = useUserStore()
-const alertStore = useAlertStore()
+const toast = useToast()
 const props = defineProps(['post', 'type'])
 const emits = defineEmits(['deleted', 'edited'])
 const dialog = ref(false)
@@ -105,7 +104,7 @@ function deletePost() {
   postService.deletePost(props.post.id)
     .then((response) => {
       console.log(response.data)
-      alertStore.showAlert(response.data.message, MessageType.SUCCESS)
+      toast.success(response.data.message)
       emits('deleted')
     })
     .catch((error) => {

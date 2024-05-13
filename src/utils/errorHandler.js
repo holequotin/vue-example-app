@@ -1,8 +1,7 @@
 import router from '../router'
-import { useAlertStore } from '@/stores/alert'
-import { MessageType } from './MessageType'
+import { useToast } from 'vue-toastification'
 
-const alertStore = useAlertStore()
+const toast = useToast()
 const getMessage = function (error) {
   if (error.response) {
     return error.response.data.error || error.response.data.message
@@ -15,17 +14,17 @@ const errorHandler = function (error) {
     case 401:
       router.replace({ name: 'login' })
       localStorage.setItem('token', '')
-      alertStore.showAlert('Unauthorization', MessageType.ERROR)
+      toast.error('Unauthorization')
       break
     case 500:
-      alertStore.showAlert('Internal Server Error', MessageType.ERROR)
+      toast.error('Internal Server Error')
       break
     case 404:
-      alertStore.showAlert('Not Found', MessageType.ERROR)
+      toast.error('Not Found')
       router.replace({ name: 'NotFound' })
       break;
     default:
-      alertStore.showAlert(error.response.data.message || error.response.data.error, MessageType.ERROR)
+      toast.error(error.response.data.message || error.response.data.error)
       break
   }
 }

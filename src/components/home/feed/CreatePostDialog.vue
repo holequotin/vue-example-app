@@ -35,13 +35,12 @@ import { computed, ref, watchEffect } from 'vue'
 import { useUserStore } from '@/stores/user'
 import { postService } from '@/service/postService'
 import { errorHandler } from '@/utils/errorHandler'
-import { useAlertStore } from '@/stores/alert'
-import { MessageType } from '@/utils/MessageType'
+import { useToast } from 'vue-toastification'
 
 const props = defineProps(['dialog', 'group'])
 const userStore = useUserStore()
 const emit = defineEmits(['toggle', 'created'])
-const alertStore = useAlertStore()
+const toast = useToast()
 
 
 const defaultType = computed(() => {
@@ -87,7 +86,7 @@ function storePost() {
     // alert(JSON.stringify(data))
     postService.storePost(data).then((response) => {
         console.log(response.data)
-      alertStore.showAlert(response.data.message, MessageType.SUCCESS)
+      toast.success(response.data.message)
         emit('toggle')
       emit('created')
     }).catch((error) => {

@@ -80,9 +80,8 @@ import { checkURL } from '@/utils/fileUtils'
 import { ref, watch, watchEffect } from 'vue'
 import { friendService } from '@/service/friendService'
 import { errorHandler } from '@/utils/errorHandler'
-import { useAlertStore } from '@/stores/alert'
-import { MessageType } from '@/utils/MessageType'
 import { useUserStore } from '@/stores/user'
+import { useToast } from 'vue-toastification'
 
 const friends = ref([])
 const props = defineProps(['id'])
@@ -102,7 +101,7 @@ const nickNameErrors = ref({
     nickname: []
   }
 })
-const alertStore = useAlertStore()
+const toast = useToast()
 const userStore = useUserStore()
 
 function getFriends(id, page, perPage) {
@@ -148,7 +147,7 @@ const setNickname = () => {
   }
   friendService.setNickName(data, nickname.value.id)
     .then(response => {
-      alertStore.showAlert('Set nick name successfully', MessageType.SUCCESS)
+      toast.success('Set nick name successfully')
       updateNickname(nickname.value.id, nickname.value.value)
       dialog.value = false
     })

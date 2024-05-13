@@ -17,26 +17,22 @@
 import AvatarMenuItem from './AvatarMenuItem.vue'
 import { useUserStore } from '@/stores/user'
 import { userService } from '@/service/userService'
-import { useAlertStore } from '@/stores/alert'
 import { RouterLink, useRouter } from 'vue-router'
-import { MessageType } from '@/utils/MessageType'
 import { errorHandler } from '@/utils/errorHandler'
 import { checkURL } from '@/utils/fileUtils'
+import { useToast } from 'vue-toastification'
 
 const userStore = useUserStore()
-const alertStore = useAlertStore()
+const toast = useToast()
 const router = useRouter()
 function logout() {
   userService.logout()
     .then((response) => {
         router.replace({name : 'login'})
         localStorage.setItem('token','')
-        alertStore.showAlert(response.data.message,MessageType.SUCCESS)
+      toast.success(response.data.message)
     })
     .catch((error) => {
-
-      // const message = getMessage(error)
-      // alertStore.showAlert(message, MessageType.ERROR)
       errorHandler(error)
     })
 }

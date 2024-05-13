@@ -14,10 +14,10 @@
 </template>
 <script setup>
 import AlertBase from '../notify/AlertBase.vue'
-import { watchEffect,ref } from 'vue';
-import {MessageType} from '../../utils/MessageType'
+import { ref, watchEffect } from 'vue'
+import { MessageType } from '../../utils/MessageType'
 //TODO: use alert store here
-import {useAlertStore} from '../../stores/alert'
+import { useAlertStore } from '@/stores/alert'
 
 const alertStore = useAlertStore()
 const message = ref('default message')
