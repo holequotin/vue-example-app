@@ -15,7 +15,7 @@ export const useUserStore = defineStore('user',() => {
         return 'A'
     })
     async function getUser() {
-        userService.getUser()
+        await userService.getUser()
             .then((response) => {
                 user.value = response.data
             })

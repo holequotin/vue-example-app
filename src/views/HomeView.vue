@@ -1,9 +1,6 @@
 <template>
   <v-infinite-scroll style="height: 100vh" :onLoad="load">
     <BaseLayout>
-      <template #appbar>
-        <AppBar></AppBar>
-      </template>
       <template #main>
         <v-main class="d-flex align-center justify-center flex-column" style="min-height: 300px;">
           <div style="width: 90%;">
@@ -26,7 +23,6 @@
 </template>
 <script setup>
 import BaseLayout from './base/BaseLayout.vue'
-import AppBar from '@/components/home/appbar/AppBar.vue'
 import NewPostCard from '../components/home/feed/NewPostCard.vue'
 import PostCard from '../components/home/feed/PostCard.vue'
 import DrawerLeft from '../components/home/drawerLeft/DrawerLeft.vue'

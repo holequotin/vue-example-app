@@ -5,17 +5,19 @@ import { userService } from '@/service/userService'
 import { errorHandler } from '@/utils/errorHandler'
 import { checkURL } from '@/utils/fileUtils'
 import { messageService } from '@/service/messageService'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import MessageItem from '@/components/chat/MessageItem.vue'
 import { useUserStore } from '@/stores/user'
 import { useMessageStore } from '@/stores/message'
-import pusher from '@/notifications/pusher'
+import { useToast } from 'vue-toastification'
 
 const props = defineProps(['id'])
 const route = useRoute()
 const messageStore = useMessageStore()
 const perPage = ref(15)
 const body = ref('')
+const toast = useToast()
+const router = useRouter()
 
 const meta = ref({
   last_page: 1,
@@ -44,17 +46,6 @@ watchEffect(async () => {
     await getUser(props.id)
     await getMessage(props.id, perPage.value)
   }
-
-  pusher.unsubscribe(`private-Chat.User.${userStore.user?.id}`)
-  const channelChat = pusher.subscribe(`private-Chat.User.${userStore.user?.id}`)
-  channelChat.bind('App\\Events\\MessageCreated', function(data) {
-    const fromUserId = data.message.from_user.id
-    if (route.name == 'chat' && fromUserId == route.params.id) {
-      messageStore.push(data.message)
-    } else if (route.name == 'chat' && fromUserId != route.params.id) {
-      messageStore.newUserMessage(data.message)
-    }
-  })
 })
 
 async function getUser(id) {
