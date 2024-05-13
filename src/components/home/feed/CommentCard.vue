@@ -68,7 +68,7 @@ function deleteComment() {
 function updateComment() {
     const data = {
         body: commentContent.value,
-        image: updateImage.value ? updateImage.value[0] : null,
+      image: updateImage.value,
         delete_image: deleteImage.value ? 1 : 0
     }
     commentService.updateComment(props.comment.id, data).then((response) => {

@@ -9,10 +9,11 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue';
-import AvatarIcon from './AvatarIcon.vue';
+import { computed, ref } from 'vue'
+import AvatarIcon from './AvatarIcon.vue'
 import { commentService } from '@/service/commentService'
-import { errorHandler } from '@/utils/errorHandler';
+import { errorHandler } from '@/utils/errorHandler'
+
 const props = defineProps(['user', 'post'])
 const emit = defineEmits(['created'])
 const body = ref(null);
@@ -24,7 +25,7 @@ const isButtonDisable = computed(() => {
 function storeComment() {
     const data = {
         body: body?.value,
-        image: image.value ? image.value[0] : null,
+      image: image.value,
         post_id: props.post.id
     }
     commentService.storeComment(data).then((response) => {
