@@ -51,7 +51,8 @@ const login = handleSubmit((values) => {
             if(response.data.message)
             {
                 alertStore.showAlert(response.data.message, MessageType.INFO)
-                return
+
+              return
             }
             const token = response.data.access_token
             localStorage.setItem('token', token)

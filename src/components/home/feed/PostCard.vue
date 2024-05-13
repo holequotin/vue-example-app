@@ -1,5 +1,5 @@
 <template>
-  <v-card class="mx-auto mb-5" width="100%">
+  <v-card class="mx-auto mb-5" light width="100%">
     <template v-slot:prepend>
       <div class="d-flex justify-start">
         <v-avatar color="blue-darken-2" size="large">

@@ -10,6 +10,7 @@ import { groupChatService } from '@/service/groupChatService'
 import GroupMessageItem from '@/components/chat/GroupMessageItem.vue'
 import MembersDialog from '@/components/chat/MembersDialog.vue'
 import AddUserDialog from '@/components/chat/AddUserDialog.vue'
+import LeaveGroupDialog from '@/components/chat/LeaveGroupDialog.vue'
 
 const props = defineProps(['id'])
 const route = useRoute()
@@ -118,6 +119,7 @@ async function load({ done }) {
       <template #append>
         <MembersDialog :id="id"></MembersDialog>
         <AddUserDialog :id="id"></AddUserDialog>
+        <LeaveGroupDialog :id="id"></LeaveGroupDialog>
       </template>
     </v-app-bar>
     <v-main>

@@ -1,11 +1,19 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { groupChatService } from '@/service/groupChatService'
 import { errorHandler } from '@/utils/errorHandler'
+import { checkURL } from '@/utils/fileUtils'
+import { useUserStore } from '@/stores/user'
+import { GroupChatRole } from '@/utils/GroupChatRole'
+import { useAlertStore } from '@/stores/alert'
+import { MessageType } from '@/utils/MessageType'
 
 const members = ref([])
 const perPage = ref(15)
 const props = defineProps(['id'])
+const userStore = useUserStore()
+const alertStore = useAlertStore()
+const dialog = ref(false)
 const meta = ref({
   current_page: 0,
   last_page: 1
@@ -30,46 +38,125 @@ async function load({ done }) {
   }
 }
 
-function modelChange() {
-  members.value = []
-  meta.value = {
-    current_page: 0,
-    last_page: 1
+watch(dialog, () => {
+  if (dialog.value === true) {
+    members.value = []
+    meta.value = {
+      current_page: 0,
+      last_page: 1
+    }
+    getGroupChatUsers()
+  } else {
+    members.value = []
+    meta.value = {
+      current_page: 0,
+      last_page: 1
+    }
   }
-  getGroupChatUsers()
+})
+
+function removeUser(groupChatUserId) {
+  groupChatService.removeUser(groupChatUserId)
+    .then(response => {
+      removeInMembers(groupChatUserId)
+      alertStore.showAlert(response.data.message, MessageType.SUCCESS)
+    })
+    .catch(error => errorHandler(error))
 }
 
+function updateRole(groupChatUserId, role) {
+  const data = {
+    role: role
+  }
+
+  groupChatService.setRole(groupChatUserId, data)
+    .then(response => {
+      alertStore.showAlert(response.data.message, MessageType.SUCCESS)
+      updateRoleInMembers(groupChatUserId, role)
+    })
+    .catch(error => errorHandler(error))
+}
+
+function removeInMembers(groupChatUserId) {
+  members.value = members.value.filter((item) => {
+    return item.id !== groupChatUserId
+  })
+}
+
+function updateRoleInMembers(groupChatUserId, role) {
+  members.value = members.value.map((item) => {
+    if (item.id === groupChatUserId) return { ...item, role: role }
+    return item
+  })
+}
 
 </script>
 
 <template>
-  <v-dialog max-width="500" @update:model-value="modelChange">
-    <template v-slot:activator="{ props: activatorProps }">
-      <v-btn
-        color="primary"
-        icon="mdi-account-group-outline"
-        text="Open Dialog"
-        v-bind="activatorProps"
-        variant="text"
-      ></v-btn>
-    </template>
+  <div>
 
-    <template v-slot:default="{ isActive }">
-      <v-card title="Members">
-        <v-card-item>
-          <v-infinite-scroll mode="manual" @load="load">
-            <v-list>
-              <v-list-item v-for="member in members" :key="member">
-                <v-list-item-title>{{ member.user.name }}</v-list-item-title>
-              </v-list-item>
-            </v-list>
-          </v-infinite-scroll>
-        </v-card-item>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-        </v-card-actions>
-      </v-card>
-    </template>
+  </div>
+  <v-btn
+    color="primary"
+    icon="mdi-account-group-outline"
+    text="Open Dialog"
+    variant="text"
+    @click="dialog = true"
+  ></v-btn>
+  <v-dialog v-model="dialog" max-width="500">
+    <v-card title="Members">
+      <v-card-item>
+        <v-infinite-scroll mode="manual" @load="load">
+          <v-list>
+            <v-list-item v-for="member in members" :key="member">
+              <template #prepend>
+                <v-avatar :size="50" class="ma-2" color="red" v-bind="props">
+                  <v-img v-if="checkURL(member.user.avatar)" :src="member.user.avatar" alt="John"></v-img>
+                  <span v-else class="text-h5">{{ member.user.name[0] }}</span>
+                </v-avatar>
+              </template>
+              <v-list-item-title>{{ member.user.name }}
+                <v-chip v-if="member.role === GroupChatRole.ADMIN" color="green">
+                  Admin
+                </v-chip>
+              </v-list-item-title>
+              <template #append>
+                <v-menu
+                  v-if="userStore.user?.id !== member.user.id && member.permissions.delete && member.permissions.update">
+                  <template v-slot:activator="{ props }">
+                    <v-btn icon="mdi-dots-vertical" v-bind="props"></v-btn>
+                  </template>
+
+                  <v-list>
+                    <v-list-item v-if="member.permissions.delete"
+                                 prepend-icon="mdi-account-remove-outline"
+                                 @click="removeUser(member.id)"
+                    >
+                      <v-list-item-title>Remove</v-list-item-title>
+                    </v-list-item>
+                    <v-list-item v-if="member.permissions.update && member.role === GroupChatRole.MEMBER"
+                                 prepend-icon="mdi-security"
+                                 @click="() => updateRole(member.id, GroupChatRole.ADMIN)"
+                    >
+                      <v-list-item-title>Set as admin</v-list-item-title>
+                    </v-list-item>
+                    <v-list-item v-if="member.permissions.update && member.role === GroupChatRole.ADMIN"
+                                 prepend-icon="mdi-account"
+                                 @click="() => updateRole(member.id, GroupChatRole.MEMBER)"
+                    >
+                      <v-list-item-title>Set as member</v-list-item-title>
+                    </v-list-item>
+                  </v-list>
+                </v-menu>
+              </template>
+            </v-list-item>
+          </v-list>
+        </v-infinite-scroll>
+      </v-card-item>
+      <v-card-actions>
+        <v-spacer></v-spacer>
+      </v-card-actions>
+    </v-card>
   </v-dialog>
 </template>
 

@@ -121,6 +121,52 @@ class GroupChatService {
 
     return this.api.post(endpoint, data, config)
   }
+
+  async removeUser(groupChatUserId) {
+    const endpoint = `/group-chat-user/${groupChatUserId}`
+    const token = localStorage.getItem('token')
+
+    const config = {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        Authorization: `Bearer ${token}`,
+        Accept: 'application/json'
+      }
+    }
+
+    return this.api.delete(endpoint, config)
+  }
+
+  async setRole(groupChatUserId, data) {
+    data._method = 'patch'
+    const endpoint = `/group-chat-user/${groupChatUserId}`
+    const token = localStorage.getItem('token')
+
+    const config = {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        Authorization: `Bearer ${token}`,
+        Accept: 'application/json'
+      }
+    }
+
+    return this.api.post(endpoint, data, config)
+  }
+
+  async leave(groupChatId) {
+    const endpoint = `/group-chat/${groupChatId}/leave`
+    const token = localStorage.getItem('token')
+
+    const config = {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        Authorization: `Bearer ${token}`,
+        Accept: 'application/json'
+      }
+    }
+
+    return this.api.delete(endpoint, config)
+  }
 }
 
 const groupChatService = new GroupChatService(axios)

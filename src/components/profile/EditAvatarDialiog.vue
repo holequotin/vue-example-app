@@ -18,13 +18,14 @@
     </BaseDialog>
 </template>
 <script setup>
-import BaseDialog from '../home/feed/BaseDialog.vue';
-import { ref, computed, watchEffect, defineEmits } from 'vue'
-import { useAlertStore } from '../../stores/alert';
-import { useUserStore } from '../../stores/user';
-import { userService } from '../../service/userService';
-import { MessageType } from '../../utils/MessageType';
-import { errorHandler } from '../../utils/errorHandler';
+import BaseDialog from '../home/feed/BaseDialog.vue'
+import { computed, defineEmits, ref, watchEffect } from 'vue'
+import { useAlertStore } from '@/stores/alert'
+import { useUserStore } from '@/stores/user'
+import { userService } from '@/service/userService'
+import { MessageType } from '@/utils/MessageType'
+import { errorHandler } from '@/utils/errorHandler'
+
 const props = defineProps(['dialog'])
 const emit = defineEmits(['toggle', 'after'])
 
@@ -44,9 +45,10 @@ function close() {
 
 function changeAvatar() {
     const data = {
-        'image': avatar.value[0]
+      image: avatar.value
     }
-    userService.uploadAvatar(data)
+
+  userService.uploadAvatar(data)
         .then((response) => {
             console.log(response.data)
             emit('after')

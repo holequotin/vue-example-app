@@ -4,6 +4,7 @@ import { errorHandler } from '@/utils/errorHandler'
 import { groupChatService } from '@/service/groupChatService'
 import { useAlertStore } from '@/stores/alert'
 import { MessageType } from '@/utils/MessageType'
+import { checkURL } from '@/utils/fileUtils'
 
 const usersCanAdd = ref([])
 const perPage = ref(15)
@@ -87,6 +88,12 @@ watch(dialog, () => {
           <v-list>
             <v-infinite-scroll mode="manual" @load="loadUserCanAdd">
               <v-list-item v-for="user in usersCanAdd" :key="user">
+                <template #prepend>
+                  <v-avatar :size="50" class="ma-2" color="red" v-bind="props">
+                    <v-img v-if="checkURL(user.avatar)" :src="user.avatar" alt="John"></v-img>
+                    <span v-else class="text-h5">{{ user.name[0] }}</span>
+                  </v-avatar>
+                </template>
                 <v-list-item-title>{{ user.name }}</v-list-item-title>
                 <template #append>
                   <v-checkbox v-model="users" :value="user.id"></v-checkbox>
